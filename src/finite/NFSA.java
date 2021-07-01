@@ -1,4 +1,4 @@
-package il.ac.openu.flue.yogi;
+package finite;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

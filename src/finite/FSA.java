@@ -1,4 +1,4 @@
-package il.ac.openu.flue.yogi;
+package finite;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;

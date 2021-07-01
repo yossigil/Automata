@@ -1,4 +1,4 @@
-package il.ac.openu.flue.yogi;
+package finite;
 
 import static org.junit.jupiter.api.Assertions.*;
 

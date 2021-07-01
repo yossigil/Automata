@@ -1,4 +1,4 @@
-package il.ac.openu.flue.yogi;
+package finite;
 
 public abstract class RE {
 //@formatter:off
