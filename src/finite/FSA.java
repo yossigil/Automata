@@ -5,32 +5,41 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-abstract class FSA {
+class Q {
+  static Q make() {return new Q(); }
+};
 
-  @SuppressWarnings("unchecked") static <F, T> Map<F, T>[] maps(int n) {
-    var $ = new Map[n];
-    for (int i = 0; i < n; ++i)
-      $[i] = new LinkedHashMap<>();
-    return $;
+
+class FSA<Σ> {
+  Q q0 = Q.make();
+  final Set<Q> ζ;
+  final Σ any = null;
+  final Map<Σ, Map<Q, Q>> δ;
+
+  void q0(Q q0) {
+    this.q0 = q0;
+  }
+  void ζ(Q q) {
+    ζ.add(q);
+  }
+  void δ(Q from, Σ σ, Q to) {
+    δ(σ).put(from, to);
+  }
+  Map<Q, Q> δ(Σ σ) {
+    if (δ.get(σ) == null)
+      δ.put(σ, new LinkedHashMap<>());
+    return δ.get(σ);
   }
 
-  abstract boolean run(String string);
-
-  final Map<Character, Integer>[] δ;
-  protected final Set<Integer> ζ;
-
-  public FSA(int n) {
-    δ = maps(n);
+  Q δ(Q q, Σ σ) {
+    return δ(σ).get(q);
+  }
+  FSA() {
     ζ = new LinkedHashSet<>();
+    δ = new LinkedHashMap<>();
   }
-
-  public FSA(Set<Integer> ζ, Map<Character, Integer>[] δ) {
-    this.δ = δ;
+  FSA(Set<Q> ζ, Map<Σ, Map<Q, Q>> δ) {
     this.ζ = ζ;
+    this.δ = δ;
   }
-
-  public int n() {
-    return δ.length;
-  }
-
 }

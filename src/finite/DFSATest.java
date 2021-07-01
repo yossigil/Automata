@@ -5,13 +5,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("static-method") class DFSATest {
-  final NFSA empty = new NFSA();
-  final NFSA a = new NFSA('a');
-  final NFSA b = new NFSA('b');
-  final NFSA ab = a.then(b);
-  final NFSA a_b = a.or(b);
-  final NFSA abStar = ab.star();
-  final NFSA x = a_b.then(ab).then(a_b).or(a.then(a).then(a).then(a));
+  final NFSA<Character> empty = new NFSA();
+  final NFSA<Character> a = new NFSA('a');
+  final NFSA<Character> b = new NFSA('b');
+  final NFSA<Character> ab = a.then(b);
+  final NFSA<Character> a_b = a.or(b);
+  final NFSA<Character> abStar = ab.star();
+  final NFSA<Character> x = a_b.then(ab).then(a_b).or(a.then(a).then(a).then(a));
 
   @Test void t00() {
     new DFSA(x);

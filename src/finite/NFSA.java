@@ -1,7 +1,7 @@
 package finite;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -10,95 +10,93 @@ import java.util.Set;
 /**
  * Class invariant: all nodes are numbered between start and stop.
  */
-public class NFSA extends FSA {
-  final List<Integer>[] ε;
+class NFSA<Σ> extends FSA<Σ> {
 
-  NFSA() {
-    this(1);
-    ζ.add(0);
+  boolean ζ(Set<Q> qs) {
+    for (var s : qs)
+      if (ζ.contains(s))
+        return true;
+    return false;
   }
 
+  final Map<Q, Set<Q>> ε;
 
-
-  NFSA(char c) {
-    this(2);
-    ζ.add(1);
-    δ[0].put(c,1);
+  boolean run(Iterable<Σ> w) {
+    var q = Set.of(q0);
+    for (var σ : w)
+      q = δ(q, σ);
+    return ζ(q);
   }
 
-  NFSA ε(int from, int to) {
-    ε[from].add(to);
+  NFSA<Σ, Q> ε(Q from, Q to) {
+    ε(from).add(to);
     return this;
   }
 
-  public NFSA(int n) {
-    super(n);
-    ε = lists(n);
-
+  private Set<Q> ε(Q q) {
+    if (ε.get(q) == null)
+      ε.put(q, new LinkedHashSet<>());
+    return ε.get(q);
   }
 
-  public NFSA(NFSA a1, NFSA a2) {
-    this(1 + a1.n() + a2.n());
-    merge(a1, 1).merge(a2, 1 + a1.n());
-  }
-
-  public boolean run(String s) {
-    Set<Integer> q = new LinkedHashSet<>();
-    q.add(0);
-    for (char c : s.toCharArray()) {
-      if ((q = δ(q, c)).isEmpty())
-        return false;
-    }
-    return accepting(q);
-  }
-
-  Set<Integer> ε(Set<Integer> $) {
+  Set<Q> ε(Set<Q> $) {
     for (;;) {
-      final Set<Integer> ss = new LinkedHashSet<>();
-      for (var s : $)
-        for (var to : ε[s])
-          if (!$.contains(to))
-            ss.add(to);
-      if (ss.isEmpty())
+      final Set<Q> todo = new LinkedHashSet<>();
+      for (var q : $)
+        for (var qε : ε(q))
+          if (!$.contains(qε))
+            todo.add(qε);
+      if (todo.isEmpty())
         return $;
-      $.addAll(ss);
+      $.addAll(todo);
     }
   }
 
-  public Set<Integer> δ(Set<Integer> ss, char c) {
-    final Set<Integer> $ = new LinkedHashSet<>();
-    for (var s : ε(ss))
-      if (δ[s].get(c) != null)
-        $.add( δ[s].get(c));
+  Set<Q> δ(Set<Q> qs, Σ σ) {
+    final Set<Q> $ = new LinkedHashSet<>();
+    for (var q : ε(qs))
+      $.add(δ(q, σ));
     return ε($);
   }
 
-  NFSA or(NFSA a) {
-    return new NFSA(this, a).merge(ζ, 1).merge(a.ζ, 1 + n()).ε(0, 1).ε(0, 1 + n());
+  NFSA<Σ> or(NFSA<Σ> a) {
+    var $ = new NFSA<Σ>();
+    $.merge(ζ);
+    $.merge(δ);
+    $.merge(ε);
+    $.merge(a.ζ);
+    $.merge(a.δ);
+    $.merge(a.ε);
+    return $;
   }
 
-  NFSA then(NFSA a) {
-    var $ = new NFSA(this, a).merge(a.ζ, 1 + n()).ε(0, 1);
+  private void δ(Map<Σ, Map<Q, Q>> δ) {
+    // TODO Auto-generated method stub
+
+  }
+
+  NFSA<Σ> then(NFSA<Σ> a) {
+    var $ = new NFSA<Σ>(this, a).copy(a.ζ, 1 + n()).ε(0, 1);
     for (var s : ζ)
       $.ε(s + 1, n() + 1);
     return $;
   }
 
-  NFSA and(NFSA a) {
+  NFSA<Σ> and(NFSA<Σ> a) {
     throw new RuntimeException(this + "");
   }
 
-  NFSA star() {
+  NFSA<Σ> star() {
     final var oldStart = 0;
     final var newStart = 1;
-    final var $ = new NFSA(n() + 1).merge(this, 1).ε(oldStart, newStart);
+    final var $ = new NFSA<Σ>(n() + 1).copy(this, 1).ε(oldStart, newStart);
     for (var s : ζ)
       $.ε(s + 1, newStart);
     return $;
   }
 
-  NFSA not() {
-    final var $ = new NFSA(n() + 1).merge(this, 1);
+  NFSA<Σ> not() {
+    final var $ = new NFSA(n() + 1).copy(this, 1);
     for (var s = 0; s < n(); s++)
       $.ζ.add(s);
     for (var s : ζ)
@@ -106,79 +104,83 @@ public class NFSA extends FSA {
     return $;
   }
 
-  NFSA merge(NFSA a, int Δ) {
+  NFSA<Σ> copy(NFSA a, Q Δ) {
     return ε(a.ε, Δ).δ(a.δ, Δ);
   }
 
-  NFSA merge(Set<Integer> A2, int Δ) {
+  NFSA<Σ> copy(Set<Q> A2, Q Δ) {
     for (var s : A2)
       ζ.add(s + Δ);
     return this;
   }
 
-  NFSA ε(List<Integer>[] ε2, int Δ) {
+  NFSA<Σ> ε(List<Q>[] ε2, Q Δ) {
     for (var i = 0; i < ε2.length; ++i)
-      merge(ε[i + Δ], ε2[i], Δ);
+      copy(ε[i + Δ], ε2[i], Δ);
     return this;
   }
 
-  NFSA δ(Map<Character, Integer>[] δ2, int Δ) {
-    for (var i = 0; i < δ2.length; ++i) 
+  NFSA<Σ> δ(Map<Σ, Q>[] δ2, Q Δ) {
+    for (var i = 0; i < δ2.length; ++i)
       δ(δ[i + Δ], δ2[i], Δ);
     return this;
   }
 
-  static void δ(Map<Character, Integer> into, Map<Character, Integer> from, int Δ) {
-    for (Character c : from.keySet()) {
+  void δ(Map<Σ, Q> into, Map<Σ, Q> from, Q Δ) {
+    for (Σ c : from.keySet()) {
       if (!into.containsKey(c))
-        into.put(c, from.get(c)+ Δ);
+        into.put(c, from.get(c) + Δ);
     }
   }
 
-  static void merge(List<Integer> into, List<Integer> from, int Δ) {
+  static private void copy(List<Q> into, List<Q> from, Q Δ) {
     for (var s : from)
       into.add(s + Δ);
   }
 
-  @SuppressWarnings("unchecked") static <T> List<T>[] lists(int n) {
+  @SuppressWarnings("unchecked") static <T> List<T>[] lists(Q n) {
     var $ = new List[n];
-    for (int i = 0; i < n; ++i)
+    for (Q i = 0; i < n; ++i)
       $[i] = new ArrayList<>();
     return $;
   }
 
-  public DFSA d() {
-    int current;
-    Map<Set<Integer>, Integer> ordinal = new LinkedHashMap<>();
-    Set<Integer> accepting = new LinkedHashSet<>();
-    Map<Character, Integer>[] delta=null;
-    
-    for (Set<Set<Integer>> todo = start(),done= empty();;) {
-      if (todo.isEmpty()) return done;
-      return done;
-      for (set
+  class State implements V<State> {
+    Set<Q> qs = new HashSet<>();
+
+    State(Q q) {
+      qs.add(q);
     }
-    return new DFSA(accepting, delta);
+
+    @Override public Iterable<State> neighbours() {
+      Set<State> $ = new HashSet<>();
+      for (var q : ε(qs))
+        return $;
+      return $;
+    }
+
   }
 
-  private Set<Set<Integer>> empty() {
-    // TODO Auto-generated method stub
-    return null;
+  DFSA<Σ> d() {
+    Set<NFSA<Σ>.State> states = new DFS<State>() {
+      @Override public void visit(NFSA<Σ>.State s) {
+        // TODO Auto-generated method stub
+
+      }
+    }.dfs(new State(0));
+    Q n = states.size();
+    Map<Σ, Q>[] δ = maps(n);
+    return new DFSA(null, null);
   }
 
-
-
-  private Set<Set<Integer>> start() {
-    // TODO Auto-generated method stub
-    return null;
+  NFSA() {
+    q0(q0)
+    ζ.add(0);
   }
 
-
-
-  public boolean accepting(Set<Integer> ss) {
-    for (var s : ss)
-      if (ζ.contains(s))
-        return true;
-    return false;
+  NFSA(Σ c) {
+    this(2);
+    ζ.add(1);
+    δ[0].put(c, 1);
   }
 }
