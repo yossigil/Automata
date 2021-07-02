@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("static-method") class NFSATest {
 
-  final NFSA<Character> empty = new NFSA();
-  final NFSA<Character> a = new NFSA('a');
-  final NFSA<Character> b = new NFSA('b');
-  final NFSA<Character> ab = a.then(b);
-  final NFSA<Character> a_b = a.or(b);
-  final NFSA<Character> abStar = ab.star();
+  final Text empty = new Text();
+  final Text a = new Text('a');
+  final Text b = new Text('b');
+  final Text ab = a.then(b);
+  final Text a_b = a.or(b);
+  final Text abStar = ab.star();
 
   @Test void singletonOk() {
     assertTrue(a.run("a"));
@@ -26,11 +26,11 @@ import org.junit.jupiter.api.Test;
   }
   
   @Test void singletonSize() {
-    assertEquals(a.n(),2);
+    assertEquals(a.δ.keySet().size(), 1);
   }
   @Test void emptyStringRecognizer() {
-    assertTrue(new NFSA().run(""));
-    assertFalse(new NFSA().run("a"));
+    assertTrue(new Text().run(""));
+    assertFalse(new Text().run("a"));
   }
   @Test void abAccept() {
     assertTrue(ab.run("ab"));

@@ -107,6 +107,6 @@ public abstract class RE {
   public static void main(String[] args) {
     RE.c('a').or(RE.c('b')).then(RE.c('x')).star().then(RE.c('x'));
   }
-};
+}
 
 

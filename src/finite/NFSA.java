@@ -1,36 +1,27 @@
 package finite;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-enum singleton {
-  ;
-  static <T> Set<T> Set(T t) {
-    Set<T> $ = empty.Set();
-    $.add(t);
-    return $;
-  }
-}
-
-class NFSA<Σ> extends FSA<Σ> {
+class NFSA<Σ, Self extends NFSA<Σ, Self>> extends FSA<Σ> {
   /* One liners: //@formatter:off */
  final State s0 = new State(super.q0); // The initial state
  final Map<Q, Set<Q>> ε;               // Set of all ε transitions
- static  <Σ> NFSA<Σ> σ(Σ σ) { return new NFSA<>(σ); }
- static  <Σ> NFSA<Σ> ε(){ return new NFSA<>(); }
- NFSA<Σ> star() { return Thompson.star(this); }
- NFSA<Σ> plus() { return Thompson.plus(this); }
- NFSA<Σ> not() { return Thompson.not(this); }
- NFSA<Σ> or(NFSA<Σ> a2) { return Thompson.or(this, a2); }
- NFSA<Σ> then(NFSA<Σ> a2) { return Thompson.then(this, a2); }
- NFSA<Σ> and(NFSA<Σ> a2) {return Thompson.and(this, a2); }
- NFSA<Σ> ε(Q from, Q to) { ε(from).add(to); return this; }
+ @SuppressWarnings("unchecked") Self selfie() { return (Self) this; }
+static  <Σ, Self extends NFSA<Σ, Self>> Self σ(Σ σ) { return new NFSA<Σ, Self>(σ).selfie(); }
+ static  <Σ, Self extends NFSA<Σ, Self>> Self ε(){ return new NFSA<Σ, Self>().selfie(); }
+ Self star() { return Thompson.star(this).selfie(); }
+ Self plus() { return Thompson.plus(this).selfie(); }
+ Self not() { return Thompson.not(this).selfie(); }
+ Self or(NFSA<Σ, Self> a2) { return Thompson.or(this, a2).selfie(); }
+ Self then(NFSA<Σ, Self> a2) { return Thompson.then(this, a2).selfie(); }
+ Self and(NFSA<Σ, Self> a2) {return Thompson.and(this, a2).selfie(); }
+ void ε(Q from, Q to) { ε(from).add(to);}
  
- /*  Multiple liners //@formatter:on */
+//@formatter:on */
   boolean run(Iterable<Σ> w) {
     var s = s0;
     for (var σ : w)
@@ -104,13 +95,6 @@ class NFSA<Σ> extends FSA<Σ> {
           return true;
       return false;
     }
-  }
-
-  @SuppressWarnings("static-method") Map<State, Q> encode(Set<State> ss) {
-    Map<State, Q> $ = new HashMap<>();
-    for (var s : ss)
-      $.put(s, new Q());
-    return $;
   }
 
   DFSA<Σ> d() {

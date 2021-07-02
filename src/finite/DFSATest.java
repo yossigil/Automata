@@ -5,13 +5,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("static-method") class DFSATest {
-  final NFSA<Character> empty = new NFSA();
-  final NFSA<Character> a = new NFSA('a');
-  final NFSA<Character> b = new NFSA('b');
-  final NFSA<Character> ab = a.then(b);
-  final NFSA<Character> a_b = a.or(b);
-  final NFSA<Character> abStar = ab.star();
-  final NFSA<Character> x = a_b.then(ab).then(a_b).or(a.then(a).then(a).then(a));
+  final Text empty = new Text();
+  final Text a = new Text('a');
+  final Text b = new Text('b');
+  final Text ab = a.then(b);
+  final Text a_b = a.or(b);
+  final Text abStar = ab.star();
+  final Text x = a_b.then(ab).then(a_b).or(a.then(a).then(a).then(a));
 
   @Test void t00() {
     new DFSA(x);
@@ -45,8 +45,8 @@ import org.junit.jupiter.api.Test;
     assertEquals(empty.d().n(),1);
   }
   @Test void emptyStringRecognizer() {
-    assertTrue(new NFSA().run(""));
-    assertFalse(new NFSA().run("a"));
+    assertTrue(new Text().run(""));
+    assertFalse(new Text().run("a"));
   }
   @Test void abAccept() {
     assertTrue(ab.run("ab"));
