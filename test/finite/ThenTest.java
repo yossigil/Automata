@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("static-method") class ThenTest {
+ class ThenTest {
   final Text ab = new Text(new Text('a').then(new Text('b')));
   
   @Test void accept() {
