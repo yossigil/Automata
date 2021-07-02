@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
   final Text empty = new Text();
   final Text a = new Text('a');
   final Text b = new Text('b');
-  final Text a_b = a.or(b);
-  final Text ab = a.then(b);
-  final Text abStar = ab.star();
+  final Text a_b = new Text(a.or(b));
+  final Text ab = new Text(a.then(b));
+  final Text abStar = new Text(ab.star());
 
   @Test void singletonOk() {
     assertTrue(a.run("a"));
@@ -77,8 +77,5 @@ import org.junit.jupiter.api.Test;
   }
   @Test void abStarReject3() {
     assertFalse(abStar.run("abababa"));
-  }
-  @Test void a_bSize() {
-    assertEquals(a_b.n(), 5);
   }
 }

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
   final Text empty = new Text();
   final Text a = new Text('a');
   final Text b = new Text('b');
-  final Text a_b = a.or(b);
+  final Text a_b = new Text(a.or(b));
 
   @Test void singletonOk() {
     assertTrue(a.run("a"));
@@ -24,16 +24,24 @@ import org.junit.jupiter.api.Test;
   @Test void singletonEmpty() {
     assertFalse(a.run(""));
   }
+
+  @Test void singletonOK() {
+    assertTrue(b.run("b"));
+  }
   
   @Test void singletonSize() {
     assertEquals(a.δ.keySet().size(), 1);
   }
-  @Test void emptyStringRecognizer() {
-    assertTrue(new Text().run(""));
+  @Test void emptyLanguage() {
+    assertFalse(new Text().run(""));
     assertFalse(new Text().run("a"));
+    assertFalse(new Text().run("abca"));
   }
-  @Test void a_bAccept() {
+  @Test void a_bAcceptA() {
     assertTrue(a_b.run("a"));
+    assertTrue(a_b.run("b"));
+  }
+  @Test void a_bAcceptB() {
     assertTrue(a_b.run("b"));
   }
   @Test void a_bRejectEmpty() {

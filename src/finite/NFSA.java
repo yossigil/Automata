@@ -6,21 +6,20 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-class NFSA<Σ, Self extends NFSA<Σ, Self>> extends FSA<Σ, Self> {
+class NFSA<Σ> extends FSA<Σ> {
   /* One liners: //@formatter:off */
- final Map<Q, Set<Q>> ε = empty.Map();               // Set of all ε transitions
- final State s0 = new State(super.q0); // The initial state
- @SuppressWarnings("unchecked") Self selfie() { return (Self) this; }
-static  <Σ, Self extends NFSA<Σ, Self>> Self σ(Σ σ) { return new NFSA<Σ, Self>(σ).selfie(); }
- static  <Σ, Self extends NFSA<Σ, Self>> Self ε(){ return new NFSA<Σ, Self>().selfie(); }
- Self star() { return Thompson.star(this).selfie(); }
- Self plus() { return Thompson.plus(this).selfie(); }
- Self not() { return Thompson.not(this).selfie(); }
- Self or(NFSA<Σ, Self> a2) { return Thompson.or(this, a2).selfie(); }
- Self then(NFSA<Σ, Self> a2) { return Thompson.then(this, a2).selfie(); }
- Self and(NFSA<Σ, Self> a2) {return Thompson.and(this, a2).selfie(); }
- Self ε(Q from, Q to) { ε(from).add(to); return this.selfie();}
-//@formatter:on 
+  final Map<Q, Set<Q>> ε = empty.Map();               // Set of all ε transitions
+  final State s0 = new State(super.q0); // The initial state
+  static  <Σ> NFSA<Σ> σ(Σ σ) { return new NFSA<Σ>(σ); }
+  static  <Σ> NFSA<Σ> ε(){ return new NFSA<Σ>(); }
+  NFSA<Σ> star() { return Thompson.star(this); }
+  NFSA<Σ> plus() { return Thompson.plus(this); }
+  NFSA<Σ> not() { return Thompson.not(this); }
+  NFSA<Σ> or(NFSA<Σ> a2) { return Thompson.or(this, a2); }
+  NFSA<Σ> then(NFSA<Σ> a2) { return Thompson.then(this, a2); }
+  NFSA<Σ> and(NFSA<Σ> a2) {return Thompson.and(this, a2); }
+  NFSA<Σ> ε(Q from, Q to) { ε(from).add(to); return this;}
+  //@formatter:on 
   boolean run(Iterable<Σ> w) {
     var s = s0;
     for (var σ : w)
@@ -59,6 +58,12 @@ static  <Σ, Self extends NFSA<Σ, Self>> Self σ(Σ σ) { return new NFSA<Σ, S
     var q1 = Q.make();
     ζ(q1);
     δ(q0, c, q1);
+  }
+
+  public NFSA(Q q0, Set<Q> ζ, Map<Σ, Map<Q, Q>> δ, Map<Q, Set<Q>> ε) {
+    super(q0, ζ, δ);
+    for (Q q : ε.keySet())
+      this.ε.put(q, ε.get(q));
   }
 
   class State implements V<State>, Iterable<Q> {
@@ -110,10 +115,10 @@ static  <Σ, Self extends NFSA<Σ, Self>> Self σ(Σ σ) { return new NFSA<Σ, S
     }
   }
 
-  xDFSA<Σ> d() {
+  DFSA<Σ> d() {
     return new Object() {
       /* One liners: //@formatter:off */
-      xDFSA<Σ> go() { return new xDFSA<Σ>(q0(), ζ(), δ()); }
+      DFSA<Σ> go() { return new DFSA<Σ>(q0(), ζ(), δ()); }
       /* Multi liners: //@formatter:on */
       Set<Q> ζ() {
         Set<Q> $ = empty.Set();
@@ -125,9 +130,8 @@ static  <Σ, Self extends NFSA<Σ, Self>> Self σ(Σ σ) { return new NFSA<Σ, S
 
       Map<Σ, Map<Q, Q>> δ() {
         Map<Σ, Map<Q, Q>> $ = empty.Map();
-        for (var σ : Σ()) {
+        for (var σ : Σ()) 
           $.put(σ, δ(σ));
-        }
         return $;
       }
 
@@ -144,7 +148,7 @@ static  <Σ, Self extends NFSA<Σ, Self>> Self σ(Σ σ) { return new NFSA<Σ, S
       Map<State, Q> code() { Map<State,Q> $ = empty.Map(); for (var s: ss) $.put(s, new Q()); return $; }
       Q Q(State s) { return code.get(s); }
       Q q0() { return code.get(s0); }
-      
     }.go();
   }
+  
 }
