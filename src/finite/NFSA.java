@@ -12,7 +12,7 @@ class NFSA<Σ> extends FSA<Σ> {
   final State s0 = new State(super.q0); // The initial state
   static  <Σ> NFSA<Σ> σ(Σ σ) { return new NFSA<Σ>(σ); }
   static  <Σ> NFSA<Σ> ε(){ return new NFSA<Σ>(); }
-  NFSA<Σ> star() { return Thompson.star(this); }
+
   NFSA<Σ> plus() { return Thompson.plus(this); }
   NFSA<Σ> not() { return Thompson.not(this); }
   NFSA<Σ> or(NFSA<Σ> a2) { return Thompson.or(this, a2); }
@@ -21,20 +21,19 @@ class NFSA<Σ> extends FSA<Σ> {
   NFSA<Σ> ε(Q from, Q to) { ε(from).add(to); return this;}
   //@formatter:on 
   boolean run(Iterable<Σ> w) {
-    var s = s0;
+    var s = s0.ε();
     for (var σ : w)
-      s = s.ε().δ(σ).ε();
+      s = s.δ(σ).ε();
     return s.ζ();
   }
 
   Set<Q> ε(Q q) {
     if (ε.get(q) == null)
       ε.put(q, empty.Set());
-    ε.get(q).addAll(ε(ε.get(q)));
     return ε.get(q);
   }
 
-  Set<Q> ε(Set<Q> s) {
+  private Set<Q> ε(Set<Q> s) {
     Set<Q> $ = new LinkedHashSet<>();
     for (;;) {
       final Set<Q> todo = empty.Set();
@@ -78,8 +77,8 @@ class NFSA<Σ> extends FSA<Σ> {
     @Override public Iterator<Q> iterator() { return qs.iterator(); }
     //@formatter:on 
     State ε() {
-      for (State $ = new State(qs);;) {
-        final Set<Q> todo = empty.Set();
+      final Set<Q> todo = empty.Set();
+      for (State $ = new State(qs);; todo.clear()) {
         for (Q q : $)
           for (Q qε : NFSA.this.ε(q)) {
             if ($.has(qε))
@@ -115,6 +114,16 @@ class NFSA<Σ> extends FSA<Σ> {
     }
   }
 
+  NFSA<Σ> star() {
+    final var $ = new NFSA<Σ>();
+    $.ζ($.q0);
+    $.δ(δ);
+    $.ε($.q0, q0);
+    for (Q q : ζ)
+      $.ε(q, $.q0);
+    return $;
+  }
+
   DFSA<Σ> d() {
     return new Object() {
       /* One liners: //@formatter:off */
@@ -130,7 +139,7 @@ class NFSA<Σ> extends FSA<Σ> {
 
       Map<Σ, Map<Q, Q>> δ() {
         Map<Σ, Map<Q, Q>> $ = empty.Map();
-        for (var σ : Σ()) 
+        for (var σ : Σ())
           $.put(σ, δ(σ));
         return $;
       }

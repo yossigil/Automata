@@ -1,9 +1,5 @@
 package finite;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
-
 @SuppressWarnings("static-method") class DFSATest {
   final Text empty = new Text();
   final Text a = new Text('a');
