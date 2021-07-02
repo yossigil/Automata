@@ -6,39 +6,42 @@ import java.util.Map;
 import java.util.Set;
 
 class Q {
-  static Q make() {return new Q(); }
-};
-
+  static Q make() {
+    return new Q();
+  }
+}
 
 class FSA<Σ> {
-  Q q0 = Q.make();
+  final Q q0;
+  final Q q$ = Q.make();
   final Set<Q> ζ;
-  final Σ any = null;
   final Map<Σ, Map<Q, Q>> δ;
+  Set<Σ> Σ() { return δ.keySet(); }
 
-  void q0(Q q0) {
-    this.q0 = q0;
-  }
-  void ζ(Q q) {
-    ζ.add(q);
-  }
-  void δ(Q from, Σ σ, Q to) {
-    δ(σ).put(from, to);
-  }
-  Map<Q, Q> δ(Σ σ) {
+  private Map<Q, Q> δ(Σ σ) {
     if (δ.get(σ) == null)
       δ.put(σ, new LinkedHashMap<>());
     return δ.get(σ);
   }
 
   Q δ(Q q, Σ σ) {
-    return δ(σ).get(q);
+    return q == q$ || !δ(σ).containsKey(q) ? q$ : δ(σ).get(q);
   }
+
+  void δ(Q from, Σ σ, Q to) {
+    δ(σ).put(from, to);
+  }
+
+  void ζ(Q q) {
+    ζ.add(q);
+  }
+
   FSA() {
-    ζ = new LinkedHashSet<>();
-    δ = new LinkedHashMap<>();
+    this(Q.make(),empty.Set(), empty.Map());
   }
-  FSA(Set<Q> ζ, Map<Σ, Map<Q, Q>> δ) {
+
+  FSA(Q q0, Set<Q> ζ, Map<Σ, Map<Q, Q>> δ) {
+    this.q0 = q0;
     this.ζ = ζ;
     this.δ = δ;
   }
