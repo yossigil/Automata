@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
   final Text empty = new Text();
   final Text a = new Text('a');
   final Text b = new Text('b');
-  final Text ab = a.then(b);
   final Text a_b = a.or(b);
+  final Text ab = a.then(b);
   final Text abStar = ab.star();
 
   @Test void singletonOk() {
@@ -54,9 +54,6 @@ import org.junit.jupiter.api.Test;
   @Test void a_bRejectAB() {
     assertFalse(a_b.run("ab"));
   }
-  @Test void a_bSize() {
-    assertEquals(a_b.n(), 5);
-  }
   @Test void abStarAccept0() {
     assertFalse(abStar.run(""));
   }
@@ -80,5 +77,8 @@ import org.junit.jupiter.api.Test;
   }
   @Test void abStarReject3() {
     assertFalse(abStar.run("abababa"));
+  }
+  @Test void a_bSize() {
+    assertEquals(a_b.n(), 5);
   }
 }

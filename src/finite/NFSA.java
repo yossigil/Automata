@@ -6,10 +6,10 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-class NFSA<Σ, Self extends NFSA<Σ, Self>> extends FSA<Σ> {
+class NFSA<Σ, Self extends NFSA<Σ, Self>> extends FSA<Σ, Self> {
   /* One liners: //@formatter:off */
+ final Map<Q, Set<Q>> ε = empty.Map();               // Set of all ε transitions
  final State s0 = new State(super.q0); // The initial state
- final Map<Q, Set<Q>> ε;               // Set of all ε transitions
  @SuppressWarnings("unchecked") Self selfie() { return (Self) this; }
 static  <Σ, Self extends NFSA<Σ, Self>> Self σ(Σ σ) { return new NFSA<Σ, Self>(σ).selfie(); }
  static  <Σ, Self extends NFSA<Σ, Self>> Self ε(){ return new NFSA<Σ, Self>().selfie(); }
@@ -19,13 +19,12 @@ static  <Σ, Self extends NFSA<Σ, Self>> Self σ(Σ σ) { return new NFSA<Σ, S
  Self or(NFSA<Σ, Self> a2) { return Thompson.or(this, a2).selfie(); }
  Self then(NFSA<Σ, Self> a2) { return Thompson.then(this, a2).selfie(); }
  Self and(NFSA<Σ, Self> a2) {return Thompson.and(this, a2).selfie(); }
- void ε(Q from, Q to) { ε(from).add(to);}
- 
-//@formatter:on */
+ Self ε(Q from, Q to) { ε(from).add(to); return this.selfie();}
+//@formatter:on 
   boolean run(Iterable<Σ> w) {
     var s = s0;
     for (var σ : w)
-      s = s.δ(σ);
+      s = s.ε().δ(σ).ε();
     return s.ζ();
   }
 
@@ -53,26 +52,40 @@ static  <Σ, Self extends NFSA<Σ, Self>> Self σ(Σ σ) { return new NFSA<Σ, S
   }
 
   NFSA() {
-    ε = empty.Map();
   }
 
   NFSA(Σ c) {
     this();
     var q1 = Q.make();
-    ζ.add(q1);
+    ζ(q1);
     δ(q0, c, q1);
   }
 
   class State implements V<State>, Iterable<Q> {
     /* One liners: //@formatter:off */
     final Set<Q> qs = new HashSet<>();
+    boolean has(Q q) { return qs.contains(q); }
     State() {}
     State(Q q) { add(q); }
     State(Set<Q> qs) { add(qs);}
-    Q add(Q $) { if (!qs.contains($)) qs.addAll(ε($)); return $; }
-    Set<Q> ε(Q q) { return NFSA.this.ε(q); }
+    void add(Q q) { qs.add(q); }
     void add(Set<Q> qs) { for (Q q: qs) add(q); }
     @Override public Iterator<Q> iterator() { return qs.iterator(); }
+    //@formatter:on 
+    State ε() {
+      for (State $ = new State(qs);;) {
+        final Set<Q> todo = empty.Set();
+        for (Q q : $)
+          for (Q qε : NFSA.this.ε(q)) {
+            if ($.has(qε))
+              continue;
+            todo.add(qε);
+          }
+        if (todo.isEmpty())
+          return $;
+        $.add(todo);
+      }
+    }
     /*  Multiple liners //@formatter:on */
 
     State δ(Σ σ) {
@@ -97,11 +110,10 @@ static  <Σ, Self extends NFSA<Σ, Self>> Self σ(Σ σ) { return new NFSA<Σ, S
     }
   }
 
-  DFSA<Σ> d() {
-
+  xDFSA<Σ> d() {
     return new Object() {
       /* One liners: //@formatter:off */
-      DFSA<Σ> go() { return new DFSA<Σ>(q0(), ζ(), δ()); }
+      xDFSA<Σ> go() { return new xDFSA<Σ>(q0(), ζ(), δ()); }
       /* Multi liners: //@formatter:on */
       Set<Q> ζ() {
         Set<Q> $ = empty.Set();

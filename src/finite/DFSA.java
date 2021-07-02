@@ -3,7 +3,12 @@ package finite;
 import java.util.Map;
 import java.util.Set;
 
-public class DFSA<Σ> extends FSA<Σ> {
+class xDFSA<Σ> extends DFSA<Σ,xDFSA<Σ>> {
+  public xDFSA(Q q, Set<Q> ζ, Map<Σ, Map<Q, Q>> δ) {
+    super(q, ζ, δ);
+  }
+}
+public class DFSA<Σ, Self extends DFSA<Σ,Self>> extends FSA<Σ, Self> {
   public DFSA(Q q, Set<Q> ζ, Map<Σ, Map<Q, Q>> δ) {
     super(q, ζ, δ);
   }
