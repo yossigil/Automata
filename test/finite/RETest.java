@@ -1,13 +1,5 @@
 package finite;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
-
-class RETest {
-  @Test void test() {
-    fail("Not yet implemented");
-  }
-  NFSA x; 
-
+class Fluent {
+    RE v = RE.c('a').or(RE.c('b')).then(RE.c('x')).star().then(RE.c('x'));
 }

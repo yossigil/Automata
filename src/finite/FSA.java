@@ -34,7 +34,7 @@ class FSA<Σ> {
 
   Map<Q, Q> δ(Σ σ) {
     if (δ.get(σ) == null)
-      δ.put(σ, new LinkedHashMap<>());
+      δ.put(σ, empty.Map()); 
     return δ.get(σ);
   }
   FSA(Q q0, Set<Q> ζ, Map<Σ, Map<Q, Q>> δ) {

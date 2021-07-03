@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class StarTest2 {
+class Star2 {
   final Text abStar = new Text('a').Then('b').star();
   
   @Test void accept0() {

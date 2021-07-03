@@ -101,6 +101,7 @@ class NFSA<Σ> extends FSA<Σ> {
     final var $ = new NFSA<Σ>();
     $.ζ($.q0);
     $.δ(δ);
+    $.ε(ε);
     $.ε($.q0, q0);
     for (Q q : ζ)
       $.ε(q, $.q0);
@@ -125,11 +126,11 @@ class NFSA<Σ> extends FSA<Σ> {
 
           @Override public Set<Q> n(Q q) {
             final Set<Q> $ = empty.Set();
-            if (ε.get(q) != null)
-            $.addAll(ε.get(q));
             for (Σ σ : Σ())
               if (δ(σ).get(q) != null)
                 $.add(δ(σ).get(q));
+            if (ε.get(q) != null)
+              $.addAll(ε.get(q));
             return $;
           }
         }.dfs(q0);
@@ -142,9 +143,6 @@ class NFSA<Σ> extends FSA<Σ> {
           for (Q from : δσ.keySet())
             $ += "\t " + Q(from) + "->[\"" + σ + "\"] " + Q(δσ.get(from)) + ";\n";
         }
-        for (Q q : ζ)
-          if (q != q0)
-            $ += "\t " + Q(q) + "[accept];\n";
         return $;
       }
 

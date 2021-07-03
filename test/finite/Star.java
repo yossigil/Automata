@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class StarTest {
+class Star {
   final Text aStar = new Text(new Text('a').star());
   
   @Test void accept0() {

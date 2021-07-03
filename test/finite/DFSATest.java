@@ -1,6 +1,6 @@
 package finite;
 
-@SuppressWarnings("static-method") class DFSATest {
+class DFSATest {
   final Text empty = new Text();
   final Text a = new Text('a');
   final Text b = new Text('b');

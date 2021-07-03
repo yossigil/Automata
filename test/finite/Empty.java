@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("static-method") class Empty {
+class Empty {
 
   final Text empty = new Text();
 

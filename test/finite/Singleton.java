@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("static-method") class Singleton {
+class Singleton {
 
   final Text a = new Text('a');
   final Text b = new Text('b');
