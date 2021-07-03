@@ -17,12 +17,7 @@ class TikZ {
 
   @Test void exists() {
     System.out.println(x4.TikZ());
-   DFSA<Character> d = x4.d();
-    System.out.println(d.TikZ());
-  }
-
-  @Test void detrmine() {
     DFSA<Character> d = x4.d();
-// System.out.println(d.TikZ());
+    System.out.println(d.TikZ());
   }
 }
