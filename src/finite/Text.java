@@ -5,9 +5,15 @@ import java.util.Map;
 import java.util.Set;
 
 class Text extends NFSA<Character> {
-  public Text Then(char c) {
-    return new Text(super.then(new Text(c)));
-  }
+  //@formatter:off
+  Text And(char c) { return new Text(and(new Text(c))); }
+  Text Or(char c) { return new Text(or(new Text(c))); }
+  Text Then(char c) { return new Text(then(new Text(c))); }
+  Text and(Text t) { return new Text(super.and(t)); }
+  Text or(Text t) { return new Text(super.or(t)); }
+  Text then(Text t) { return new Text(super.then(t)); }
+  Text star() { return new Text(super.star()); }
+  //@formatter:on
   Text(char c) {
     Q q1 = new Q();
     δ(q0, c, q1);
@@ -16,7 +22,6 @@ class Text extends NFSA<Character> {
 
   Text(NFSA<Character> a) {
     this(a.q0, a.ζ, a.δ, a.ε);
-    System.out.println(a.TikZ());
   }
 
   Text(Q q0, Set<Q> ζ, Map<Character, Map<Q, Q>> δ, Map<Q, Set<Q>> ε) {
@@ -41,13 +46,4 @@ class Text extends NFSA<Character> {
     });
   }
 
-  public Text And(char c) {
-    return new Text(super.and(new Text(c)));
-  }
-  public Text Or(char c) {
-    return new Text(super.or(new Text(c)));
-  }
-  public Text star() {
-    return new Text(super.star());
-  }
 }

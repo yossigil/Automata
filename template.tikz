@@ -5,20 +5,16 @@
 \tikzstyle{initial}=[circle,draw]
 \tikzstyle{every node}=[rectangle]
 \tikzstyle{epsilon}=[red]
-\tikzstyle{graphs/every graph}=[layered layout,
+\tikzstyle{graphs/every graph}=[tree layout,
 nodes={ellipse,fill=olive!20,inner sep=2pt}]
 \begin{tikzpicture}
 
 \graph{
-	 "$q_{0}$" -> [epsilon]"$q_{1}$";
-	 "$q_{2}$" -> [epsilon]"$q_{0}$";
-	 "$q_{3}$"[initial] -> [epsilon]"$q_{4}$";
-	 "$q_{5}$" -> [epsilon]"$q_{6}$";
-	 "$q_{7}$" -> [epsilon]"$q_{8}$";
-	 "$q_{1}$" -> [epsilon]"$q_{9}$";
-	 "$q_{4}$"->["a"] "$q_{2}$";
-	 "$q_{9}$"->["b"] "$q_{7}$";
-	 "$q_{8}$"->["c"] "$q_{5}$";
-	 "$q_{6}$"->["d"] "$q_{10}$"[accept];
+	 "$q_{1}$"->["a"] "$q_{1}$";
+	 "$q_{0}$"[initial]->["a"] "$q_{1}$";
+	 "$q_{1}$"->["b"] "$q_{1}$";
+	 "$q_{0}$"[initial]->["b"] "$q_{1}$";
+	 "$q_{1}$"->["c"] "$q_{1}$";
+	 "$q_{0}$"[initial]->["c"] "$q_{1}$";
 };
 \end{tikzpicture}

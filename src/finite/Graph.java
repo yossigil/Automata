@@ -1,11 +1,12 @@
 package finite;
 
-import java.util.HashSet;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
+
 interface XDFS<V> {
-  void v(V v);
+  default void v(V v) {
+  }
+
   Set<V> n(V v);
 
   default Set<V> dfs(V v) {
@@ -23,7 +24,6 @@ interface XDFS<V> {
     return $;
   }
 }
-
 
 @FunctionalInterface interface DFS<Vertex extends V<Vertex>> {
   void v(Vertex t);
