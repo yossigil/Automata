@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 class StarTest2 {
-  final Text abStar = new Text(new Text('a').then(new Text('b')).star());
+  final Text abStar = new Text('a').Then('b').star();
   
   @Test void accept0() {
     assertTrue(abStar.run(""));

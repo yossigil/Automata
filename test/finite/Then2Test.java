@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
- class ThenTest {
+ public class Then2Test {
   final Text ab = new Text(new Text('a').then(new Text('b')));
   
   @Test void accept() {

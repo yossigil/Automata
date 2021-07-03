@@ -1,0 +1,18 @@
+﻿\usetikzlibrary{automata, positioning, arrows}
+\usetikzlibrary{graphdrawing}
+\usegdlibrary{trees,force,layered}
+\tikzstyle{accept}=[fill=green!50]
+\tikzstyle{initial}=[circle,draw]
+\tikzstyle{every node}=[rectangle]
+\tikzstyle{epsilon}=[red]
+\tikzstyle{graphs/every graph}=[layered layout,
+nodes={ellipse,fill=olive!20,inner sep=2pt}]
+\begin{tikzpicture}
+\graph{
+	 "$q_{0}$" -> [epsilon]"$q_{1}$";
+	 "$q_{2}$"[initial] -> [epsilon]"$q_{3}$";
+	 "$q_{3}$"->["a"] "$q_{0}$";
+	 "$q_{1}$"->["b"] "$q_{4}$"[accept];
+	 "$q_{4}$"[accept][accept];
+};
+\end{tikzpicture}

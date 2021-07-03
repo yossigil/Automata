@@ -2,7 +2,6 @@ package finite;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,22 +30,6 @@ class NFSA<Σ> extends FSA<Σ> {
     if (ε.get(q) == null)
       ε.put(q, empty.Set());
     return ε.get(q);
-  }
-
-  private Set<Q> ε(Set<Q> s) {
-    Set<Q> $ = new LinkedHashSet<>();
-    for (;;) {
-      final Set<Q> todo = empty.Set();
-      for (var q : $)
-        for (var qε : ε(q)) {
-          if ($.contains(qε))
-            continue;
-          $.add(qε);
-          todo.add(qε);
-        }
-      if (todo.isEmpty())
-        return $;
-    }
   }
 
   NFSA() {
@@ -124,6 +107,68 @@ class NFSA<Σ> extends FSA<Σ> {
     return $;
   }
 
+  String TikZ() {
+    return new Object() {
+
+      String render() {
+        return wrap(traverse());
+      }
+
+      String wrap(String s) {
+        return "\\graph{\n" + s + "};\n";
+      }
+
+      String traverse() {
+        Set<Q> sq = new XDFS<Q>() {
+          @Override public void v(Q v) {
+          }
+
+          @Override public Set<Q> n(Q q) {
+            final Set<Q> $ = empty.Set();
+            if (ε.get(q) != null)
+            $.addAll(ε.get(q));
+            for (Σ σ : Σ())
+              if (δ(σ).get(q) != null)
+                $.add(δ(σ).get(q));
+            return $;
+          }
+        }.dfs(q0);
+        String $ = "";
+        for (Q from : ε.keySet())
+          for (Q to : ε.get(from))
+            $ += "\t " + Q(from) + " -> [epsilon]" + Q(to) + ";\n";
+        for (Σ σ : Σ()) {
+          Map<Q, Q> δσ = δ(σ);
+          for (Q from : δσ.keySet())
+            $ += "\t " + Q(from) + "->[\"" + σ + "\"] " + Q(δσ.get(from)) + ";\n";
+        }
+        for (Q q : ζ)
+          if (q != q0)
+            $ += "\t " + Q(q) + "[accept];\n";
+        return $;
+      }
+
+      int ordinal = 0;
+      Map<Q, Integer> n = empty.Map();
+
+      String Q(Q q) {
+        if (n.get(q) == null)
+          n.put(q, ordinal++);
+        return "\"$q_{" + n.get(q) + "}$\"" + properties(q);
+      }
+
+      private String properties(Q q) {
+        if (q == q0 && ζ.contains(q))
+          return "[initial,accept]";
+        if (q == q0)
+          return "[initial]";
+        if (ζ.contains(q))
+          return "[accept]";
+        return "";
+      }
+    }.render();
+  }
+
   DFSA<Σ> d() {
     return new Object() {
       /* One liners: //@formatter:off */
@@ -158,6 +203,10 @@ class NFSA<Σ> extends FSA<Σ> {
       Q Q(State s) { return code.get(s); }
       Q q0() { return code.get(s0); }
     }.go();
+  }
+  public void ε(Map<Q, Set<Q>> ε) {
+    for (Q q : ε.keySet()) 
+      ε(q).addAll(ε.get(q));
   }
   
 }

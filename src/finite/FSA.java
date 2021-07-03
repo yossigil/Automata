@@ -6,10 +6,8 @@ import java.util.Set;
 
 class Q {
   static int count = 0;
-  private int n;
-  Q() {
-    this.n = count++;
-  }
+  final int n = count++;
+
   
   @Override public String toString() {
     return "q" + n;
