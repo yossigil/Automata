@@ -5,21 +5,55 @@ import java.util.Set;
 
 class DFSA<Σ> extends FSA<Σ> {
   // @formatter: off
-  DFSA(Q q0, Set<Q> ζ, Map<Σ, Map<Q, Q>> Δ) { super(q0, ζ, Δ); }
-  boolean run(Iterable<Σ> w) { q0(); for (var σ : w) feed(σ); return ζ(); }  
+  DFSA(Q q0, Set<Q> ζ, Map<Σ, Map<Q, Q>> Δ) {
+    super(q0, ζ, Δ);
+  }
+
+  boolean run(Iterable<Σ> w) {
+    q0();
+    for (var σ : w)
+      feed(σ);
+    return ζ();
+  }
+
   String TikZ() {
     return new Object() {
 // @formatter:off
-      String render() { return wrap(traverse()); } 
-      String wrap(String s) { return "\\graph{\n" + s + "};\n"; } 
+    String render() { return wrap(traverse()); } 
+    String wrap(String s) { return "\\graph{\n" + s + "};\n"; } 
+
 // @formatter:on
       String traverse() {
         dfs(q -> Q(q));
         String $ = "";
-        for (Σ σ : Σ()) {
-          Map<Q, Q> δσ = δ(σ);
-          for (Q from : δσ.keySet())
-            $ += "\t " + Q(from) + "->[\"" + σ + "\"] " + Q(δσ.get(from)) + ";\n";
+        for (Q from : DFSA.this.Q()) {
+          Set<Σ> seen = empty.Set();
+          Set<Σ> set = empty.Set();
+          for (Σ σ : Σ()) {
+            if (seen.contains(σ))
+              continue;
+            final Q to = δ(from, σ);
+            for (Σ σ1 : Σ())
+              if (δ(from, σ) == to) {
+                set.add(σ1);
+                seen.add(σ1);
+              }
+            $ += "\t " + Q(from) + "->[\"" + labels(set) + "\"] " + Q(to) + ";\n";
+            set.clear();
+          }
+        }
+        return $;
+      }
+
+      private String labels(Set<Σ> σs) {
+        String $ = "";
+        boolean special = true;
+        for (Σ σ : σs) {
+          if (special)
+            special = false;
+          else
+            $ += ", ";
+          $ += "" + σ;
         }
         return $;
       }

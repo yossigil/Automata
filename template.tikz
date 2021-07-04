@@ -5,34 +5,19 @@
 \tikzstyle{initial}=[circle,draw]
 \tikzstyle{every node}=[rectangle]
 \tikzstyle{epsilon}=[red]
-\tikzstyle{graphs/every graph}=[layered layout,
-nodes={ellipse,fill=olive!20,inner sep=1pt,outer sep=1pt}]
+\tikzstyle{graphs/every graph}=[tree layout,
+nodes={ellipse,fill=olive!20,inner sep=1pt,outer sep=1pt}, level sep =12ex, sibling sep=4ex]
 \begin{tikzpicture}
 
 \graph{
-	 "$q_{2}$"[accept]->["a"] "$q_{3}$";
-	 "$q_{1}$"->["a"] "$q_{1}$";
-	 "$q_{0}$"[initial]->["a"] "$q_{1}$";
-	 "$q_{4}$"[accept]->["a"] "$q_{3}$";
-	 "$q_{5}$"[accept]->["a"] "$q_{3}$";
-	 "$q_{6}$"->["a"] "$q_{3}$";
-	 "$q_{7}$"->["a"] "$q_{3}$";
-	 "$q_{8}$"[accept]->["a"] "$q_{3}$";
-	 "$q_{2}$"[accept]->["b"] "$q_{3}$";
-	 "$q_{1}$"->["b"] "$q_{1}$";
-	 "$q_{0}$"[initial]->["b"] "$q_{1}$";
-	 "$q_{4}$"[accept]->["b"] "$q_{3}$";
-	 "$q_{5}$"[accept]->["b"] "$q_{3}$";
-	 "$q_{6}$"->["b"] "$q_{3}$";
-	 "$q_{7}$"->["b"] "$q_{3}$";
-	 "$q_{8}$"[accept]->["b"] "$q_{3}$";
-	 "$q_{2}$"[accept]->["c"] "$q_{3}$";
-	 "$q_{1}$"->["c"] "$q_{1}$";
-	 "$q_{0}$"[initial]->["c"] "$q_{1}$";
-	 "$q_{4}$"[accept]->["c"] "$q_{3}$";
-	 "$q_{5}$"[accept]->["c"] "$q_{3}$";
-	 "$q_{6}$"->["c"] "$q_{3}$";
-	 "$q_{7}$"->["c"] "$q_{1}$";
-	 "$q_{8}$"[accept]->["c"] "$q_{3}$";
+	 "$q_{2}$"->["a, b, c"] "$q_{3}$";
+	 "$q_{4}$"[accept]->["a, b, c"] "$q_{3}$";
+	 "$q_{5}$"->["a, b, c"] "$q_{3}$";
+	 "$q_{6}$"->["a, b, c"] "$q_{3}$";
+	 "$q_{7}$"[accept]->["a, b, c"] "$q_{3}$";
+	 "$q_{8}$"[accept]->["a, b, c"] "$q_{3}$";
+	 "$q_{9}$"[accept]->["a, b, c"] "$q_{3}$";
+	 "$q_{1}$"->["a, b, c"] "$q_{1}$";
+	 "$q_{0}$"[initial]->["a, b, c"] "$q_{1}$";
 };
 \end{tikzpicture}
