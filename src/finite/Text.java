@@ -20,9 +20,6 @@ class Text extends NFSA<Character> {
     ζ(q1);
   }
 
-  Text(NFSA<Character> a) {
-    this(a.q0, a.ζ, a.δ, a.ε);
-  }
 
   Text(Q q0, Set<Q> ζ, Map<Character, Map<Q, Q>> δ, Map<Q, Set<Q>> ε) {
     super(q0, ζ, δ, ε);
@@ -32,6 +29,12 @@ class Text extends NFSA<Character> {
     // TODO Auto-generated constructor stub
   }
 
+  public Text(Text and) {
+    // TODO Auto-generated constructor stub
+  }
+  public Text(NFSA<Character> a) {
+    super(a); 
+  }
   /* Dense: //@formatter:off */
   boolean run(String s) { return run(s.toCharArray()); }
   boolean run(char[] cs) {

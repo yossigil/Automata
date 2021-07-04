@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Test;
 public class Then4 {
   final Text abcd = new Text(new Text('a').then(new Text('b').then(new Text('c')).then(new Text('d'))));
 
+  @Test void x() {
+   System.out.println(abcd.TikZ()); 
+   System.out.println(abcd.d().TikZ()); 
+  }
   @Test void accept() {
     assertTrue(abcd.run("abcd"));
   }

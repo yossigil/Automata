@@ -30,7 +30,7 @@ interface XDFS<V> {
 
   default Set<Vertex> dfs(Vertex v) {
     Set<Vertex> $ = new LinkedHashSet<>();
-    new Object() {
+    new Object() { 
       void dfs(Vertex v) {
         if (!$.contains(v)) {
           v(v);

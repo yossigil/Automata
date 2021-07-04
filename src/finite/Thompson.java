@@ -3,28 +3,17 @@ package finite;
 enum Thompson {
   ;
   static <Σ> NFSA<Σ> or(NFSA<Σ> a1, NFSA<Σ> a2) {
-    final var $ = new NFSA<Σ>();
-    $.ζ(a1.ζ);
-    $.ζ(a2.ζ);
-    $.δ(a1.δ);
-    $.δ(a2.δ);
-    $.ε(a1.ε);
-    $.ε(a2.ε);
-    $.ε($.q0, a1.q0);
-    $.ε($.q0, a2.q0);
-    return $;
+    final NFSA<Σ> $ = new NFSA<Σ>();
+    $.ζ(a1.ζ).ζ(a2.ζ).δ(a1.Δ).δ(a2.Δ);
+    return $.ε(a1.ε).ε(a2.ε).ε($.q0, a1.q0).ε($.q0, a2.q0);
   }
 
   static <Σ> NFSA<Σ> then(NFSA<Σ> a1, NFSA<Σ> a2) {
-    final var $ = new NFSA<Σ>();
+    final var $ = new NFSA<Σ>().ε(a1.ε).ε(a2.ε);
     $.ε($.q0, a1.q0);
-    $.ε(a1.ε);
-    $.ε(a2.ε);
-    $.δ(a1.δ);
     for (Q q : a1.ζ)
       $.ε(q, a2.q0);
-    $.δ(a2.δ);
-    $.ζ(a2.ζ);
+    $.δ(a1.Δ).δ(a2.Δ).ζ(a2.ζ);
     return $;
   }
 

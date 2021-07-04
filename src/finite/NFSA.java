@@ -6,15 +6,20 @@ import java.util.Map;
 import java.util.Set;
 
 class NFSA<Σ> extends FSA<Σ> {
-  @Override Set<Q> n(Q q) {
-    var $ = super.n(q);
+  @Override Set<Q> δ(Q q) {
+    var $ = super.δ(q);
     $.addAll(ε(q));
     return $;
   }
+
   /* One liners: //@formatter:off */
   final Map<Q, Set<Q>> ε = empty.Map();               // Set of all ε transitions
+  /** Empty constructor: The empty language */ NFSA() { }
+  /** Full constructor */ NFSA(Map<Σ, Map<Q, Q>> Δ, Set<Q> ζ, Map<Q, Set<Q>> ε) { super(Δ, ζ); ε(ε);  }  
+  /** Copy constructor */ NFSA(NFSA<Σ> that) { this(that.q0, that.ζ, that.Δ, that.ε);   }
+  /** A recognizer of a single letter */ NFSA(Σ σ) { final Q q1 = new Q(); ζ(q1); δ(q0, σ, q1); }
   NFSA<Σ> ε(Q from, Q to) { ε(from).add(to); return this; } // Add an ε transition (fluently)
-  NFSA<Σ> ε(Map<Q, Set<Q>> ε) { for (Q q : ε.keySet()) ε(q).addAll(ε.get(q)); return this; }
+  NFSA<Σ> ε(Map<Q, Set<Q>> ε) { for (Q q : ε.keySet()) this.ε(q).addAll(ε.get(q)); return this; }
   Set<Q> ε(Q q) { if (ε.get(q) == null) ε.put(q, empty.Set()); return ε.get(q); } // Set of outgoing transitions
   final State s0 = new State(super.q0); // The initial state
   static  <Σ> NFSA<Σ> σ(Σ σ) { return new NFSA<Σ>(σ); }
@@ -32,21 +37,16 @@ class NFSA<Σ> extends FSA<Σ> {
     return s.ζ();
   }
 
-  NFSA() {
-  }
-
-  NFSA(Σ c) {
-    this();
-    var q1 = new Q();
-    ζ(q1);
-    δ(q0, c, q1);
-  }
 
   public NFSA(Q q0, Set<Q> ζ, Map<Σ, Map<Q, Q>> δ, Map<Q, Set<Q>> ε) {
     super(q0, ζ, δ);
-    for (Q q : ε.keySet())
+    for (Q q : ε(q))
       this.ε.put(q, ε.get(q));
   }
+
+
+
+
 
   class State implements V<State>, Iterable<Q> {
     @Override public int hashCode() {
@@ -76,7 +76,7 @@ class NFSA<Σ> extends FSA<Σ> {
     //@formatter:on 
     State ε() {
       final Set<Q> todo = empty.Set();
-      for (State $ = new State(qs);; todo.clear()) {
+      for (State $ = new State(qs);; $.add(todo),todo.clear()) {
         for (Q q : $)
           for (Q qε : NFSA.this.ε(q)) {
             if ($.has(qε))
@@ -85,7 +85,6 @@ class NFSA<Σ> extends FSA<Σ> {
           }
         if (todo.isEmpty())
           return $;
-        $.add(todo);
       }
     }
     /*  Multiple liners //@formatter:on */
@@ -99,8 +98,9 @@ class NFSA<Σ> extends FSA<Σ> {
 
     @Override public Iterable<State> neighbours() {
       final Set<State> $ = new HashSet<>();
-      for (var σ : δ.keySet())
-        $.add(δ(σ).ε());
+      final State ε = ε();
+        for (var σ : Σ())
+          $.add(ε.δ(σ).ε());
       return $;
     }
 
@@ -113,10 +113,10 @@ class NFSA<Σ> extends FSA<Σ> {
   }
 
   NFSA<Σ> star() {
-    final var $ = new NFSA<Σ>();
-    $.ζ($.q0);
-    $.δ(δ);
+    final var $ = new NFSA<Σ>(Δ, ζ, ε);
+    $.δ(Δ);
     $.ε(ε);
+    $.ζ($.q0);
     $.ε($.q0, q0);
     for (Q q : ζ)
       $.ε(q, $.q0);
@@ -154,25 +154,26 @@ class NFSA<Σ> extends FSA<Σ> {
 
       private String properties(Q q) {
         if (q == q0 && ζ.contains(q))
-          return "[initial,accept]";
+          return "[state,initial,accept]";
         if (q == q0)
-          return "[initial]";
+          return "[state,initial]";
         if (ζ.contains(q))
-          return "[accept]";
-        return "";
+          return "[state,accept]";
+        return "[]";
       }
     }.render();
   }
 
   DFSA<Σ> d() {
     return new Object() {
-      /* One liners: //@formatter:off */
-      Set<State> ss = new DFS<State>() { @Override public void v(State s) {}}.dfs(s0);
+    /* One liners: //@formatter:off */
+      DFSA<Σ> go() { return new DFSA<Σ>(q0(), ζ(), δ()); }  
+      Q q0() { return code.get(s0); }
+      Set<State> ss = new DFS<State>() { @Override public void v(State s) {}}.
+          dfs(s0);
       Map<State, Q> code = code();
       Map<State, Q> code() { Map<State,Q> $ = empty.Map(); for (var s: ss) $.put(s, new Q()); return $; }
-      Q Q(State s) { return code.get(s); }
-      Q q0() { return code.get(s0); }
-      DFSA<Σ> go() { return new DFSA<Σ>(q0(), ζ(), δ()); }  //@formatter:on */
+      Q Q(State s) { return code.get(s); } //@formatter:on */
 
       Set<Q> ζ() {
         Set<Q> $ = empty.Set();
