@@ -11,7 +11,11 @@ class Text extends NFSA<Character> {
   Text Then(char c) { return new Text(then(new Text(c))); }
   Text and(Text t) { return new Text(super.and(t)); }
   Text or(Text t) { return new Text(super.or(t)); }
-  Text then(Text t) { return new Text(super.then(t)); }
+  Text then(Text t) { NFSA<Character> then = super.then(t);
+  System.out.println("Then = " + then.TikZ());
+  Text text = new Text(then);
+  System.out.println("Text = " + text.TikZ());
+  return text; }
   Text star() { return new Text(super.star()); }
   //@formatter:on
   Text(char c) {
@@ -29,11 +33,12 @@ class Text extends NFSA<Character> {
     // TODO Auto-generated constructor stub
   }
 
-  public Text(Text and) {
-    // TODO Auto-generated constructor stub
+  public Text(Text t) {
+    super(t); 
   }
   public Text(NFSA<Character> a) {
     super(a); 
+    System.out.println("After constructor = " + TikZ());
   }
   /* Dense: //@formatter:off */
   boolean run(String s) { return run(s.toCharArray()); }

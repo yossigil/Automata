@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
   final Text ab = new Text(new Text('a').then(new Text('b')));
   
   @Test void accept() {
+    System.out.println("Ab = "+ ab.TikZ());
     assertTrue(ab.run("ab"));
   }
   @Test void rejectA() {

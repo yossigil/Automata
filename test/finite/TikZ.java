@@ -16,7 +16,7 @@ class TikZ {
   final Text x4 = x3.then(x3).star().or(x2).star().then(x1);
 
   @Test void exists() {
-    // System.out.println(x4.TikZ());
+    System.out.println(x4.TikZ());
     DFSA<Character> d = x4.d();
     System.out.println(d.TikZ());
   }
