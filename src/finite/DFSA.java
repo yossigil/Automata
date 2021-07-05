@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import utils.empty;
+import utils.set;
+
 class DFSA<Σ> extends FSA<Σ> {
   //@formatter:off
   DFSA(Q q0, Set<Q> ζ, Map<Σ, Map<Q, Q>> Δ) { super(q0, ζ, Δ); }

@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import utils.empty;
+import utils.set;
+
 class NFSA<Σ> extends FSA<Σ> {
   @Override public String toString() {
     return "Nodeterministic " + super.toString() + //

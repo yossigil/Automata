@@ -1,4 +1,4 @@
-package finite;
+package utils;
 
 import java.util.Set;
 
