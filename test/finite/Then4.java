@@ -9,7 +9,7 @@ public class Then4 {
 
   @Test void x() {
    System.out.println(abcd.TikZ()); 
-   System.out.println(abcd.d().TikZ()); 
+   System.out.println(abcd.DFSA().TikZ()); 
   }
   @Test void accept() {
     assertTrue(abcd.run("abcd"));

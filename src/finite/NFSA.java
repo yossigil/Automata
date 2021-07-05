@@ -6,8 +6,14 @@ import java.util.Map;
 import java.util.Set;
 
 class NFSA<Σ> extends FSA<Σ> {
+  @Override public String toString() {
+    return "Nodeterministic " + super.toString() + //
+        "\t ε = " + ε + " (non-deterministic ε-transitions)\n" + //
+        "";
+  }
+
   @Override Set<Q> δ(Q q) {
-    var $ = new State(ε(q));
+    var $ = new State(ε(q)).add(super.δ(q));
     for (Σ σ : Σ())
       $.add(new State().δ(σ).ε().qs);
     return $.qs;
@@ -17,9 +23,7 @@ class NFSA<Σ> extends FSA<Σ> {
   final Map<Q, Set<Q>> ε = empty.Map();               // Set of all ε transitions
   /** Empty constructor: The empty language */ NFSA() { }
   /** Full constructor */ NFSA(Map<Σ, Map<Q, Q>> Δ, Set<Q> ζ, Map<Q, Set<Q>> ε) { super(Δ, ζ); ε(ε);  }  
-  /** Copy constructor */ NFSA(NFSA<Σ> that) { this(that.q0, that.ζ, that.Δ, that.ε);   
-    System.out.println("After second constructor = " + TikZ());
-  }
+  /** Copy constructor */ NFSA(NFSA<Σ> that) { this(that.q0, that.ζ, that.Δ, that.ε); }
   /** A recognizer of a single letter */ NFSA(Σ σ) { final Q q1 = new Q(); ζ(q1); δ(q0, σ, q1); }
   NFSA<Σ> ε(Q from, Q to) { ε(from).add(to); return this; } // Add an ε transition (fluently)
   NFSA<Σ> ε(Map<Q, Set<Q>> ε) { for (Q q : ε.keySet()) this.ε(q).addAll(ε.get(q)); return this; }
@@ -31,7 +35,16 @@ class NFSA<Σ> extends FSA<Σ> {
   NFSA<Σ> not() { return Thompson.not(this); }
   NFSA<Σ> or(NFSA<Σ> a2) { return Thompson.or(this, a2); }
   NFSA<Σ> and(NFSA<Σ> a2) {return Thompson.and(this, a2); }
+
   //@formatter:on 
+
+  @Override Set<Q> Q() {
+    var $ = set.union(super.Q(), ε.keySet());
+    for (Q q : ε.keySet())
+      $.addAll(ε.get(q));
+    return $;
+  }
+
   boolean run(Iterable<Σ> w) {
     var s = s0.ε();
     for (var σ : w)
@@ -41,16 +54,11 @@ class NFSA<Σ> extends FSA<Σ> {
 
   public NFSA(Q q0, Set<Q> ζ, Map<Σ, Map<Q, Q>> δ, Map<Q, Set<Q>> ε) {
     super(q0, ζ, δ);
-    System.out.println("After third constructor = " + TikZ());
     for (Q q : ε.keySet())
       this.ε.put(q, ε.get(q));
   }
 
-
   class State implements V<State>, Iterable<Q> {
-    @Override public int hashCode() {
-      return qs.hashCode();
-    }
 
     @Override public boolean equals(Object o) {
       if (this == o)
@@ -64,26 +72,28 @@ class NFSA<Σ> extends FSA<Σ> {
     }
 
     /* One liners: //@formatter:off */
+    @Override public int hashCode() { return qs.hashCode(); }
     final Set<Q> qs = new HashSet<>();
     boolean has(Q q) { return qs.contains(q); }
     State() {}
     State(Q q) { add(q); }
     State(Set<Q> qs) { add(qs);}
-    void add(Q q) { qs.add(q); }
-    void add(Set<Q> qs) { for (Q q: qs) add(q); }
+
+    State add(Set<Q> qs) { for (Q q: qs) add(q); return this;}
+    void add(Q q) { qs.add(q); ε(); }
+    @Override public String toString() { return qs.toString(); } 
     @Override public Iterator<Q> iterator() { return qs.iterator(); }
     //@formatter:on 
     State ε() {
-      final Set<Q> todo = empty.Set();
-      for (State $ = new State(qs);; $.add(todo), todo.clear()) {
-        for (Q q : $)
+      for (final Set<Q> todo = empty.Set();; add(todo), todo.clear()) {
+        for (Q q : this)
           for (Q qε : NFSA.this.ε(q)) {
-            if ($.has(qε))
+            if (has(qε))
               continue;
             todo.add(qε);
           }
         if (todo.isEmpty())
-          return $;
+          return this;
       }
     }
     /*  Multiple liners //@formatter:on */
@@ -117,7 +127,6 @@ class NFSA<Σ> extends FSA<Σ> {
     for (Q q : this.ζ)
       $.ε(q, a2.q0);
     $.δ(this.Δ).δ(a2.Δ).ζ(a2.ζ);
-    System.out.println($.TikZ());
     return $;
   }
 
@@ -136,18 +145,18 @@ class NFSA<Σ> extends FSA<Σ> {
     return new Object() {
 // @formatter:off
       String render() { return wrap(traverse()); } 
-      String wrap(String s) { return "\\graph{\n" + s + "};\n"; } 
+      String wrap(String s) { return "graph{\n" + s + "}\n"; } 
 // @formatter:on
       String traverse() {
         dfs(q -> Q(q));
         String $ = "";
         for (Q from : ε.keySet())
           for (Q to : ε.get(from))
-            $ += "\t " + Q(from) + " -> [epsilon]" + Q(to) + ";\n";
+            $ += "\t " + Q(from) + " ->[\"$\\varepsilon$\",epsilon] " + Q(to) + ";\n";
         for (Σ σ : Σ()) {
           Map<Q, Q> δσ = δ(σ);
           for (Q from : δσ.keySet())
-            $ += "\t " + Q(from) + "->[\"" + σ + "\"] " + Q(δσ.get(from)) + ";\n";
+            $ += "\t " + Q(from) + "-> [\"" + σ + "\"] " + Q(δσ.get(from)) + ";\n";
         }
         return $;
       }
@@ -161,25 +170,29 @@ class NFSA<Σ> extends FSA<Σ> {
         return "\"$q_{" + n.get(q) + "}$\"" + properties(q);
       }
 
+      private Set<Q> seen = empty.Set();
+
       private String properties(Q q) {
+        if (seen.contains(q))
+          return "";
+        seen.add(q);
         if (q == q0 && ζ.contains(q))
           return "[state,initial,accept]";
         if (q == q0)
           return "[state,initial]";
         if (ζ.contains(q))
           return "[state,accept]";
-        return "[]";
+        return "";
       }
     }.render();
   }
 
-  DFSA<Σ> d() {
+  DFSA<Σ> DFSA() {
     return new Object() {
     /* One liners: //@formatter:off */
-      DFSA<Σ> go() { return new DFSA<Σ>(q0(), ζ(), δ()); }  
+      DFSA<Σ> DFSA() { return new DFSA<Σ>(q0(), ζ(), δ()); }  
       Q q0() { return code.get(s0); }
-      Set<State> ss = new DFS<State>() { @Override public void v(State s) {}}.
-          dfs(s0);
+      Set<State> ss = new DFS<State>() { @Override public void v(State s) {}}.dfs(s0);
       Map<State, Q> code = code();
       Map<State, Q> code() { Map<State,Q> $ = empty.Map(); for (var s: ss) $.put(s, new Q()); return $; }
       Q Q(State s) { return code.get(s); } //@formatter:on */
@@ -202,11 +215,10 @@ class NFSA<Σ> extends FSA<Σ> {
       Map<Q, Q> δ(Σ σ) {
         Map<Q, Q> $ = empty.Map();
         for (var s : ss)
-          $.put(Q(s), Q(s.δ(σ)));
+          $.put(Q(s), Q(s.ε().δ(σ).ε()));
         return $;
       }
-      /*Auxiliary definitions : //@formatter:off */
-    }.go();
+    }.DFSA();
   }
-  
+
 }

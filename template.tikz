@@ -5,19 +5,30 @@
 \tikzstyle{initial}=[circle,draw]
 \tikzstyle{every node}=[rectangle]
 \tikzstyle{epsilon}=[red]
-\tikzstyle{graphs/every graph}=[tree layout,
-nodes={ellipse,fill=olive!20,inner sep=1pt,outer sep=1pt}, level sep =12ex, sibling sep=4ex]
+\tikzstyle{graphs/every graph}=[spring layout,
+nodes={ellipse,fill=olive!20,inner sep=2pt,outer sep=2pt}, level sep =12ex, sibling sep=4ex, node distance = 35ex]
 \begin{tikzpicture}
 
-\graph{
-	 "$q_{2}$"->["a, b, c"] "$q_{3}$";
-	 "$q_{4}$"[accept]->["a, b, c"] "$q_{3}$";
-	 "$q_{5}$"->["a, b, c"] "$q_{3}$";
-	 "$q_{6}$"->["a, b, c"] "$q_{3}$";
-	 "$q_{7}$"[accept]->["a, b, c"] "$q_{3}$";
-	 "$q_{8}$"[accept]->["a, b, c"] "$q_{3}$";
-	 "$q_{9}$"[accept]->["a, b, c"] "$q_{3}$";
-	 "$q_{1}$"->["a, b, c"] "$q_{1}$";
-	 "$q_{0}$"[initial]->["a, b, c"] "$q_{1}$";
-};
+\path graph{
+	 "$q_{2}$" ->["$\varepsilon$",epsilon] "$q_{3}$";
+	 "$q_{4}$" ->["$\varepsilon$",epsilon] "$q_{0}$";
+	 "$q_{0}$" ->["$\varepsilon$",epsilon] "$q_{0}$";
+	 "$q_{0}$" ->["$\varepsilon$",epsilon] "$q_{6}$";
+	 "$q_{6}$" ->["$\varepsilon$",epsilon] "$q_{1}$";
+	 "$q_{1}$"-> ["a"] "$q_{2}$";
+	 "$q_{3}$"-> ["b"] "$q_{4}$";
+}
+;
+\node [above=of current bounding box] {{$(ab)^*$ NFSA}};
+\node [below=of current bounding box] {{$(ab)^*$ DFSA}};
+\path (-5,-12) graph{
+	 "$q_{3}$"[accept]->["a"] "$q_{2}$";
+	 "$q_{3}$"[accept]->["b"] "$q_{1}$";
+	 "$q_{1}$"->["a, b", loop] "$q_{1}$";
+	 "$q_{0}$"[initial,accept]->["a"] "$q_{2}$";
+	 "$q_{0}$"[initial,accept]->["b"] "$q_{1}$";
+	 "$q_{2}$"->["a"] "$q_{1}$";
+	 "$q_{2}$"->["b"] "$q_{3}$"[accept];
+}
+;
 \end{tikzpicture}

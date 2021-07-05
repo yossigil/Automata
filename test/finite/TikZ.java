@@ -17,7 +17,7 @@ class TikZ {
 
   @Test void exists() {
     System.out.println(x4.TikZ());
-    DFSA<Character> d = x4.d();
+    DFSA<Character> d = x4.DFSA();
     System.out.println(d.TikZ());
   }
 }
