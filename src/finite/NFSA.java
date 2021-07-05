@@ -20,23 +20,31 @@ class NFSA<Σ> extends FSA<Σ> {
   }
 
   /* One liners: //@formatter:off */
-  final Map<Q, Set<Q>> ε = empty.Map();               // Set of all ε transitions
-  /** Empty constructor: The empty language */ NFSA() { }
-  /** Full constructor */ NFSA(Map<Σ, Map<Q, Q>> Δ, Set<Q> ζ, Map<Q, Set<Q>> ε) { super(Δ, ζ); ε(ε);  }  
-  /** Copy constructor */ NFSA(NFSA<Σ> that) { this(that.q0, that.ζ, that.Δ, that.ε); }
-  /** A recognizer of a single letter */ NFSA(Σ σ) { final Q q1 = new Q(); ζ(q1); δ(q0, σ, q1); }
-  NFSA<Σ> ε(Q from, Q to) { ε(from).add(to); return this; } // Add an ε transition (fluently)
-  NFSA<Σ> ε(Map<Q, Set<Q>> ε) { for (Q q : ε.keySet()) this.ε(q).addAll(ε.get(q)); return this; }
+  /** Data: the table of ε transitions */ final Map<Q, Set<Q>> ε = empty.Map();               
+  /** Constructor: Empty */ NFSA() { }
+  /** Constructor: Full constructor */ NFSA(Map<Σ, Map<Q, Q>> Δ, Set<Q> ζ, Map<Q, Set<Q>> ε) { super(Δ, ζ); ε(ε);  }  
+  /** Constructor: Copy */ NFSA(NFSA<Σ> that) { this(that.q0, that.ζ, that.Δ, that.ε); }
+
+  /** Factory: recognizer of a single letter */ static <Σ> NFSA<Σ> σ(Σ σ) { return new NFSA<Σ>(σ); }
+  /** Factory: recognizer of the empty string */ static  <Σ> NFSA<Σ> ε(){ var $ = new NFSA<Σ>(); $.ζ($.q0); return $;}
+  /** Factory: recognizer of the empty set */ static  <Σ> NFSA<Σ> any(){ return new NFSA<Σ>((Σ)null); } 
+  /** Factory: recognizer of the empty set */ static  <Σ> NFSA<Σ> Φ(){ return new NFSA<Σ>(); }
+  /** Modifier: add a new empty transition */ NFSA<Σ> ε(Q from, Q to) { ε(from).add(to); return this; }
   Set<Q> ε(Q q) { if (ε.get(q) == null) ε.put(q, empty.Set()); return ε.get(q); } // Set of outgoing transitions
   final State s0 = new State(super.q0); // The initial state
-  static  <Σ> NFSA<Σ> σ(Σ σ) { return new NFSA<Σ>(σ); }
-  static  <Σ> NFSA<Σ> ε(){ var $ = new NFSA<Σ>(); $.ζ($.q0); return $;}
   NFSA<Σ> plus() { return Thompson.plus(this); }
   NFSA<Σ> not() { return Thompson.not(this); }
   NFSA<Σ> or(NFSA<Σ> a2) { return Thompson.or(this, a2); }
   NFSA<Σ> and(NFSA<Σ> a2) {return Thompson.and(this, a2); }
 
   //@formatter:on 
+  /** Modifier: add a new table of empty transitions */
+  NFSA<Σ> ε(Map<Q, Set<Q>> ε) {
+    for (Q q : ε.keySet())
+      if (ε.get(q) != null)
+        ε(q).addAll(ε.get(q));
+    return this;
+  }
 
   @Override Set<Q> Q() {
     var $ = set.union(super.Q(), ε.keySet());
@@ -56,6 +64,11 @@ class NFSA<Σ> extends FSA<Σ> {
     super(q0, ζ, δ);
     for (Q q : ε.keySet())
       this.ε.put(q, ε.get(q));
+  }
+
+  public NFSA(Σ σ) {
+    Q q = new Q();
+    δ(q0, σ, q).ζ(q);
   }
 
   class State implements V<State>, Iterable<Q> {

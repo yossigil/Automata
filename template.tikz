@@ -10,25 +10,28 @@ nodes={ellipse,fill=olive!20,inner sep=2pt,outer sep=2pt}, level sep =12ex, sibl
 \begin{tikzpicture}
 
 \path graph{
-	 "$q_{2}$" ->["$\varepsilon$",epsilon] "$q_{3}$";
-	 "$q_{4}$" ->["$\varepsilon$",epsilon] "$q_{0}$";
-	 "$q_{0}$" ->["$\varepsilon$",epsilon] "$q_{0}$";
-	 "$q_{0}$" ->["$\varepsilon$",epsilon] "$q_{6}$";
-	 "$q_{6}$" ->["$\varepsilon$",epsilon] "$q_{1}$";
-	 "$q_{1}$"-> ["a"] "$q_{2}$";
-	 "$q_{3}$"-> ["b"] "$q_{4}$";
-}
-;
-\node [above=of current bounding box] {{$(ab)^*$ NFSA}};
-\node [below=of current bounding box] {{$(ab)^*$ DFSA}};
-\path (-5,-12) graph{
-	 "$q_{3}$"[accept]->["a"] "$q_{2}$";
-	 "$q_{3}$"[accept]->["b"] "$q_{1}$";
-	 "$q_{1}$"->["a, b", loop] "$q_{1}$";
-	 "$q_{0}$"[initial,accept]->["a"] "$q_{2}$";
-	 "$q_{0}$"[initial,accept]->["b"] "$q_{1}$";
-	 "$q_{2}$"->["a"] "$q_{1}$";
-	 "$q_{2}$"->["b"] "$q_{3}$"[accept];
+	 "$q_{0}$"[initial,accept]->["a",bend left] "$q_{1}$"[accept];
+	 "$q_{0}$"[initial,accept]->["b",bend left] "$q_{4}$"[accept];
+	 "$q_{0}$"[initial,accept]->["c",bend left] "$q_{7}$";
+	 "$q_{2}$"[accept]->["a",bend left] "$q_{3}$"[accept];
+	 "$q_{2}$"[accept]->["b"] "$q_{4}$"[accept];
+	 "$q_{2}$"[accept]->["c"] "$q_{5}$";
+	 "$q_{1}$"[accept]->["a", loop] "$q_{1}$"[accept];
+	 "$q_{1}$"[accept]->["b"] "$q_{4}$"[accept];
+	 "$q_{1}$"[accept]->["c"] "$q_{2}$"[accept];
+	 "$q_{6}$"->["a, b, c", loop] "$q_{6}$";
+	 "$q_{3}$"[accept]->["a",,bend left] "$q_{1}$"[accept];
+	 "$q_{3}$"[accept]->["b",bend left] "$q_{4}$"[accept];
+	 "$q_{3}$"[accept]->["c",bend left] "$q_{2}$"[accept]
+	 "$q_{4}$"[accept]->["a",bend left] "$q_{1}$"[accept];
+	 "$q_{4}$"[accept]->["b",,bend left, loop] "$q_{4}$"[accept];
+	 "$q_{4}$"[accept]->["c"] "$q_{2}$"[accept];
+	 "$q_{5}$"->["a",bend left] "$q_{3}$" [accept];
+	 "$q_{5}$"->["b",bend left] "$q_{4}$"[accept];
+	 "$q_{5}$"->["c",bend left] "$q_{6}$";
+	 "$q_{7}$"->["a",bend left] "$q_{3}$"[accept];
+	 "$q_{7}$"->["b",bend left] "$q_{4}$"[accept];
+	 "$q_{7}$"->["c",bend left] "$q_{5}$";
 }
 ;
 \end{tikzpicture}
