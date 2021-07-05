@@ -21,31 +21,52 @@ class DFSA<Σ> extends FSA<Σ> {
     private boolean seen(Q q) { return seen.contains(q); }
     // @formatter:on
 
+    Set<Q> Q = empty.Set();
+
     String traverse() {
       dfs(q -> Q(q));
       String $ = "";
       for (Q from : DFSA.this.Q()) {
-        if (q == q$)
+        if (from == q$ || Q.contains(from))
           continue;
-        Set<Σ> seen = empty.Set();
-        for (final Σ σ : Σ()) {
-          if (seen.contains(σ))
-            continue;
-          final Q to = δ(from, σ);
-          if (to == q$)
-            continue;
-          Set<Σ> same = empty.Set();
-          for (Σ σ1 : Σ())
-            if (δ(from, σ1) == to) {
-              same.add(σ1);
-              seen.add(σ1);
-            }
-          $ += "\t " + Q(from) + "->[\"" + labels(same) + "\"";
-          if (to == from)
-            $ += ", loop";
-          $ += "] " + Q(to) + ";\n";
-        }
+        Q.add(from);
+        $ += draw(from);
       }
+      return $;
+    }
+
+    private String draw(Q from) {
+      String $ = "";
+      Set<Σ> seen = empty.Set();
+      for (final Σ σ : Σ()) {
+        if (seen.contains(σ))
+          continue;
+        final Q to = δ(from, σ);
+        Set<Σ> same = unify(from, to);
+        seen.addAll(same);
+        $ += "\t " + Q(from) + "->[\"" + labels(same) + "\"";
+        if (to == from)
+          $ += ", loop";
+        else if (inverse(from, to))
+          $ += ", bend left";
+        $ += "] " + Q(to) + ";\n";
+      }
+      return $;
+
+    }
+
+    private boolean inverse(Q from, Q to) {
+      for (Σ σ : Σ())
+        if (δ(to, σ) == from)
+          return true;
+      return false;
+    }
+
+    private Set<Σ> unify(Q from, Q to) {
+      Set<Σ> $ = empty.Set();
+      for (Σ σ : Σ())
+        if (δ(from, σ) == to)
+          $.add(σ);
       return $;
     }
 
@@ -65,7 +86,7 @@ class DFSA<Σ> extends FSA<Σ> {
     String Q(Q q) {
       if (n.get(q) == null)
         n.put(q, ordinal++);
-      return "\"$q_{" + n.get(q)  + "}$\"" + properties(q);
+      return "\"$q_{" + n.get(q) + "}$\"" + properties(q);
     }
 
     private String properties(Q q) {
@@ -120,11 +141,12 @@ class DFSA<Σ> extends FSA<Σ> {
 
       private Map<Q, Set<Q>> container() {
         Map<Q, Set<Q>> $ = empty.Map();
-        for (Set<Q> s: P)
-          for (Q q: s)
-            $.put(q,s);
+        for (Set<Q> s : P)
+          for (Q q : s)
+            $.put(q, s);
         return $;
       }
+
       Set<Set<Q>> Hopcroft() {
         Set<Set<Q>> P = set.of(set.of(ζ), set.minus(Q(), ζ));
         final Set<Set<Q>> W = set.of(set.of(ζ), set.minus(Q(), ζ));
@@ -137,12 +159,12 @@ class DFSA<Σ> extends FSA<Σ> {
             for (Set<Q> Y : P) {
               final Set<Q> intersection = set.intersection(Y, X);
               final Set<Q> minus = set.minus(Y, X);
-              if (intersection.isEmpty() || minus.isEmpty())
+              if (intersection.isEmpty() || minus.isEmpty()) {
                 newP.add(Y);
-              else {
-                newP.add(intersection);
-                newP.add(minus);
+                continue;
               }
+              newP.add(intersection);
+              newP.add(minus);
               if (W.contains(Y)) {
                 W.remove(Y);
                 W.add(intersection);
@@ -150,6 +172,8 @@ class DFSA<Σ> extends FSA<Σ> {
               } else {
                 if (intersection.size() <= minus.size())
                   W.add(minus);
+                else
+                  W.add(intersection);
               }
             }
             P = newP;
@@ -174,7 +198,7 @@ class DFSA<Σ> extends FSA<Σ> {
 
   }
 
-    /* Dense: //@formatter:off */
+  /* Dense: //@formatter:off */
     boolean run(String s) { return run(s.toCharArray()); }
     boolean run(char[] cs) {
       return DFSA.this.run(new Iterable<Σ>() {
