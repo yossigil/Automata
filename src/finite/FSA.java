@@ -26,13 +26,11 @@ abstract class Δ<Σ> {
   /** Class summary */
   @Override public String toString() {
     return  //
-     "\t q$ = " + q$ + " (sink state)\n" + //  
      "\t Δ = " + Δ +  " (transition function)\n" + //
      "";
   }
   /* Essence: // @formatter:off */
   /** Empty constructor */ Δ() { this(empty.Map()); } 
-  /** Data: Sink state use to automaton complete */ Q q$ = new Q();
   /** Copy constructor */  Δ(Δ<Σ> that) { this(that.Δ); } 
   /** Full constructor */  Δ(Map<Σ, Map<Q, Q>> Δ) { this.Δ = Δ; }
   /** Inspector Letters seen */ final Set<Σ> Σ()  { return Δ.keySet(); } 
@@ -42,12 +40,7 @@ abstract class Δ<Σ> {
 
   // Details: // @formatter:on
   Q δ(Q q, Σ σ) {
-    if (q == q$)
-      return q$;
-    final Q $ = δ(σ).get(q);
-    if ($ == null)
-      return q$;
-    return $;
+    return δ(σ).get(q);
   }
 
   /** Inspector: set of all states seen */ //@formatter:on
