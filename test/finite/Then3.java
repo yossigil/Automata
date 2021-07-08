@@ -8,8 +8,6 @@ public class Then3 {
   final Text abc = new Text('a').Then('b').Then('c');
 
   @Test void accept() {
-    System.out.println(new Text('a').Then('b').TikZ());    
-    System.out.println(abc.TikZ());
     assertTrue(abc.run("abc"));
   }
 
