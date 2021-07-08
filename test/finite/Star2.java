@@ -7,12 +7,75 @@ import org.junit.jupiter.api.Test;
 class Star2 {
   final Text abStar = new Text('a').Then('b').star();
 
+  @Test void m1() {
+    abStar.DFSA();
+  }
+
+  @Test void m2() {
+    abStar.DFSA().minimize();
+  }
+
+  @Test void t0() {
+    abStar.TikZ();
+  }
+
+  @Test void t1() {
+    abStar.DFSA().TikZ();
+  }
+
+  @Test void t3() {
+    abStar.DFSA().minimize().TikZ();
+  }
+
+  <Σ> void show(NFSA<Σ> a) {
+    System.out.println("\\begin{tikzpicture}\n");
+    System.out.println("\\begin{scope}[start chain=going down]\n");
+//    System.out.println(node("on chain", a + ""));
+    System.out.println("\\begin{scope}[local bounding box=NFSA,on chain] \\path \n" + a.TikZ() + ";\n\\end{scope}");
+ //   System.out.println(node("", a.DFSA() + ""));
+    System.out.println("\\begin{scope}[local bounding box=DFSA] \\path \n" + a.DFSA().TikZ() + ";\n\\end{scope}");
+  //  System.out.println(node("", a.DFSA().minimize() + ""));
+    System.out
+        .println("\\begin{scope}[local bounding box=DFSA] \\path \n" + a.DFSA().minimize().TikZ() + ";\n\\end{scope}");
+    System.out.println("\\end{scope}");
+    System.out.println("\\end{tikzpicture}\n");
+  }
+
+  @Test void DFSADemo() {
+    show(new Text('a').Then('b').then(new Text('a').Or('b')).star());
+  }
+
+  @Test void DFSA() {
+    abStar.DFSA();
+  }
+
   @Test void DFSA0() {
     DFSA<Character> dfsa = abStar.DFSA();
     assertTrue(dfsa.run(""));
+  }
+
+  @Test void DFSA1() {
+    DFSA<Character> dfsa = abStar.DFSA();
     assertTrue(dfsa.run("ab"));
+  }
+
+  @Test void DFSA2() {
+    DFSA<Character> dfsa = abStar.DFSA();
     assertTrue(dfsa.run("abab"));
+  }
+
+  @Test void DFSA3() {
+    DFSA<Character> dfsa = abStar.DFSA();
     assertTrue(dfsa.run("ababab"));
+  }
+
+  @Test void DFSA4() {
+    DFSA<Character> dfsa = abStar.DFSA();
+    assertTrue(dfsa.run("abababab"));
+  }
+
+  @Test void DFSAx() {
+    DFSA<Character> dfsa = abStar.DFSA();
     assertFalse(dfsa.run("a"));
     assertFalse(dfsa.run("b"));
     assertFalse(dfsa.run("aa"));
@@ -23,29 +86,27 @@ class Star2 {
     assertFalse(dfsa.run("abb"));
     assertFalse(dfsa.run("aaa"));
     assertFalse(dfsa.run("bbb"));
-
-    System.out.println("\\begin{tikzpicture}\n");
-    System.out.println("\\path " + abStar.TikZ() +";");
-    System.out.println(node("above","$(ab)^*$ NFSA") );
-    System.out.println(node("below","$(ab)^*$ DFSA") );
-    System.out.println("\\path " + dfsa.TikZ() +";");
-    System.out.println("\\end{tikzpicture}\n");
   }
 
-  private String node(String location, String name) {
-    return "\\node [" + location + "=of current bounding box] {{"  + name+ "}};";
+  private String node(String options, String name) {
+    return "\\node [" + options + "] {{" + name + "}};";
   }
 
-  @Test void minimize0() {
+  @Test void minimize() {
     DFSA<Character> dfsa = abStar.DFSA();
-    System.out.println("DFDA (minimized): (AB)*" + dfsa.minimize().TikZ());
-    assertTrue(dfsa.run(""));
+    DFSA<Character> minimize = dfsa.minimize();
+    assertTrue(minimize.run(""));
+  }
+
+  @Test void TikZ() {
+    DFSA<Character> dfsa = abStar.DFSA();
+    dfsa.TikZ();
+    DFSA<Character> minimize = dfsa.minimize();
+    assertTrue(minimize.run(""));
+    minimize.TikZ();
   }
 
   @Test void accept0() {
-    System.out.println("NFSA: $(ab)^*$" + abStar.TikZ());
-    System.out.println("DFSA: (AB)*" + abStar.DFSA().TikZ());
-//    System.out.println("DFDA (minimized): (AB)*"+abStar.DFSA().minimize().TikZ());
     assertTrue(abStar.run(""));
     assertTrue(abStar.DFSA().run(""));
   }
@@ -67,7 +128,6 @@ class Star2 {
 
   @Test void abStarReject0() {
     assertFalse(abStar.run("a"));
-    assertTrue(abStar.DFSA().run("ab"));
   }
 
   @Test void abStarReject1() {
