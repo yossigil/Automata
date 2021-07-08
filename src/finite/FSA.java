@@ -76,7 +76,7 @@ class Implementation<Σ> extends Δ<Σ> implements Recognizer<Σ> {
   }
 
   @Override public String toString() {
-    return "" +//
+    return "" + //
         "\t " + toString("Q", Q()) + " (all states)\n" + //
         "\t " + toString("q0", q0) + " (start state)\n" + //
         "\t " + toString("ζ", ζ) + "  (accepting states)\n" + //
