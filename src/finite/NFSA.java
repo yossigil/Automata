@@ -124,7 +124,8 @@ class NFSA<Σ> extends FSA<Σ> {
     @Override public Iterable<State> neighbours() {
       final Set<State> $ = new HashSet<>();
       final State ε = ε();
-      for (var σ : Σ())
+      Set<Σ> σ2 = Σ();
+      for (var σ : σ2)
         $.add(ε.δ(σ).ε());
       return $;
     }
@@ -157,24 +158,30 @@ class NFSA<Σ> extends FSA<Σ> {
     return $;
   }
 
+  void printf(String format, Object ...os) {
+    String.format(format,os);
+  }
+
+
   String TikZ() {
     return new Object() {
 // @formatter:off
       String render() { return wrap(traverse()); } 
       String wrap(String s) { return "graph{\n" + s + "}\n"; } 
 // @formatter:on
+
       String traverse() {
         dfs(q -> Q(q));
-        String $ = "";
-        for (Q from : ε.keySet())
+        final StringBuilder $ = new StringBuilder();
+        dfs(from -> {
           for (Q to : ε.get(from))
-            $ += "\t " + Q(from) + " ->[\"$\\varepsilon$\",epsilon] " + Q(to) + ";\n";
-        for (Σ σ : Σ()) {
-          Map<Q, Q> δσ = δ(σ);
-          for (Q from : δσ.keySet())
-            $ += "\t " + Q(from) + "-> [\"" + σ + "\"] " + Q(δσ.get(from)) + ";\n";
-        }
-        return $;
+            $.append("\t " + Q(from) + " ->[\"$\\varepsilon$\",epsilon] " + Q(to) + ";\n");
+          for (Σ σ : Σ()) {
+            if (δ(σ).get(from) != null)
+              $.append("\t " + Q(from) + "-> [\"" + σ + "\"] " + Q(NFSA.this.δ(from, σ)) + ";\n");
+          }
+        });
+        return $ + "";
       }
 
       int ordinal = 0;
@@ -223,8 +230,10 @@ class NFSA<Σ> extends FSA<Σ> {
 
       Map<Σ, Map<Q, Q>> δ() {
         Map<Σ, Map<Q, Q>> $ = empty.Map();
-        for (var σ : Σ())
+        for (var σ : Σ()) {
           $.put(σ, δ(σ));
+          this.toString();
+        }
         return $;
       }
 
