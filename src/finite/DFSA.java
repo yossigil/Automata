@@ -27,10 +27,10 @@ class DFSA<Σ> extends FSA<Σ> {
       dfs(q -> Q(q));
       String $ = "";
       for (Q from : DFSA.this.Q()) {
-        if (Q.contains(from))
-          continue;
-        Q.add(from);
-        $ += draw(from);
+        if (!Q.contains(from)) {
+          Q.add(from);
+          $ += draw(from);
+        }
       }
       return $;
     }
