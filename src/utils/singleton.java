@@ -4,8 +4,8 @@ import java.util.Set;
 
 enum singleton {
   ;
-  static <T> Set<T> Set(T ¢) {
-    Set<T> $ = empty.Set();
+  static <T> Set<T> Set(final T ¢) {
+    final Set<T> $ = empty.Set();
     $.add(¢);
     return $;
   }
