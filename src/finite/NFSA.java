@@ -166,7 +166,7 @@ class NFSA<Σ> extends FSA<Σ> {
     /* One liners: //@formatter:off */
       DFSA<Σ> DFSA() { return new DFSA<Σ>(q0(), ζ(), δ()); }  
       Q q0() { return code.get(s0); }
-      Set<State> ss = new DFS<State>() { @Override public void v(State s) {}}.dfs(s0);
+      Set<State> ss = new DFS<State>() { @Override public void visit(State s) {}}.dfs(s0);
       Map<State, Q> code = code();
       Map<State, Q> code() { Map<State,Q> $ = empty.Map(); for (var s: ss) $.put(s, new Q()); return $; }
       Q Q(State ¢) { return code.get(¢); } //@formatter:on */
