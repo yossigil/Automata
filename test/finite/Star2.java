@@ -25,7 +25,7 @@ class Star2 {
     abStar.DFSA().minimize().TikZ();
   }
 
-  <Σ> void show(NFSA<Σ> ¢) {
+  <Σ> void show(final NFSA<Σ> ¢) {
     System.out.println("\\begin{tikzpicture}\n");
     System.out.println("\\begin{scope}[start chain=going down]\n");
 //    System.out.println(node("on chain", a + ""));
@@ -68,7 +68,7 @@ class Star2 {
   }
 
   @Test void DFSAx() {
-    DFSA<Character> dfsa = abStar.DFSA();
+    final DFSA<Character> dfsa = abStar.DFSA();
     assert !dfsa.run("a");
     assert !dfsa.run("b");
     assert !dfsa.run("aa");
@@ -86,9 +86,9 @@ class Star2 {
   }
 
   @Test void TikZ() {
-    DFSA<Character> dfsa = abStar.DFSA();
+    final DFSA<Character> dfsa = abStar.DFSA();
     dfsa.TikZ();
-    DFSA<Character> minimize = dfsa.minimize();
+    final var minimize = dfsa.minimize();
     assert minimize.run("");
     minimize.TikZ();
   }
