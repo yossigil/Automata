@@ -81,10 +81,6 @@ class Star2 {
     assert !dfsa.run("bbb");
   }
 
-  private String node(String options, String name) {
-    return "\\node [" + options + "] {{" + name + "}};";
-  }
-
   @Test void minimize() {
     assert abStar.DFSA().minimize().run("");
   }
