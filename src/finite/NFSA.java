@@ -9,6 +9,11 @@ import utils.empty;
 import utils.set;
 
 class NFSA<Σ> extends FSA<Σ> {
+  String TikZ() {
+    return new TikZ() {
+    }.render();
+  }
+
   @Override public String toString() {
     return "Nodeterministic " + super.toString() + //
         "\t ε = " + ε + " (non-deterministic ε-transitions)\n" + //
@@ -27,7 +32,6 @@ class NFSA<Σ> extends FSA<Σ> {
   /** Constructor: Empty */ NFSA() { }
   /** Constructor: Full constructor */ NFSA(Map<Σ, Map<Q, Q>> Δ, Set<Q> ζ, Map<Q, Set<Q>> ε) { super(Δ, ζ); ε(ε);  }  
   /** Constructor: Copy */ NFSA(NFSA<Σ> that) { this(that.q0, that.ζ, that.Δ, that.ε); }
-
   /** Factory: recognizer of a single letter */ static <Σ> NFSA<Σ> σ(Σ σ) { return new NFSA<Σ>(σ); }
   /** Factory: recognizer of the empty string */ static  <Σ> NFSA<Σ> ε(){ var $ = new NFSA<Σ>(); $.ζ($.q0); return $;}
   /** Factory: recognizer of the empty set */ static  <Σ> NFSA<Σ> any(){ return new NFSA<Σ>((Σ)null); } 
@@ -158,57 +162,6 @@ class NFSA<Σ> extends FSA<Σ> {
     return $;
   }
 
-  void printf(String format, Object ...os) {
-    String.format(format,os);
-  }
-
-
-  String TikZ() {
-    return new Object() {
-// @formatter:off
-      String render() { return wrap(traverse()); } 
-      String wrap(String s) { return "graph{\n" + s + "}\n"; } 
-// @formatter:on
-
-      String traverse() {
-        dfs(q -> Q(q));
-        final StringBuilder $ = new StringBuilder();
-        dfs(from -> {
-          for (Q to : ε.get(from))
-            $.append("\t " + Q(from) + " ->[\"$\\varepsilon$\",epsilon] " + Q(to) + ";\n");
-          for (Σ σ : Σ()) {
-            if (δ(σ).get(from) != null)
-              $.append("\t " + Q(from) + "-> [\"" + σ + "\"] " + Q(NFSA.this.δ(from, σ)) + ";\n");
-          }
-        });
-        return $ + "";
-      }
-
-      int ordinal = 0;
-      Map<Q, Integer> n = empty.Map();
-
-      String Q(Q q) {
-        if (n.get(q) == null)
-          n.put(q, ordinal++);
-        return "\"$q_{" + n.get(q) + "}$\"" + properties(q);
-      }
-
-      private Set<Q> seen = empty.Set();
-
-      private String properties(Q q) {
-        if (seen.contains(q))
-          return "";
-        seen.add(q);
-        if (q == q0 && ζ.contains(q))
-          return "[state,initial,accept]";
-        if (q == q0)
-          return "[state,initial]";
-        if (ζ.contains(q))
-          return "[state,accept]";
-        return "";
-      }
-    }.render();
-  }
 
   DFSA<Σ> DFSA() {
     return new Object() {

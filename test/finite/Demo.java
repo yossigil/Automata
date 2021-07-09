@@ -16,14 +16,28 @@ class Demo {
   final Text x4 = x3.then(x3).star().or(x2).star().then(x1);
   final Text abcd = new Text(new Text('a').then(new Text('b').then(new Text('c')).then(new Text('d'))));
 
-  @Test void t1() {
-   System.out.println(abcd.TikZ()); 
-   System.out.println(abcd.DFSA().TikZ()); 
+  @Test void nfsa() {
+    show(x4.TikZ());
   }
-  @Test void t2() {
-    System.out.println(x4.TikZ());
-    DFSA<Character> d = x4.DFSA();
-    System.out.println(d.TikZ());
-    System.out.println(d.minimize().TikZ());
+
+  @Test void dfsa() {
+    show(x4.DFSA().TikZ());
   }
+
+  private static void show(String graph) {
+    print(path(graph));
+  }
+
+  @Test void minimized() {
+    print(path(x4.DFSA().minimize().TikZ()));
+  }
+
+  private static void print(String s) {
+    System.out.println(s);
+  }
+
+  private static String path(String graph) {
+    return "\\path " + graph + ";";
+  }
+
 }

@@ -1,5 +1,6 @@
 package finite;
 
+import java.util.Formatter;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -12,6 +13,19 @@ class Q {
   static int count = 0;
   final int n = count++;
   @Override public String toString() { return "ι" + n; }
+}
+abstract class Texter {
+  @Override public String toString() { return inner + ""; }
+  void printf(String format, Object... os) { inner.format(format,os); }
+  static String sprintf(String format, Object... os) { return String.format(format,os); }
+  private final Formatter inner = new Formatter();
+}
+abstract class Grapher extends Texter {
+  final String render() { return wrap(traverse()); }
+  final String wrap(String s) { return sprintf("graph{\n%s}\n" , s); }
+  abstract String traverse();
+  final Set<Q> elaborated = empty.Set();
+  boolean elaborated(Q q) { return elaborated.contains(q); }
 }
 
 /** Abstract recognizer of a formal language over Σ */ 
@@ -34,14 +48,12 @@ abstract class Δ<Σ> {
   /** Copy constructor */  Δ(Δ<Σ> that) { this(that.Δ); } 
   /** Full constructor */  Δ(Map<Σ, Map<Q, Q>> Δ) { this.Δ = Δ; }
   /** Inspector Letters seen */ final Set<Σ> Σ()  { return Δ.keySet(); } 
-  /** Inspector: Transition table of given letter */  Map<Q,Q> δ(Σ σ) { if (Δ.get(σ) == null) Δ.put(σ, empty.Map()); return Δ.get(σ); } 
+  /** Inspector: Transition table of given letter */  Map<Q,Q> δ(Σ σ) {return Δ.putIfAbsent(σ,  empty.Map()); } 
   /** Data: The transition table */ Map<Σ, Map<Q, Q>> Δ;
   /** Inspector: complete transition function from a state and letter  */ 
+  /** Inspector: the transition function */ Q δ(Q q, Σ σ) { return δ(σ).get(q); }
 
   // Details: // @formatter:on
-  Q δ(Q q, Σ σ) {
-    return δ(σ).get(q);
-  }
 
   /** Inspector: set of all states seen */ //@formatter:on
   Set<Q> Q() {
@@ -145,13 +157,76 @@ abstract class FSA<Σ> extends Implementation<Σ> {
     return $;
   }
 
-  /** Exerciser: do a DFS search, supplying each state q to a consumer of */
+  /** Exerciser: do a DFS search, supplying each state q to a given consumer */
   final void dfs(Consumer<Q> c) {
-    new XDFS<Q>() {
-      //@formatter:off
+    new XDFS<Q>() { //@formatter:off
       @Override public Set<Q> n(Q q) { return δ(q); }
-      @Override public void v(Q q) { c.accept(q); } //@formatter:on
+      @Override public Q v(Q q) { c.accept(q); return q;} 
       //@formatter:on
     }.dfs(q0);
+  }
+
+  class TikZ extends Grapher { //@formatter:off
+    private int ordinal = 0;
+    final private Map<Q, Integer> enumeration = empty.Map();
+    final Set<Q> elaborated = empty.Set();
+    void enumerate() { dfs(q -> enumeration.computeIfAbsent(q, __ -> ordinal++)); }
+    String tikz(Q q) { return sprintf("\"$q_{%s$\" [%s]", enumeration.get(q), elaborate(q)); }
+    String elaborate(Q from, Q to) { return to == from ? ",loop" : inverse(from, to) ? ",bend left" : ""; }
+    String traverse() { enumerate(); dfs(from -> render(from)); return this + ""; } 
+
+    //@formatter:on
+    void render(Q from) {
+      Set<Σ> σs = empty.Set();
+      for (final Σ σ : Σ())
+        if (!σs.contains(σ))
+          σs.addAll(render(from, δ(from, σ)));
+    }
+
+    Set<Σ> render(Q from, final Q to) {
+      if (to == null)
+        return empty.Set();
+      final Set<Σ> $ = unify(from, to);
+      printf("\t %s -> [\"%s\"%s] %s\n;", tikz(from), tikz($), elaborate(from, to), tikz(to));
+      return $;
+    }
+
+    final String elaborate(Q q) { //@formatter:off 
+      String $ = "";
+      if (elaborated(q)) return $;
+      elaborated.add(q);
+      if (q == q0) $ += "initial,";
+      if (ζ.contains(q)) $ += "accept";
+      return $;
+    }//@formatter:on 
+
+    boolean inverse(Q from, Q to) {
+      for (Σ σ : Σ())
+        if (δ(to, σ) == from)
+          return true;
+      return false;
+    }
+
+    private Set<Σ> unify(Q from, Q to) {
+      Set<Σ> $ = empty.Set();
+      for (Σ σ : Σ())
+        if (δ(from, σ) == to)
+          $.add(σ);
+      return $;
+    }
+
+    private String tikz(Set<Σ> σs) {
+      String $ = "";
+      boolean special = true;
+      for (Σ σ : σs) {
+        if (special)
+          special = false;
+        else
+          $ += ", ";
+        $ += σ == null ? "*" : σ;
+      }
+      return $;
+    }
+
   }
 }

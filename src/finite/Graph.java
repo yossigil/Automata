@@ -4,7 +4,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 interface XDFS<V> {
-  default void v(V v) {
+  default V v(V v) {
+    return v;
   }
 
   Set<V> n(V v);
@@ -14,8 +15,7 @@ interface XDFS<V> {
     new Object() {
       void dfs(V v) {
         if (!$.contains(v)) {
-          v(v);
-          $.add(v);
+          $.add(v(v));
           for (var n : n(v))
             dfs(n);
         }

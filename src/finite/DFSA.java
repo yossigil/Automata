@@ -1,6 +1,7 @@
 package finite;
 
 import java.util.Iterator;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -10,107 +11,14 @@ import utils.set;
 class DFSA<Σ> extends FSA<Σ> {
   //@formatter:off
   DFSA(Q q0, Set<Q> ζ, Map<Σ, Map<Q, Q>> Δ) { super(q0, ζ, Δ); }
+  String TikZ() { return new TikZ().render(); }
   //@formatter:on
-  final class Renderer {
-   // @formatter:off
-    private Set<Q> seen = empty.Set();
-    private int ordinal = 0;
-    private Map<Q, Integer> n = empty.Map();
-    String render() { return wrap(traverse()); }
-    String wrap(String s) { return "graph{\n" + s + "}\n"; }
-    private boolean seen(Q q) { return seen.contains(q); }
-    // @formatter:on
-
-    Set<Q> Q = empty.Set();
-
-    String traverse() {
-      dfs(q -> Q(q));
-      String $ = "";
-      for (Q from : DFSA.this.Q()) {
-        if (!Q.contains(from)) {
-          Q.add(from);
-          $ += draw(from);
-        }
-      }
-      return $;
-    }
-
-    private String draw(Q from) {
-      String $ = "";
-      Set<Σ> seen = empty.Set();
-      for (final Σ σ : Σ()) {
-        if (seen.contains(σ))
-          continue;
-        final Q to = δ(from, σ);
-        Set<Σ> same = unify(from, to);
-        seen.addAll(same);
-        $ += "\t " + Q(from) + "->[\"" + labels(same) + "\"";
-        if (to == from)
-          $ += ", loop";
-        else if (inverse(from, to))
-          $ += ", bend left";
-        $ += "] " + Q(to) + ";\n";
-      }
-      return $;
-
-    }
-
-    private boolean inverse(Q from, Q to) {
-      for (Σ σ : Σ())
-        if (δ(to, σ) == from)
-          return true;
-      return false;
-    }
-
-    private Set<Σ> unify(Q from, Q to) {
-      Set<Σ> $ = empty.Set();
-      for (Σ σ : Σ())
-        if (δ(from, σ) == to)
-          $.add(σ);
-      return $;
-    }
-
-    private String labels(Set<Σ> σs) {
-      String $ = "";
-      boolean special = true;
-      for (Σ σ : σs) {
-        if (special)
-          special = false;
-        else
-          $ += ", ";
-        $ += "" + σ;
-      }
-      return $;
-    }
-
-    String Q(Q q) {
-      if (n.get(q) == null)
-        n.put(q, ordinal++);
-      return "\"$q_{" + n.get(q) + "}$\"" + properties(q);
-    }
-
-    private String properties(Q q) {
-      if (seen(q))
-        return "";
-      if (q == q0 && ζ.contains(q))
-        return "[initial,accept]";
-      if (q == q0)
-        return "[initial]";
-      if (ζ.contains(q))
-        return "[accept]";
-      return "";
-    }
-  }
 
   boolean run(Iterable<Σ> w) {
     q0();
     for (var σ : w)
       feed(σ);
     return ζ();
-  }
-
-  String TikZ() {
-    return new Renderer().render();
   }
 
   DFSA<Σ> minimize() {
@@ -211,28 +119,4 @@ class DFSA<Σ> extends FSA<Σ> {
          }
       });
     }
-
-  /**
-   * <pre>
-  P := {F, Q \ F};
-  W := {F, Q \ F};
-  while (W is not empty) do
-      choose and remove a set A from W
-      for each c in Σ do
-           let X be the set of states for which a transition on c leads to a state in A
-           for each set Y in P for which X ∩ Y is nonempty and Y \ X is nonempty do
-                replace Y in P by the two sets X ∩ Y and Y \ X
-                if Y is in W
-                     replace Y in W by the same two sets
-                else
-                     if |X ∩ Y| <= |Y \ X|
-                          add X ∩ Y to W
-                     else
-                          add Y \ X to W
-           end;
-      end;
-  end;
-   * </pre>
-   */
-
 }
