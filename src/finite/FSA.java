@@ -39,6 +39,11 @@ abstract class Δ<Σ> {
     return $;
   }
 
+  Set<String> labels(final Q from, final Q to) {
+    final Set<String> $ = empty.Set();
+    for (final Σ σ : Σ()) if (δ(from, σ) == to) $.add(σ + "");
+    return $;
+  }
 }
 
 class Implementation<Σ> extends Δ<Σ> implements Recognizer<Σ> {
@@ -58,14 +63,14 @@ class Implementation<Σ> extends Δ<Σ> implements Recognizer<Σ> {
 
   @Override public String toString() {
     return //
-        "\t " + toString("Q", Q()) + " (all states)\n" + //
+    "\t " + toString("Q", Q()) + " (all states)\n" + //
         "\t " + toString("q0", q0) + " (start state)\n" + //
         "\t " + toString("ζ", ζ) + "  (accepting states)\n" + //
         "\t " + toString("Q\\ζ", set.minus(Q(), ζ)) + " (rejecting states)\n" + //
         "\t " + toString("q", q) + " (current state)\n" + //
         "\t " + toString("Σ", Σ()) + " (alphabet)\n" + //
         super.toString()//
-        ;
+    ;
   }
 
   //@formatter:off
@@ -90,7 +95,7 @@ abstract class FSA<Σ> extends Implementation<Σ> {
     return "FSA #" + n + "/" + N + " = ⟨Σ,q0,Q,ζ,Δ⟩ \n" + //
         super.toString() + //
         "\t " + toString("Q'$", QQ()) + " (reachable states)\n"//
-        ;
+    ;
   }
 
   // @formatter:off
@@ -156,16 +161,20 @@ abstract class FSA<Σ> extends Implementation<Σ> {
     @Override String traverse() { enumerate(); dfs(from -> render(from)); return this + ""; }
 
     //@formatter:on
-    void render(final Q from) {
-      final Set<Σ> σs = empty.Set();
-      for (final Σ σ : Σ()) if (!σs.contains(σ)) σs.addAll(render(from, δ(from, σ)));
-    }
+    /*
+     * void render1(final Q from) { final Set<Σ> σs = empty.Set(); for (final Σ σ :
+     * Σ()) if (!σs.contains(σ)) σs.addAll(render(from, δ(from, σ))); } void
+     * render(final Q from) { render(from, δ(from)); final Set<Σ> σs = empty.Set();
+     * for (final Σ σ : Σ()) if (!σs.contains(σ)) σs.addAll(render(from, δ(from,
+     * σ))); }
+     */
 
-    Set<Σ> render(final Q from, final Q to) {
-      if (to == null) return empty.Set();
-      final var $ = unify(from, to);
-      printf("\t %s -> [\"%s\"%s] %s;\n", tikz(from), tikz($), elaborate(from, to), tikz(to));
-      return $;
+    void render(Q from) { render(from, δ(from)); }
+
+    void render(Q from, Set<Q> to) { for (Q q : to) render(from, q); }
+
+    void render(Q from, Q to) {
+      printf("\t %s -> [\"%s\"%s] %s;\n", tikz(from), tikz(labels(from, to)), elaborate(from, to), tikz(to));
     }
 
     final String elaborate(final Q ¢) { //@formatter:on
@@ -181,21 +190,15 @@ abstract class FSA<Σ> extends Implementation<Σ> {
       return false;
     }
 
-    private Set<Σ> unify(final Q from, final Q to) {
-      final Set<Σ> $ = empty.Set();
-      for (final Σ σ : Σ()) if (δ(from, σ) == to) $.add(σ);
-      return $;
-    }
-
-    private String tikz(final Set<Σ> σs) {
-      final var $        = new StringBuilder();
-      var       ordinary = false;
-      for (final Σ σ : σs) {
-        if (ordinary) $.append(", ");
+    private String tikz(final Set<String> ss) {
+      var $        = "";
+      var ordinary = false;
+      for (final String s : ss) {
+        if (ordinary) $ += ", ";
         else ordinary = true;
-        $.append(σ != null ? σ : "*");
+        $ += s;
       }
-      return $ + "";
+      return $;
     }
 
   }

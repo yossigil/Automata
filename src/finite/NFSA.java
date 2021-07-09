@@ -160,13 +160,19 @@ class NFSA<Σ> extends FSA<Σ> {
         }
         return $;
       }
-
       Map<Q, Q> δ(Σ σ) {
         Map<Q, Q> $ = empty.Map();
         for (var s : ss) $.put(Q(s), Q(s.ε().δ(σ).ε()));
         return $;
       }
     }.DFSA();
+  }
+
+  Set<String> labels(finite.Q from, finite.Q to) { 
+    Set<String> $ = super.labels(from, to);
+    if (ε(from).contains(to))
+      $.add("\\varepsilon");
+    return $;
   }
 
 }
