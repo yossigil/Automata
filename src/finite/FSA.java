@@ -181,7 +181,7 @@ abstract class FSA<Σ> extends Implementation<Σ> {
     final Set<Q> elaborated = empty.Set();
     void enumerate() { dfs(q -> enumeration.computeIfAbsent(q, __ -> ordinal++)); }
     String tikz(Q q) { return sprintf("\"$q_{%s$\" [%s]", enumeration.get(q), elaborate(q)); }
-    String elaborate(Q from, Q to) { return to == from ? ",loop" : inverse(from, to) ? ",bend left" : ""; }
+    String elaborate(Q from, Q to) { return to == from ? ",loop" : !edge(to, from) ? "" : ",bend left"; }
     String traverse() { enumerate(); dfs(from -> render(from)); return this + ""; } 
 
     //@formatter:on
@@ -208,14 +208,13 @@ abstract class FSA<Σ> extends Implementation<Σ> {
       if (ζ.contains(q)) $ += "accept";
       return $;
     }//@formatter:on 
-
-    boolean inverse(Q from, Q to) {
+ 
+    boolean edge(Q from, Q to) {
       for (Σ σ : Σ())
-        if (δ(to, σ) == from)
+        if (δ(from, σ) == to)
           return true;
       return false;
     }
-
     private Set<Σ> unify(Q from, Q to) {
       Set<Σ> $ = empty.Set();
       for (Σ σ : Σ())
@@ -226,12 +225,12 @@ abstract class FSA<Σ> extends Implementation<Σ> {
 
     private String tikz(Set<Σ> σs) {
       String $ = "";
-      boolean special = true;
+      boolean ordinary = true;
       for (Σ σ : σs) {
-        if (special)
-          special = false;
-        else
+        if (ordinary)
           $ += ", ";
+        else
+          ordinary = true;
         $ += σ == null ? "*" : σ;
       }
       return $;

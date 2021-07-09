@@ -107,11 +107,9 @@ class NFSA<Σ> extends FSA<Σ> {
     State ε() {
       for (final Set<Q> todo = empty.Set();; add(todo), todo.clear()) {
         for (Q q : this)
-          for (Q qε : NFSA.this.ε(q)) {
-            if (has(qε))
-              continue;
-            todo.add(qε);
-          }
+          for (Q qε : NFSA.this.ε(q))
+            if (!has(qε))
+              todo.add(qε);
         if (todo.isEmpty())
           return this;
       }
