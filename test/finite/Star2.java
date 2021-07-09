@@ -30,9 +30,9 @@ class Star2 {
     System.out.println("\\begin{scope}[start chain=going down]\n");
 //    System.out.println(node("on chain", a + ""));
     System.out.println("\\begin{scope}[local bounding box=NFSA,on chain] \\path \n" + ¢.TikZ() + ";\n\\end{scope}");
- //   System.out.println(node("", a.DFSA() + ""));
+    // System.out.println(node("", a.DFSA() + ""));
     System.out.println("\\begin{scope}[local bounding box=DFSA] \\path \n" + ¢.DFSA().TikZ() + ";\n\\end{scope}");
-  //  System.out.println(node("", a.DFSA().minimize() + ""));
+    // System.out.println(node("", a.DFSA().minimize() + ""));
     System.out
         .println("\\begin{scope}[local bounding box=DFSA] \\path \n" + ¢.DFSA().minimize().TikZ() + ";\n\\end{scope}");
     System.out.println("\\end{scope}");

@@ -20,7 +20,6 @@ class Text extends NFSA<Character> {
   Text(char c) { Q q1 = new Q(); δ(q0, c, q1); ζ(q1); }
   //@formatter:on
 
-
   /* Dense: //@formatter:off */
   boolean run(String ¢) { return run(¢.toCharArray()); }
   boolean run(char[] cs) {

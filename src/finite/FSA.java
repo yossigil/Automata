@@ -8,13 +8,14 @@ import utils.empty;
 import utils.set;
 
 /** An immutable transition table, complete function from Q x Σ -> Q */
-abstract class Δ<Σ> { 
+abstract class Δ<Σ> {
   /** Class summary */
   @Override public String toString() {
-    return  //
-     "\t Δ = " + Δ +  " (transition function)\n" + //
-     "";
+    return //
+    "\t Δ = " + Δ + " (transition function)\n" + //
+        "";
   }
+
   /* Essence: // @formatter:off */
   /** Empty constructor */ Δ() { this(empty.Map()); } 
   /** Copy constructor */  Δ(Δ<Σ> that) { this(that.Δ); } 
@@ -33,7 +34,7 @@ abstract class Δ<Σ> {
     for (Σ σ : Σ()) {
       Set<finite.Q> keySet = δ(σ).keySet();
       $.addAll(keySet);
-      for (Q q : keySet) 
+      for (Q q : keySet)
         $.add(δ(σ).get(q));
     }
     return $;
@@ -180,13 +181,14 @@ abstract class FSA<Σ> extends Implementation<Σ> {
       if (ζ.contains(¢)) $ += "accept";
       return $;
     }//@formatter:on 
- 
+
     boolean edge(Q from, Q to) {
       for (Σ σ : Σ())
         if (δ(from, σ) == to)
           return true;
       return false;
     }
+
     private Set<Σ> unify(Q from, Q to) {
       Set<Σ> $ = empty.Set();
       for (Σ σ : Σ())

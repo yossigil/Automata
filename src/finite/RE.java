@@ -3,13 +3,10 @@ package finite;
 public abstract class RE {
 //@formatter:off
   abstract static class Nullary extends RE {}
-  abstract static class Unary extends RE {
-	  public final RE x;
-	  public Unary(RE x) { this.x = x; }
-  }
+  abstract static class Unary extends RE { final RE x; Unary(RE x) { this.x = x; } }
   abstract static class Binary extends RE {
-	  public final RE x1,x2;
-	  public Binary(RE x1, RE x2) { this.x1 = x1; this.x2 = x2; }
+	  final RE x1,x2;
+	  Binary(RE x1, RE x2) { this.x1 = x1; this.x2 = x2; }
   }
   abstract static class Φ extends Nullary{ }
   abstract static class ε extends Nullary{}
@@ -21,7 +18,7 @@ public abstract class RE {
   abstract static class Or extends RE.Binary{ public Or(RE x1, RE x2) { super(x1, x2); }}
   abstract static class Then extends RE.Binary{ Then(RE x1, RE x2) {super (x1,x2); }}
   abstract <T> T reduce(Reducer<T> r);
-  //@formatter:on
+  //@formatter:off
   interface Reducer<T> {
     T ε();
     T Φ();
