@@ -189,13 +189,13 @@ abstract class FSA<Σ> extends Implementation<Σ> {
 
     private String tikz(final Set<Σ> σs) {
       var $        = new StringBuilder();
-      var       ordinary = true;
+      var ordinary = false;
       for (final Σ σ : σs) {
         if (ordinary) $.append(", ");
         else ordinary = true;
-        $.append(σ == null ? "*" : σ);
+        $.append(σ != null ? σ : "*");
       }
-      return $.toString();
+      return $ + "";
     }
 
   }
