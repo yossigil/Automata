@@ -9,21 +9,15 @@ import utils.empty;
 import utils.set;
 
 class NFSA<Σ> extends FSA<Σ> {
-  String TikZ() {
-    return new TikZ() {
-    }.render();
-  }
-
   @Override public String toString() {
     return "Nodeterministic " + super.toString() + //
         "\t ε = " + ε + " (non-deterministic ε-transitions)\n" //
-        ;
+    ;
   }
 
   @Override Set<Q> δ(Q q) {
     var $ = new State(ε(q)).add(super.δ(q));
-    for (Σ σ : Σ())
-      $.add(new State().δ(σ).ε().qs);
+    for (Σ σ : Σ()) $.add(new State().δ(σ).ε().qs);
     return $.qs;
   }
 
@@ -47,30 +41,25 @@ class NFSA<Σ> extends FSA<Σ> {
   //@formatter:on 
   /** Modifier: add a new table of empty transitions */
   NFSA<Σ> ε(Map<Q, Set<Q>> ε) {
-    for (Q q : ε.keySet())
-      if (ε.get(q) != null)
-        ε(q).addAll(ε.get(q));
+    for (Q q : ε.keySet()) if (ε.get(q) != null) ε(q).addAll(ε.get(q));
     return this;
   }
 
   @Override Set<Q> Q() {
     var $ = set.union(super.Q(), ε.keySet());
-    for (Q q : ε.keySet())
-      $.addAll(ε.get(q));
+    for (Q q : ε.keySet()) $.addAll(ε.get(q));
     return $;
   }
 
   boolean run(Iterable<Σ> w) {
     var s = s0.ε();
-    for (var σ : w)
-      s = s.δ(σ).ε();
+    for (var σ : w) s = s.δ(σ).ε();
     return s.ζ();
   }
 
   public NFSA(Q q0, Set<Q> ζ, Map<Σ, Map<Q, Q>> δ, Map<Q, Set<Q>> ε) {
     super(q0, ζ, δ);
-    for (Q q : ε.keySet())
-      this.ε.put(q, ε.get(q));
+    for (Q q : ε.keySet()) this.ε.put(q, ε.get(q));
   }
 
   public NFSA(Σ σ) {
@@ -81,12 +70,9 @@ class NFSA<Σ> extends FSA<Σ> {
   class State implements Vertex<State>, Iterable<Q> {
 
     @Override public boolean equals(Object o) {
-      if (o == this)
-        return true;
-      if (o == null)
-        return false;
-      if (getClass() != o.getClass())
-        return false;
+      if (o == this) return true;
+      if (o == null) return false;
+      if (getClass() != o.getClass()) return false;
       @SuppressWarnings("unchecked") State other = (State) o;
       return qs.equals(other.qs);
     }
@@ -106,36 +92,28 @@ class NFSA<Σ> extends FSA<Σ> {
     //@formatter:on 
     State ε() {
       for (final Set<Q> todo = empty.Set();; add(todo), todo.clear()) {
-        for (Q q : this)
-          for (Q qε : NFSA.this.ε(q))
-            if (!has(qε))
-              todo.add(qε);
-        if (todo.isEmpty())
-          return this;
+        for (Q q : this) for (Q qε : NFSA.this.ε(q)) if (!has(qε)) todo.add(qε);
+        if (todo.isEmpty()) return this;
       }
     }
     /*  Multiple liners //@formatter:on */
 
     State δ(Σ σ) {
       final var $ = new State();
-      for (var q : this)
-        $.add(NFSA.this.δ(q, σ));
+      for (var q : this) $.add(NFSA.this.δ(q, σ));
       return $;
     }
 
     @Override public Set<State> neighbours() {
-      final Set<State> $ = new HashSet<>();
-      final State ε = ε();
-      Set<Σ> σ2 = Σ();
-      for (var σ : σ2)
-        $.add(ε.δ(σ).ε());
+      final Set<State> $  = new HashSet<>();
+      final State      ε  = ε();
+      Set<Σ>           σ2 = Σ();
+      for (var σ : σ2) $.add(ε.δ(σ).ε());
       return $;
     }
 
     boolean ζ() {
-      for (var q : this)
-        if (ζ.contains(q))
-          return true;
+      for (var q : this) if (ζ.contains(q)) return true;
       return false;
     }
   }
@@ -143,8 +121,7 @@ class NFSA<Σ> extends FSA<Σ> {
   NFSA<Σ> then(NFSA<Σ> a2) {
     final var $ = new NFSA<Σ>().ε(this.ε).ε(a2.ε);
     $.ε($.q0, this.q0);
-    for (Q q : this.ζ)
-      $.ε(q, a2.q0);
+    for (Q q : this.ζ) $.ε(q, a2.q0);
     $.δ(this.Δ).δ(a2.Δ).ζ(a2.ζ);
     return $;
   }
@@ -155,11 +132,9 @@ class NFSA<Σ> extends FSA<Σ> {
     $.ε(ε);
     $.ζ($.q0);
     $.ε($.q0, q0);
-    for (Q q : ζ)
-      $.ε(q, $.q0);
+    for (Q q : ζ) $.ε(q, $.q0);
     return $;
   }
-
 
   DFSA<Σ> DFSA() {
     return new Object() {
@@ -173,9 +148,7 @@ class NFSA<Σ> extends FSA<Σ> {
 
       Set<Q> ζ() {
         Set<Q> $ = empty.Set();
-        for (var s : ss)
-          if (s.ζ())
-            $.add(Q(s));
+        for (var s : ss) if (s.ζ()) $.add(Q(s));
         return $;
       }
 
@@ -190,8 +163,7 @@ class NFSA<Σ> extends FSA<Σ> {
 
       Map<Q, Q> δ(Σ σ) {
         Map<Q, Q> $ = empty.Map();
-        for (var s : ss)
-          $.put(Q(s), Q(s.ε().δ(σ).ε()));
+        for (var s : ss) $.put(Q(s), Q(s.ε().δ(σ).ε()));
         return $;
       }
     }.DFSA();

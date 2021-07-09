@@ -143,6 +143,9 @@ abstract class FSA<Σ> extends Implementation<Σ> {
     }.dfs(q0);
   }
 
+  final String TikZ() { return new TikZ().render(); }
+  //@formatter:on
+
   class TikZ extends Renderer { //@formatter:off
     private int ordinal;
     private final Map<Q, Integer> enumeration = empty.Map();

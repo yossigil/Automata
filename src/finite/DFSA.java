@@ -12,9 +12,6 @@ import utils.set;
 class DFSA<Σ> extends FSA<Σ> {
   //@formatter:off
   DFSA(final Q q0, final Set<Q> ζ, final Map<Σ, Map<Q, Q>> Δ) { super(q0, ζ, Δ); }
-  String TikZ() { return new TikZ().render(); }
-  //@formatter:on
-
   boolean run(final Iterable<Σ> w) {
     q0();
     for (final var σ : w) feed(σ);
