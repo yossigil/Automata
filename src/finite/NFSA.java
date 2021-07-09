@@ -16,8 +16,8 @@ class NFSA<Σ> extends FSA<Σ> {
 
   @Override public String toString() {
     return "Nodeterministic " + super.toString() + //
-        "\t ε = " + ε + " (non-deterministic ε-transitions)\n" + //
-        "";
+        "\t ε = " + ε + " (non-deterministic ε-transitions)\n" //
+        ;
   }
 
   @Override Set<Q> δ(Q q) {

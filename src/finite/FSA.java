@@ -19,13 +19,13 @@ abstract class Δ<Σ> {
   /** Empty constructor */ Δ() { this(empty.Map()); }
   /** Copy constructor */  Δ(final Δ<Σ> that) { this(that.Δ); }
   /** Full constructor */  Δ(final Map<Σ, Map<Q, Q>> Δ) { this.Δ = Δ; }
-  /** Inspector Letters seen */ final Set<Σ> Σ()  { return Δ.keySet(); }
-  /** Data: The transition table */ Map<Σ, Map<Q, Q>> Δ;
+  /** Inspector: Letters seen */ final Set<Σ> Σ()  { return Δ.keySet(); }
   /** Inspector: complete transition function from a state and letter  */
   /** Inspector: the transition function */ Q δ(final Q q, final Σ σ) { return δ(σ).get(q); }
   /** Inspector: Transition table of given letter */ Map<Q, Q> δ(final Σ ¢) { init(¢); return Δ.get(¢); }
   /** Inspector: Transition table of given letter */  void init(final Σ ¢) { Δ.putIfAbsent(¢, empty.Map()); }
-  /** Inspector: Set of all states for which a transition on a letter is defined */ Set<Q> Q(final Σ σ) { return δ(σ).keySet(); }
+  /** Inspector: Set of all states for which a transition on a letter is defined */ Set<Q> Q(final Σ ¢) { return δ(¢).keySet(); }
+  /** Data: The transition table */ Map<Σ, Map<Q, Q>> Δ;
   // Details: // @formatter:on
 
   /** Inspector: set of all states seen */ //@formatter:on
@@ -57,15 +57,15 @@ class Implementation<Σ> extends Δ<Σ> implements Recognizer<Σ> {
   static <T> String toString(final String name, final T t) { return name + " = " + t; }
 
   @Override public String toString() {
-    return "" + //
+    return //
         "\t " + toString("Q", Q()) + " (all states)\n" + //
         "\t " + toString("q0", q0) + " (start state)\n" + //
         "\t " + toString("ζ", ζ) + "  (accepting states)\n" + //
         "\t " + toString("Q\\ζ", set.minus(Q(), ζ)) + " (rejecting states)\n" + //
         "\t " + toString("q", q) + " (current state)\n" + //
         "\t " + toString("Σ", Σ()) + " (alphabet)\n" + //
-        super.toString() + //
-        "";
+        super.toString()//
+        ;
   }
 
   //@formatter:off
@@ -89,8 +89,8 @@ abstract class FSA<Σ> extends Implementation<Σ> {
   @Override public String toString() {
     return "FSA #" + n + "/" + N + " = ⟨Σ,q0,Q,ζ,Δ⟩ \n" + //
         super.toString() + //
-        "\t " + toString("Q'$", QQ()) + " (reachable states)\n" + //
-        "";
+        "\t " + toString("Q'$", QQ()) + " (reachable states)\n"//
+        ;
   }
 
   // @formatter:off
