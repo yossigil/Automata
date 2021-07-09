@@ -4,7 +4,7 @@ import java.util.Set;
 
 import utils.empty;
 
-abstract class Grapher extends Texter {
+abstract class Renderer extends Texter {
   final String render() { return wrap(traverse()); }
   final String wrap(String ¢) { return sprintf("graph{\n%s}\n" , ¢); }
   abstract String traverse();

@@ -147,7 +147,7 @@ abstract class FSA<Σ> extends Implementation<Σ> {
     }.dfs(q0);
   }
 
-  class TikZ extends Grapher { //@formatter:off
+  class TikZ extends Renderer { //@formatter:off
     private int ordinal;
     private final Map<Q, Integer> enumeration = empty.Map();
     final Set<Q> elaborated = empty.Set();
