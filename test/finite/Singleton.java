@@ -26,6 +26,6 @@ class Singleton {
   }
 
   @Test void singletonSize() {
-    assertEquals(a.Δ.keySet().size(), 1);
+    assertEquals(a.Δ.size(), 1);
   }
 }
