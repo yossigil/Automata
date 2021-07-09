@@ -26,17 +26,20 @@ class Star2 {
     abStar.DFSA().minimize().TikZ();
   }
 
+  static void scope(String s) {
+    System.out.println("\\begin{scope} \\path");
+    System.out.println(s);
+    System.out.println("; \\end{scope}");
+  }
+
   static <Σ> void show(final NFSA<Σ> ¢) {
-    System.out.println("\\begin{tikzpicture}\n");
-    System.out.println("\\begin{scope}[start chain=going down]\n");
-//    System.out.println(node("on chain", a + ""));
-    System.out.println("\\begin{scope}[local bounding box=NFSA,on chain] \\path \n" + ¢.TikZ() + ";\n\\end{scope}");
-    // System.out.println(node("", a.DFSA() + ""));
-    System.out.println("\\begin{scope}[local bounding box=DFSA] \\path \n" + ¢.DFSA().TikZ() + ";\n\\end{scope}");
-    // System.out.println(node("", a.DFSA().minimize() + ""));
-    System.out
-        .println("\\begin{scope}[local bounding box=DFSA] \\path \n" + ¢.DFSA().minimize().TikZ() + ";\n\\end{scope}");
-    System.out.println("\\end{scope}");
+    System.out.println("\\begin{tikzpicture}[start chain=going down]\n");
+    System.out.println("\\node[on chain] {NFSA};");
+    scope(¢.TikZ() );
+    System.out.println("\\node[on chain] {DFSA};");
+    scope(¢.DFSA().TikZ() );
+    System.out.println("\\node[on chain] {minimized DFSA};");
+    scope(¢.DFSA().minimize().TikZ());
     System.out.println("\\end{tikzpicture}\n");
   }
 
