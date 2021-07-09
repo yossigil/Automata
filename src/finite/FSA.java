@@ -172,8 +172,6 @@ abstract class FSA<Σ> extends Implementation<Σ> {
       return square($);
     }//@formatter:on
 
-    private String square(String $) { return "[" + $ + "]"; }
-
     boolean edge(final Q from, final Q to) {
       for (final Σ σ : Σ()) if (δ(from, σ) == to) return true;
       return false;
