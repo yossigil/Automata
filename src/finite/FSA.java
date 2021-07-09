@@ -1,39 +1,11 @@
 package finite;
 
-import java.util.Formatter;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
 import utils.empty;
 import utils.set;
-
-//@formatter:off
-class Q {
-  static int count;
-  final int n = count++;
-  @Override public String toString() { return "ι" + n; }
-}
-abstract class Texter {
-  @Override public String toString() { return inner + ""; }
-  void printf(String format, Object... os) { inner.format(format,os); }
-  static String sprintf(String format, Object... os) { return String.format(format,os); }
-  private final Formatter inner = new Formatter();
-}
-abstract class Grapher extends Texter {
-  final String render() { return wrap(traverse()); }
-  final String wrap(String s) { return sprintf("graph{\n%s}\n" , s); }
-  abstract String traverse();
-  final Set<Q> elaborated = empty.Set();
-  boolean elaborated(Q q) { return elaborated.contains(q); }
-}
-
-/** Abstract recognizer of a formal language over Σ */ 
-interface Recognizer<Σ> {
-  /** Initialize the recognizer */ void q0(); 
-  /** Feed the next letter */  void feed(Σ σ);
-  /** Is it in an accepting state */ boolean ζ();
-}
 
 /** An immutable transition table, complete function from Q x Σ -> Q */
 abstract class Δ<Σ> { 
