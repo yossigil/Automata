@@ -24,7 +24,3 @@ interface XDFS<V> {
     return $;
   }
 }
-
-interface V<Self> {
-  Iterable<Self> neighbours();
-}

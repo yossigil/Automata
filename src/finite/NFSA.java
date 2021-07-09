@@ -78,7 +78,7 @@ class NFSA<Σ> extends FSA<Σ> {
     δ(q0, σ, q).ζ(q);
   }
 
-  class State implements V<State>, Iterable<Q> {
+  class State implements Vertex<State>, Iterable<Q> {
 
     @Override public boolean equals(Object o) {
       if (o == this)

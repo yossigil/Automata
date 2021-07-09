@@ -4,15 +4,14 @@ import java.util.Set;
 
 import utils.empty;
 
-@FunctionalInterface interface DFS<Vertex extends V<Vertex>> {
-  void visit(Vertex v);
-
-  default Set<Vertex> dfs(Vertex v) {
-    final Set<Vertex> $ = empty.Set();
+@FunctionalInterface interface DFS<V extends Vertex<V>> {
+  void visit(V v);
+  default Set<V> dfs(V v) {
+    final Set<V> $ = empty.Set();
     new Object() { //@formatter:off 
-      boolean mint(Vertex ¢) { return $.add(¢); }
-      void recurse(Vertex ¢) { visit(¢); for (var n : ¢.neighbours()) dfs(n); }
-      void dfs(Vertex ¢) { if (mint(¢)) recurse(¢); }
+      boolean mint(V ¢) { return $.add(¢); }
+      void recurse(V ¢) { visit(¢); for (var n : ¢.neighbours()) dfs(n); }
+      void dfs(V ¢) { if (mint(¢)) recurse(¢); }
     }.dfs(v);
     return $;
   }
