@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 class Star2 {
   final Text abStar = new Text('a').Then('b').star();
+  final Text star   = new Text('a').Then('b').then(new Text('a').Or('b')).star();
 
   @Test void m1() {
     abStar.DFSA();
@@ -25,7 +26,7 @@ class Star2 {
     abStar.DFSA().minimize().TikZ();
   }
 
-  <Σ> void show(final NFSA<Σ> ¢) {
+  static <Σ> void show(final NFSA<Σ> ¢) {
     System.out.println("\\begin{tikzpicture}\n");
     System.out.println("\\begin{scope}[start chain=going down]\n");
 //    System.out.println(node("on chain", a + ""));
@@ -40,7 +41,7 @@ class Star2 {
   }
 
   @Test void DFSADemo() {
-    show(new Text('a').Then('b').then(new Text('a').Or('b')).star());
+    show(star);
   }
 
   @Test void DFSA() {
