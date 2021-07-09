@@ -17,44 +17,43 @@ abstract class Δ<Σ> {
   }
 
   /* Essence: // @formatter:off */
-  /** Empty constructor */ Δ() { this(empty.Map()); } 
-  /** Copy constructor */  Δ(Δ<Σ> that) { this(that.Δ); } 
-  /** Full constructor */  Δ(Map<Σ, Map<Q, Q>> Δ) { this.Δ = Δ; }
-  /** Inspector Letters seen */ final Set<Σ> Σ()  { return Δ.keySet(); } 
+  /** Empty constructor */ Δ() { this(empty.Map()); }
+  /** Copy constructor */  Δ(final Δ<Σ> that) { this(that.Δ); }
+  /** Full constructor */  Δ(final Map<Σ, Map<Q, Q>> Δ) { this.Δ = Δ; }
+  /** Inspector Letters seen */ final Set<Σ> Σ()  { return Δ.keySet(); }
   /** Data: The transition table */ Map<Σ, Map<Q, Q>> Δ;
-  /** Inspector: complete transition function from a state and letter  */ 
-  /** Inspector: the transition function */ Q δ(Q q, Σ σ) { return δ(σ).get(q); }
-  /** Inspector: Transition table of given letter */ Map<Q, Q> δ(Σ ¢) { init(¢); return Δ.get(¢); }
-  /** Inspector: Transition table of given letter */  void init(Σ ¢) { Δ.putIfAbsent(¢, empty.Map()); }
+  /** Inspector: complete transition function from a state and letter  */
+  /** Inspector: the transition function */ Q δ(final Q q, final Σ σ) { return δ(σ).get(q); }
+  /** Inspector: Transition table of given letter */ Map<Q, Q> δ(final Σ ¢) { init(¢); return Δ.get(¢); }
+  /** Inspector: Transition table of given letter */  void init(final Σ ¢) { Δ.putIfAbsent(¢, empty.Map()); }
   // Details: // @formatter:on
 
   /** Inspector: set of all states seen */ //@formatter:on
   Set<Q> Q() {
-    Set<Q> $ = empty.Set();
-    for (Σ σ : Σ()) {
-      Set<finite.Q> keySet = δ(σ).keySet();
+    final Set<Q> $ = empty.Set();
+    for (final Σ σ : Σ()) {
+      final var keySet = δ(σ).keySet();
       $.addAll(keySet);
-      for (Q q : keySet)
-        $.add(δ(σ).get(q));
+      for (final Q q : keySet) $.add(δ(σ).get(q));
     }
     return $;
   }
 }
 
 class Implementation<Σ> extends Δ<Σ> implements Recognizer<Σ> {
-  static <T> String toString(String name, Set<T> ts) {
+  static <T> String toString(final String name, final Set<T> ts) {
     return head(name, ts) + ts;
   }
 
-  private static <T> String head(String name, Set<T> ts) {
+  private static <T> String head(final String name, final Set<T> ts) {
     return name + "[[" + ts.size() + "]] = ";
   }
 
-  static <S, T> String toString(String name, Map<S, T> m) {
+  static <S, T> String toString(final String name, final Map<S, T> m) {
     return name + "[[" + m.size() + "]] = " + name + "[{" + m.keySet() + "}]=" + m;
   }
 
-  static <T> String toString(String name, T t) { return name + " = " + t; }
+  static <T> String toString(final String name, final T t) { return name + " = " + t; }
 
   @Override public String toString() {
     return "" + //
@@ -69,18 +68,18 @@ class Implementation<Σ> extends Δ<Σ> implements Recognizer<Σ> {
   }
 
   //@formatter:off
-  /** Data: Initial state */ final Q q0; 
-  /** Data: Set of accepting states */ final Set<Q> ζ; 
+  /** Data: Initial state */ final Q q0;
+  /** Data: Set of accepting states */ final Set<Q> ζ;
   /** Data: Current state  */ Q q;
   /** Empty constructor */ Implementation()  { this(new Q(), empty.Set()); }
-  /** Partial constructor */  Implementation(Q q0, Set<Q> ζ) { this.q0 = q0; this.ζ = ζ; }
-  /** Full constructor */  Implementation(Q q0, Set<Q> ζ,  Map<Σ, Map<Q, Q>> Δ) { super(Δ); this.q0 = q0; this.ζ= ζ; }
-  /** Full constructor */  Implementation(Set<Q> ζ,  Map<Σ, Map<Q, Q>> Δ) { super(Δ); this.q0 = new Q(); this.ζ= ζ; }
-  /** Copy constructor */  Implementation(Implementation<Σ> that) { this(that.q0,that.ζ,that.Δ); }
-  /** Update transition table */  Implementation<Σ>  δ(Q from, Σ σ, Q to) { δ(σ).put(from, to); return this;}
+  /** Partial constructor */  Implementation(final Q q0, final Set<Q> ζ) { this.q0 = q0; this.ζ = ζ; }
+  /** Full constructor */  Implementation(final Q q0, final Set<Q> ζ,  final Map<Σ, Map<Q, Q>> Δ) { super(Δ); this.q0 = q0; this.ζ= ζ; }
+  /** Full constructor */  Implementation(final Set<Q> ζ,  final Map<Σ, Map<Q, Q>> Δ) { super(Δ); this.q0 = new Q(); this.ζ= ζ; }
+  /** Copy constructor */  Implementation(final Implementation<Σ> that) { this(that.q0,that.ζ,that.Δ); }
+  /** Update transition table */  Implementation<Σ>  δ(final Q from, final Σ σ, final Q to) { δ(σ).put(from, to); return this;}
   @Override Set<Q> Q() { return set.union(super.Q(),ζ); }
-  @Override public void q0() { q = q0; } 
-  @Override public void feed(Σ ¢) { q = δ(q,¢); } 
+  @Override public void q0() { q = q0; }
+  @Override public void feed(final Σ ¢) { q = δ(q,¢); }
   @Override public boolean ζ() { return ζ.contains(q); }
 }
 
@@ -95,55 +94,52 @@ abstract class FSA<Σ> extends Implementation<Σ> {
 
   // @formatter:off
   /** Empty constructor */ FSA() {}
-  /** Copy constructor */ FSA(FSA<Σ> a) { super(a); }
-  /** Partial constructor */  FSA(Map<Σ, Map<Q, Q>> Δ, Set<Q> ζ) { super(ζ, Δ); }
-  /** Full constructor */ FSA(Q q0, Set<Q> ζ, Map<Σ,Map<Q,Q>> Δ) { super(q0, ζ, Δ); }
+  /** Copy constructor */ FSA(final FSA<Σ> a) { super(a); }
+  /** Partial constructor */  FSA(final Map<Σ, Map<Q, Q>> Δ, final Set<Q> ζ) { super(ζ, Δ); }
+  /** Full constructor */ FSA(final Q q0, final Set<Q> ζ, final Map<Σ,Map<Q,Q>> Δ) { super(q0, ζ, Δ); }
 
-  /** Modifier: Add a new accepting state */ FSA<Σ> ζ(Q ¢) { ζ.add(¢); return this; }
-  /** Modifier: Add a set of new accepting state */ FSA<Σ> ζ(Set<Q> ¢) { ζ.addAll(¢); return this; }
-  /** Data: Instance number */  final int n = ++N; 
+  /** Modifier: Add a new accepting state */ FSA<Σ> ζ(final Q ¢) { ζ.add(¢); return this; }
+  /** Modifier: Add a set of new accepting state */ FSA<Σ> ζ(final Set<Q> ¢) { ζ.addAll(¢); return this; }
+  /** Data: Instance number */  final int n = ++N;
   /** Data: Instance counter */ static int N;
   //@formatter:on
 
   /** Inspector: Set of all reachable state of a give state */
-  Set<Q> δ(Q q) {
-    Set<Q> $ = empty.Set();
-    for (Σ σ : Σ())
-      $.add(δ(q, σ));
+  Set<Q> δ(final Q q) {
+    final Set<Q> $ = empty.Set();
+    for (final Σ σ : Σ()) $.add(δ(q, σ));
     return $;
   }
 
   /** Modifier: Add a new transition */
-  FSA<Σ> δ(Q from, Σ σ, Q to) {
+  @Override FSA<Σ> δ(final Q from, final Σ σ, final Q to) {
     δ(σ).put(from, to);
     return this;
   }
 
   /** Modifier: Add a full transition table */
-  FSA<Σ> δ(Map<Σ, Map<Q, Q>> Δ) {
-    for (Σ σ : Δ.keySet())
-      δ(δ(σ), Δ.get(σ));
+  FSA<Σ> δ(final Map<Σ, Map<Q, Q>> Δ) {
+    for (final Σ σ : Δ.keySet()) δ(δ(σ), Δ.get(σ));
     return this;
   }
 
   /** Helper: Copy a transition table of a single letter */
-  static void δ(Map<Q, Q> m1, Map<Q, Q> m2) {
-    for (Q q : m2.keySet())
-      m1.put(q, m2.get(q));
+  static void δ(final Map<Q, Q> m1, final Map<Q, Q> m2) {
+    for (final Q q : m2.keySet()) m1.put(q, m2.get(q));
   }
 
   /** Inspector: Set of all reachable states */
   Set<Q> QQ() {
-    Set<Q> $ = empty.Set();
+    final Set<Q> $ = empty.Set();
     dfs(λ -> $.add(λ));
     return $;
   }
 
   /** Exerciser: do a DFS search, supplying each state q to a given consumer */
-  final void dfs(Consumer<Q> c) {
+  final void dfs(final Consumer<Q> c) {
     new XDFS<Q>() { //@formatter:off
-      @Override public Set<Q> n(Q ¢) { return δ(¢); }
-      @Override public Q v(Q ¢) { c.accept(¢); return ¢;} 
+      @Override public Set<Q> n(final Q ¢) { return δ(¢); }
+      @Override public Q v(final Q ¢) { c.accept(¢); return ¢;}
       //@formatter:on
     }.dfs(q0);
   }
@@ -153,61 +149,53 @@ abstract class FSA<Σ> extends Implementation<Σ> {
     private final Map<Q, Integer> enumeration = empty.Map();
     final Set<Q> elaborated = empty.Set();
     void enumerate() { dfs(q -> enumeration.computeIfAbsent(q, __ -> ordinal++)); }
-    String tikz(Q ¢) { return sprintf("\"$q_{%s$\" [%s]", enumeration.get(¢), elaborate(¢)); }
-    String elaborate(Q from, Q to) { return to == from ? ",loop" : !edge(to, from) ? "" : ",bend left"; }
-    String traverse() { enumerate(); dfs(from -> render(from)); return this + ""; } 
+    String tikz(final Q ¢) { return sprintf("\"$q_{%s$\" [%s]", enumeration.get(¢), elaborate(¢)); }
+    String elaborate(final Q from, final Q to) { return to == from ? ",loop" : !edge(to, from) ? "" : ",bend left"; }
+    @Override
+    String traverse() { enumerate(); dfs(from -> render(from)); return this + ""; }
 
     //@formatter:on
-    void render(Q from) {
-      Set<Σ> σs = empty.Set();
-      for (final Σ σ : Σ())
-        if (!σs.contains(σ))
-          σs.addAll(render(from, δ(from, σ)));
+    void render(final Q from) {
+      final Set<Σ> σs = empty.Set();
+      for (final Σ σ : Σ()) if (!σs.contains(σ)) σs.addAll(render(from, δ(from, σ)));
     }
 
-    Set<Σ> render(Q from, final Q to) {
-      if (to == null)
-        return empty.Set();
-      final Set<Σ> $ = unify(from, to);
+    Set<Σ> render(final Q from, final Q to) {
+      if (to == null) return empty.Set();
+      final var $ = unify(from, to);
       printf("\t %s -> [\"%s\"%s] %s\n;", tikz(from), tikz($), elaborate(from, to), tikz(to));
       return $;
     }
 
-    final String elaborate(Q ¢) { //@formatter:off 
-      String $ = "";
+    final String elaborate(final Q ¢) { //@formatter:off
+      var $ = "";
       if (elaborated(¢)) return $;
       elaborated.add(¢);
       if (¢ == q0) $ += "initial,";
       if (ζ.contains(¢)) $ += "accept";
       return $;
-    }//@formatter:on 
+    }//@formatter:on
 
-    boolean edge(Q from, Q to) {
-      for (Σ σ : Σ())
-        if (δ(from, σ) == to)
-          return true;
+    boolean edge(final Q from, final Q to) {
+      for (final Σ σ : Σ()) if (δ(from, σ) == to) return true;
       return false;
     }
 
-    private Set<Σ> unify(Q from, Q to) {
-      Set<Σ> $ = empty.Set();
-      for (Σ σ : Σ())
-        if (δ(from, σ) == to)
-          $.add(σ);
+    private Set<Σ> unify(final Q from, final Q to) {
+      final Set<Σ> $ = empty.Set();
+      for (final Σ σ : Σ()) if (δ(from, σ) == to) $.add(σ);
       return $;
     }
 
-    private String tikz(Set<Σ> σs) {
-      String $ = "";
-      boolean ordinary = true;
-      for (Σ σ : σs) {
-        if (ordinary)
-          $ += ", ";
-        else
-          ordinary = true;
-        $ += σ == null ? "*" : σ;
+    private String tikz(final Set<Σ> σs) {
+      var $        = new StringBuilder();
+      var       ordinary = true;
+      for (final Σ σ : σs) {
+        if (ordinary) $.append(", ");
+        else ordinary = true;
+        $.append(σ == null ? "*" : σ);
       }
-      return $;
+      return $.toString();
     }
 
   }
