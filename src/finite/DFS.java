@@ -10,7 +10,7 @@ import utils.empty;
     final Set<V> $ = empty.Set();
     new Object() { //@formatter:off 
       boolean mint(V ¢) { return $.add(¢); }
-      void recurse(V ¢) { visit(¢); for (var n : ¢.neighbours()) dfs(n); }
+      void recurse(V ¢) { visit(¢); ¢.neighbours().forEach(λ -> dfs(λ)); }
       void dfs(V ¢) { if (mint(¢)) recurse(¢); }
     }.dfs(v);
     return $;

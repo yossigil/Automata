@@ -1,5 +1,7 @@
 package finite;
 
+import java.util.Set;
+
 interface Vertex<Self> {
-  Iterable<Self> neighbours();
+  Set<Self> neighbours();
 }

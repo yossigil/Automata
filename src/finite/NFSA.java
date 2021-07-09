@@ -123,7 +123,7 @@ class NFSA<Σ> extends FSA<Σ> {
       return $;
     }
 
-    @Override public Iterable<State> neighbours() {
+    @Override public Set<State> neighbours() {
       final Set<State> $ = new HashSet<>();
       final State ε = ε();
       Set<Σ> σ2 = Σ();
