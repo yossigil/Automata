@@ -147,7 +147,7 @@ abstract class FSA<Σ> extends Implementation<Σ> {
     private final Map<Q, Integer> enumeration = empty.Map();
     final Set<Q> elaborated = empty.Set();
     void enumerate() { dfs(q -> enumeration.computeIfAbsent(q, __ -> ordinal++)); }
-    String tikz(final Q ¢) { return sprintf("\"$q_{%s}$\" [%s]", enumeration.get(¢), elaborate(¢)); }
+    String tikz(final Q ¢) { return sprintf("\"$q_{%s}$\" %s", enumeration.get(¢), elaborate(¢)); }
     String elaborate(final Q from, final Q to) { return to == from ? ",loop" : !edge(to, from) ? "" : ",bend left"; }
     @Override String traverse() { enumerate(); dfs(from -> render(from)); return this + ""; }
 
