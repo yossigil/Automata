@@ -4,8 +4,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 interface XDFS<V> {
-  default V v(V v) {
-    return v;
+  default V v(V ¢) {
+    return ¢;
   }
 
   Set<V> n(V v);

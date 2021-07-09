@@ -6,8 +6,8 @@ import utils.empty;
 
 abstract class Grapher extends Texter {
   final String render() { return wrap(traverse()); }
-  final String wrap(String s) { return sprintf("graph{\n%s}\n" , s); }
+  final String wrap(String ¢) { return sprintf("graph{\n%s}\n" , ¢); }
   abstract String traverse();
   final Set<Q> elaborated = empty.Set();
-  boolean elaborated(Q q) { return elaborated.contains(q); }
+  boolean elaborated(Q ¢) { return elaborated.contains(¢); }
 }

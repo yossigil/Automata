@@ -25,16 +25,16 @@ class Star2 {
     abStar.DFSA().minimize().TikZ();
   }
 
-  <Σ> void show(NFSA<Σ> a) {
+  <Σ> void show(NFSA<Σ> ¢) {
     System.out.println("\\begin{tikzpicture}\n");
     System.out.println("\\begin{scope}[start chain=going down]\n");
 //    System.out.println(node("on chain", a + ""));
-    System.out.println("\\begin{scope}[local bounding box=NFSA,on chain] \\path \n" + a.TikZ() + ";\n\\end{scope}");
+    System.out.println("\\begin{scope}[local bounding box=NFSA,on chain] \\path \n" + ¢.TikZ() + ";\n\\end{scope}");
  //   System.out.println(node("", a.DFSA() + ""));
-    System.out.println("\\begin{scope}[local bounding box=DFSA] \\path \n" + a.DFSA().TikZ() + ";\n\\end{scope}");
+    System.out.println("\\begin{scope}[local bounding box=DFSA] \\path \n" + ¢.DFSA().TikZ() + ";\n\\end{scope}");
   //  System.out.println(node("", a.DFSA().minimize() + ""));
     System.out
-        .println("\\begin{scope}[local bounding box=DFSA] \\path \n" + a.DFSA().minimize().TikZ() + ";\n\\end{scope}");
+        .println("\\begin{scope}[local bounding box=DFSA] \\path \n" + ¢.DFSA().minimize().TikZ() + ";\n\\end{scope}");
     System.out.println("\\end{scope}");
     System.out.println("\\end{tikzpicture}\n");
   }

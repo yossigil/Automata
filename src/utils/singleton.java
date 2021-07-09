@@ -4,9 +4,9 @@ import java.util.Set;
 
 enum singleton {
   ;
-  static <T> Set<T> Set(T t) {
+  static <T> Set<T> Set(T ¢) {
     Set<T> $ = empty.Set();
-    $.add(t);
+    $.add(¢);
     return $;
   }
 }

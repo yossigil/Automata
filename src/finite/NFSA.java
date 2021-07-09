@@ -32,12 +32,12 @@ class NFSA<Σ> extends FSA<Σ> {
   /** Constructor: Empty */ NFSA() { }
   /** Constructor: Full constructor */ NFSA(Map<Σ, Map<Q, Q>> Δ, Set<Q> ζ, Map<Q, Set<Q>> ε) { super(Δ, ζ); ε(ε);  }  
   /** Constructor: Copy */ NFSA(NFSA<Σ> that) { this(that.q0, that.ζ, that.Δ, that.ε); }
-  /** Factory: recognizer of a single letter */ static <Σ> NFSA<Σ> σ(Σ σ) { return new NFSA<Σ>(σ); }
+  /** Factory: recognizer of a single letter */ static <Σ> NFSA<Σ> σ(Σ ¢) { return new NFSA<Σ>(¢); }
   /** Factory: recognizer of the empty string */ static  <Σ> NFSA<Σ> ε(){ var $ = new NFSA<Σ>(); $.ζ($.q0); return $;}
   /** Factory: recognizer of the empty set */ static  <Σ> NFSA<Σ> any(){ return new NFSA<Σ>((Σ)null); } 
   /** Factory: recognizer of the empty set */ static  <Σ> NFSA<Σ> Φ(){ return new NFSA<Σ>(); }
   /** Modifier: add a new empty transition */ NFSA<Σ> ε(Q from, Q to) { ε(from).add(to); return this; }
-  Set<Q> ε(Q q) { if (ε.get(q) == null) ε.put(q, empty.Set()); return ε.get(q); } // Set of outgoing transitions
+  Set<Q> ε(Q ¢) { if (ε.get(¢) == null) ε.put(¢, empty.Set()); return ε.get(¢); } // Set of outgoing transitions
   final State s0 = new State(super.q0); // The initial state
   NFSA<Σ> plus() { return Thompson.plus(this); }
   NFSA<Σ> not() { return Thompson.not(this); }
@@ -94,14 +94,14 @@ class NFSA<Σ> extends FSA<Σ> {
     /* One liners: //@formatter:off */
     @Override public int hashCode() { return qs.hashCode(); }
     final Set<Q> qs = new HashSet<>();
-    boolean has(Q q) { return qs.contains(q); }
+    boolean has(Q ¢) { return qs.contains(¢); }
     State() {}
     State(Q q) { add(q); }
     State(Set<Q> qs) { add(qs);}
 
     State add(Set<Q> qs) { for (Q q: qs) add(q); return this;}
-    void add(Q q) { qs.add(q); ε(); }
-    @Override public String toString() { return qs.toString(); } 
+    void add(Q ¢) { qs.add(¢); ε(); }
+    @Override public String toString() { return qs + ""; } 
     @Override public Iterator<Q> iterator() { return qs.iterator(); }
     //@formatter:on 
     State ε() {
@@ -169,7 +169,7 @@ class NFSA<Σ> extends FSA<Σ> {
       Set<State> ss = new DFS<State>() { @Override public void v(State s) {}}.dfs(s0);
       Map<State, Q> code = code();
       Map<State, Q> code() { Map<State,Q> $ = empty.Map(); for (var s: ss) $.put(s, new Q()); return $; }
-      Q Q(State s) { return code.get(s); } //@formatter:on */
+      Q Q(State ¢) { return code.get(¢); } //@formatter:on */
 
       Set<Q> ζ() {
         Set<Q> $ = empty.Set();
