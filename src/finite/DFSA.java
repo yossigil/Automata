@@ -3,6 +3,8 @@ package finite;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import utils.empty;
 import utils.set;
@@ -32,9 +34,7 @@ class DFSA<Σ> extends FSA<Σ> {
       final Map<Q, Set<Q>> container = container();
 //@formatter:on
       Map<Σ, Map<Q, Q>> δ() {
-        final Map<Σ, Map<Q, Q>> $ = empty.Map();
-        for (final var σ : Σ()) $.put(σ, δ(σ));
-        return $;
+        return Σ().stream().collect(Collectors.toMap(Function.identity(), λ -> δ(λ)));
       }
 
       Map<Q, Q> δ(final Σ σ) {
@@ -56,7 +56,7 @@ class DFSA<Σ> extends FSA<Σ> {
           final Set<Q> A = set.pick(W);
           W.remove(A);
           for (final Σ σ : Σ()) {
-            final var      X    = X(A, σ);
+            final var         X    = X(A, σ);
             final Set<Set<Q>> new$ = empty.Set();
             for (final Set<Q> Y : $) {
               final Set<Q> intersection = set.intersection(Y, X);
