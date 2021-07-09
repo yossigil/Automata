@@ -5,21 +5,15 @@ import java.util.Set;
 import utils.empty;
 
 @FunctionalInterface interface DFS<Vertex extends V<Vertex>> {
-  void v(Vertex t);
+  void visit(Vertex v);
 
   default Set<Vertex> dfs(Vertex v) {
-    Set<Vertex> $ = empty.Set(); 
-    new Object() { 
-      void dfs(Vertex v) {
-        if (!$.contains(v)) {
-          v(v);
-          $.add(v);
-          for (var n : v.neighbours())
-            dfs(n);
-        }
-      }
+    final Set<Vertex> $ = empty.Set();
+    new Object() { //@formatter:off 
+      boolean mint(Vertex ¢) { return $.add(¢); }
+      void recurse(Vertex ¢) { visit(¢); for (var n : ¢.neighbours()) dfs(n); }
+      void dfs(Vertex ¢) { if (mint(¢)) recurse(¢); }
     }.dfs(v);
     return $;
   }
-
 }
