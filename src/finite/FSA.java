@@ -24,18 +24,20 @@ abstract class Δ<Σ> {
   /** Inspector: the transition function */ Q δ(final Q q, final Σ σ) { return δ(σ).get(q); }
   /** Inspector: Transition table of given letter */ Map<Q, Q> δ(final Σ ¢) { init(¢); return Δ.get(¢); }
   /** Inspector: Transition table of given letter */  void init(final Σ ¢) { Δ.putIfAbsent(¢, empty.Map()); }
+  /** Inspector: Set of all states for which a transition on a letter is defined */ Set<Q> Q(final Σ σ) { return δ(σ).keySet(); }
   // Details: // @formatter:on
 
   /** Inspector: set of all states seen */ //@formatter:on
   Set<Q> Q() {
     final Set<Q> $ = empty.Set();
     for (final Σ σ : Σ()) {
-      final var keySet = δ(σ).keySet();
-      $.addAll(keySet);
-      for (final Q q : keySet) $.add(δ(σ).get(q));
+      final var qs = Q(σ);
+      $.addAll(qs);
+      for (final Q q : qs) $.add(δ(σ).get(q));
     }
     return $;
   }
+
 }
 
 class Implementation<Σ> extends Δ<Σ> implements Recognizer<Σ> {
