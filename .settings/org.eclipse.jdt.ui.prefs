@@ -1,3 +1,9 @@
+cleanup_settings_version=2
 eclipse.preferences.version=1
 formatter_profile=_BASIC
 formatter_settings_version=21
+org.eclipse.jdt.ui.exception.name=x
+org.eclipse.jdt.ui.gettersetter.use.is=false
+org.eclipse.jdt.ui.keywordthis=false
+org.eclipse.jdt.ui.overrideannotation=false
+org.eclipse.jdt.ui.text.custom_code_templates=
