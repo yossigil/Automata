@@ -3,6 +3,7 @@ package finite;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import utils.empty;
 import utils.set;
@@ -106,9 +107,7 @@ abstract class FSA<Σ> extends Implementation<Σ> {
 
   /** Inspector: Set of all reachable state of a give state */
   Set<Q> δ(final Q q) {
-    final Set<Q> $ = empty.Set();
-    for (final Σ σ : Σ()) $.add(δ(q, σ));
-    return $;
+    return Σ().stream().map(λ -> δ(q, λ)).collect(Collectors.toSet());
   }
 
   /** Modifier: Add a new transition */
@@ -168,7 +167,7 @@ abstract class FSA<Σ> extends Implementation<Σ> {
 
     final String elaborate(final Q ¢) { //@formatter:on
       if (!elaborated.add(¢)) return "";
-      String $ = "";
+      var $ = "";
       if (¢ == q0) $ += "initial,";
       if (ζ.contains(¢)) $ += "accept";
       return square($);
@@ -186,8 +185,8 @@ abstract class FSA<Σ> extends Implementation<Σ> {
     }
 
     private String tikz(final Set<Σ> σs) {
-      var $        = new StringBuilder();
-      var ordinary = false;
+      final var $        = new StringBuilder();
+      var       ordinary = false;
       for (final Σ σ : σs) {
         if (ordinary) $.append(", ");
         else ordinary = true;
