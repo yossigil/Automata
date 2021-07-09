@@ -11,9 +11,7 @@ import utils.set;
 abstract class Δ<Σ> {
   /** Class summary */
   @Override public String toString() {
-    return //
-    "\t Δ = " + Δ + " (transition function)\n" + //
-        "";
+    return "\t Δ = " + Δ + " (transition function)\n";
   }
 
   /* Essence: // @formatter:off */
@@ -149,10 +147,9 @@ abstract class FSA<Σ> extends Implementation<Σ> {
     private final Map<Q, Integer> enumeration = empty.Map();
     final Set<Q> elaborated = empty.Set();
     void enumerate() { dfs(q -> enumeration.computeIfAbsent(q, __ -> ordinal++)); }
-    String tikz(final Q ¢) { return sprintf("\"$q_{%s$\" [%s]", enumeration.get(¢), elaborate(¢)); }
+    String tikz(final Q ¢) { return sprintf("\"$q_{%s}$\" [%s]", enumeration.get(¢), elaborate(¢)); }
     String elaborate(final Q from, final Q to) { return to == from ? ",loop" : !edge(to, from) ? "" : ",bend left"; }
-    @Override
-    String traverse() { enumerate(); dfs(from -> render(from)); return this + ""; }
+    @Override String traverse() { enumerate(); dfs(from -> render(from)); return this + ""; }
 
     //@formatter:on
     void render(final Q from) {
@@ -163,18 +160,19 @@ abstract class FSA<Σ> extends Implementation<Σ> {
     Set<Σ> render(final Q from, final Q to) {
       if (to == null) return empty.Set();
       final var $ = unify(from, to);
-      printf("\t %s -> [\"%s\"%s] %s\n;", tikz(from), tikz($), elaborate(from, to), tikz(to));
+      printf("\t %s -> [\"%s\"%s] %s;\n", tikz(from), tikz($), elaborate(from, to), tikz(to));
       return $;
     }
 
-    final String elaborate(final Q ¢) { //@formatter:off
-      var $ = "";
-      if (elaborated(¢)) return $;
-      elaborated.add(¢);
+    final String elaborate(final Q ¢) { //@formatter:on
+      if (!elaborated.add(¢)) return "";
+      String $ = "";
       if (¢ == q0) $ += "initial,";
       if (ζ.contains(¢)) $ += "accept";
-      return $;
+      return square($);
     }//@formatter:on
+
+    private String square(String $) { return "[" + $ + "]"; }
 
     boolean edge(final Q from, final Q to) {
       for (final Σ σ : Σ()) if (δ(from, σ) == to) return true;
