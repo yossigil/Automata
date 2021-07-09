@@ -32,8 +32,8 @@ class Demo {
     print(path(x4.DFSA().minimize().TikZ()));
   }
 
-  private static void print(String s) {
-    System.out.println(s);
+  private static void print(String ¢) {
+    System.out.println(¢);
   }
 
   private static String path(String graph) {

@@ -23,8 +23,8 @@ abstract class Δ<Σ> {
   /** Data: The transition table */ Map<Σ, Map<Q, Q>> Δ;
   /** Inspector: complete transition function from a state and letter  */ 
   /** Inspector: the transition function */ Q δ(Q q, Σ σ) { return δ(σ).get(q); }
-  /** Inspector: Transition table of given letter */ Map<Q, Q> δ(Σ σ) { init(σ); return Δ.get(σ); }
-  /** Inspector: Transition table of given letter */  void init(Σ σ) { Δ.putIfAbsent(σ, empty.Map()); }
+  /** Inspector: Transition table of given letter */ Map<Q, Q> δ(Σ ¢) { init(¢); return Δ.get(¢); }
+  /** Inspector: Transition table of given letter */  void init(Σ ¢) { Δ.putIfAbsent(¢, empty.Map()); }
   // Details: // @formatter:on
 
   /** Inspector: set of all states seen */ //@formatter:on
@@ -79,7 +79,7 @@ class Implementation<Σ> extends Δ<Σ> implements Recognizer<Σ> {
   /** Update transition table */  Implementation<Σ>  δ(Q from, Σ σ, Q to) { δ(σ).put(from, to); return this;}
   @Override Set<Q> Q() { return set.union(super.Q(),ζ); }
   @Override public void q0() { q = q0; } 
-  @Override public void feed(Σ σ) { q = δ(q,σ); } 
+  @Override public void feed(Σ ¢) { q = δ(q,¢); } 
   @Override public boolean ζ() { return ζ.contains(q); }
 }
 
@@ -98,8 +98,8 @@ abstract class FSA<Σ> extends Implementation<Σ> {
   /** Partial constructor */  FSA(Map<Σ, Map<Q, Q>> Δ, Set<Q> ζ) { super(ζ, Δ); }
   /** Full constructor */ FSA(Q q0, Set<Q> ζ, Map<Σ,Map<Q,Q>> Δ) { super(q0, ζ, Δ); }
 
-  /** Modifier: Add a new accepting state */ FSA<Σ> ζ(Q q) { ζ.add(q); return this; }
-  /** Modifier: Add a set of new accepting state */ FSA<Σ> ζ(Set<Q> qs) { ζ.addAll(qs); return this; }
+  /** Modifier: Add a new accepting state */ FSA<Σ> ζ(Q ¢) { ζ.add(¢); return this; }
+  /** Modifier: Add a set of new accepting state */ FSA<Σ> ζ(Set<Q> ¢) { ζ.addAll(¢); return this; }
   /** Data: Instance number */  final int n = ++N; 
   /** Data: Instance counter */ static int N;
   //@formatter:on
@@ -134,15 +134,15 @@ abstract class FSA<Σ> extends Implementation<Σ> {
   /** Inspector: Set of all reachable states */
   Set<Q> QQ() {
     Set<Q> $ = empty.Set();
-    dfs(q -> $.add(q));
+    dfs(λ -> $.add(λ));
     return $;
   }
 
   /** Exerciser: do a DFS search, supplying each state q to a given consumer */
   final void dfs(Consumer<Q> c) {
     new XDFS<Q>() { //@formatter:off
-      @Override public Set<Q> n(Q q) { return δ(q); }
-      @Override public Q v(Q q) { c.accept(q); return q;} 
+      @Override public Set<Q> n(Q ¢) { return δ(¢); }
+      @Override public Q v(Q ¢) { c.accept(¢); return ¢;} 
       //@formatter:on
     }.dfs(q0);
   }
@@ -152,7 +152,7 @@ abstract class FSA<Σ> extends Implementation<Σ> {
     private final Map<Q, Integer> enumeration = empty.Map();
     final Set<Q> elaborated = empty.Set();
     void enumerate() { dfs(q -> enumeration.computeIfAbsent(q, __ -> ordinal++)); }
-    String tikz(Q q) { return sprintf("\"$q_{%s$\" [%s]", enumeration.get(q), elaborate(q)); }
+    String tikz(Q ¢) { return sprintf("\"$q_{%s$\" [%s]", enumeration.get(¢), elaborate(¢)); }
     String elaborate(Q from, Q to) { return to == from ? ",loop" : !edge(to, from) ? "" : ",bend left"; }
     String traverse() { enumerate(); dfs(from -> render(from)); return this + ""; } 
 
@@ -172,12 +172,12 @@ abstract class FSA<Σ> extends Implementation<Σ> {
       return $;
     }
 
-    final String elaborate(Q q) { //@formatter:off 
+    final String elaborate(Q ¢) { //@formatter:off 
       String $ = "";
-      if (elaborated(q)) return $;
-      elaborated.add(q);
-      if (q == q0) $ += "initial,";
-      if (ζ.contains(q)) $ += "accept";
+      if (elaborated(¢)) return $;
+      elaborated.add(¢);
+      if (¢ == q0) $ += "initial,";
+      if (ζ.contains(¢)) $ += "accept";
       return $;
     }//@formatter:on 
  

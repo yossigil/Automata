@@ -6,12 +6,12 @@ import java.util.Set;
 
 class Text extends NFSA<Character> {
   //@formatter:off
-  Text And(char c) { return new Text(and(new Text(c))); }
-  Text Or(char c) { return new Text(or(new Text(c))); }
-  Text Then(char c) { return new Text(then(new Text(c))); }
-  Text and(Text t) { return new Text(super.and(t)); }
-  Text or(Text t) { return new Text(super.or(t)); }
-  Text then(Text t) { return new Text(super.then(t)); }
+  Text And(char ¢) { return new Text(and(new Text(¢))); }
+  Text Or(char ¢) { return new Text(or(new Text(¢))); }
+  Text Then(char ¢) { return new Text(then(new Text(¢))); }
+  Text and(Text ¢) { return new Text(super.and(¢)); }
+  Text or(Text ¢) { return new Text(super.or(¢)); }
+  Text then(Text ¢) { return new Text(super.then(¢)); }
   Text star() { return new Text(super.star()); }
   Text(Q q0, Set<Q> ζ, Map<Character, Map<Q, Q>> δ, Map<Q, Set<Q>> ε) { super(q0, ζ, δ, ε); } 
   Text() { }
@@ -22,7 +22,7 @@ class Text extends NFSA<Character> {
 
 
   /* Dense: //@formatter:off */
-  boolean run(String s) { return run(s.toCharArray()); }
+  boolean run(String ¢) { return run(¢.toCharArray()); }
   boolean run(char[] cs) {
     return run(new Iterable<Character>() {
       @Override public Iterator<Character> iterator() {

@@ -25,9 +25,9 @@ class DFSA<Σ> extends FSA<Σ> {
       DFSA<Σ> DFSA() { return new DFSA<Σ>(q0(), ζ(), δ()); }  
       Q q0() { return Q(Q(q0)); } 
       Set<Q> ζ() { return set.of(Q(Q(set.pick(ζ)))); }
-      Set<Q> Q(Q q) { return container.get(q); }
+      Set<Q> Q(Q ¢) { return container.get(¢); }
       Map<Set<Q>, Q> code() { Map<Set<Q>,Q> $ = empty.Map(); for (var s: P) $.put(s, new Q()); return $; }
-      Q Q(Set<Q> qs) { return code.get(qs); } 
+      Q Q(Set<Q> ¢) { return code.get(¢); } 
       final Set<Set<Q>> P = Hopcroft(); 
       final Map<Set<Q>, Q> code = code();
       final Map<Q, Set<Q>> container = container(); 
@@ -46,7 +46,7 @@ class DFSA<Σ> extends FSA<Σ> {
         return $;
       }
 
-      private Map<Q, Set<Q>> container() {
+      Map<Q, Set<Q>> container() {
         Map<Q, Set<Q>> $ = empty.Map();
         for (Set<Q> s : P)
           for (Q q : s)
@@ -55,23 +55,23 @@ class DFSA<Σ> extends FSA<Σ> {
       }
 
       Set<Set<Q>> Hopcroft() {
-        Set<Set<Q>> P = set.of(set.of(ζ), set.minus(Q(), ζ));
+        Set<Set<Q>> $ = set.of(set.of(ζ), set.minus(Q(), ζ));
         final Set<Set<Q>> W = set.of(set.of(ζ), set.minus(Q(), ζ));
         while (!W.isEmpty()) {
           final Set<Q> A = set.pick(W);
           W.remove(A);
           for (Σ σ : Σ()) {
             final Set<Q> X = X(A, σ);
-            Set<Set<Q>> newP = empty.Set();
-            for (Set<Q> Y : P) {
+            Set<Set<Q>> new$ = empty.Set();
+            for (Set<Q> Y : $) {
               final Set<Q> intersection = set.intersection(Y, X);
               final Set<Q> minus = set.minus(Y, X);
               if (intersection.isEmpty() || minus.isEmpty()) {
-                newP.add(Y);
+                new$.add(Y);
                 continue;
               }
-              newP.add(intersection);
-              newP.add(minus);
+              new$.add(intersection);
+              new$.add(minus);
               if (W.contains(Y)) {
                 W.remove(Y);
                 W.add(intersection);
@@ -81,18 +81,18 @@ class DFSA<Σ> extends FSA<Σ> {
               else
                 W.add(intersection);
             }
-            P = newP;
+            $ = new$;
           }
         }
-        return P;
+        return $;
       }
 
       Set<Q> X(Set<Q> A, Σ σ) {
-        Set<Q> X = empty.Set();
+        Set<Q> $ = empty.Set();
         for (Q q : Q())
           if (A.contains(DFSA.this.δ(q, σ)))
-            X.add(q);
-        return X;
+            $.add(q);
+        return $;
       }
 
       Set<Q> Q() {
@@ -104,7 +104,7 @@ class DFSA<Σ> extends FSA<Σ> {
   }
 
   /* Dense: //@formatter:off */
-    boolean run(String s) { return run(s.toCharArray()); }
+    boolean run(String ¢) { return run(¢.toCharArray()); }
     boolean run(char[] cs) {
       return DFSA.this.run(new Iterable<Σ>() {
         @Override public Iterator<Σ> iterator() {
