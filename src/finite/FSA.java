@@ -10,7 +10,7 @@ import utils.set;
 
 //@formatter:off
 class Q {
-  static int count = 0;
+  static int count;
   final int n = count++;
   @Override public String toString() { return "ι" + n; }
 }
@@ -48,37 +48,40 @@ abstract class Δ<Σ> {
   /** Copy constructor */  Δ(Δ<Σ> that) { this(that.Δ); } 
   /** Full constructor */  Δ(Map<Σ, Map<Q, Q>> Δ) { this.Δ = Δ; }
   /** Inspector Letters seen */ final Set<Σ> Σ()  { return Δ.keySet(); } 
-  /** Inspector: Transition table of given letter */  Map<Q,Q> δ(Σ σ) {return Δ.putIfAbsent(σ,  empty.Map()); } 
   /** Data: The transition table */ Map<Σ, Map<Q, Q>> Δ;
   /** Inspector: complete transition function from a state and letter  */ 
   /** Inspector: the transition function */ Q δ(Q q, Σ σ) { return δ(σ).get(q); }
-
+  /** Inspector: Transition table of given letter */ Map<Q, Q> δ(Σ σ) { init(σ); return Δ.get(σ); }
+  /** Inspector: Transition table of given letter */  void init(Σ σ) { Δ.putIfAbsent(σ, empty.Map()); }
   // Details: // @formatter:on
 
   /** Inspector: set of all states seen */ //@formatter:on
   Set<Q> Q() {
     Set<Q> $ = empty.Set();
-    for (Σ σ : Σ())
-      for (Q q : δ(σ).keySet()) {
-        $.add(q);
+    for (Σ σ : Σ()) {
+      Set<finite.Q> keySet = δ(σ).keySet();
+      $.addAll(keySet);
+      for (Q q : keySet) 
         $.add(δ(σ).get(q));
-      }
+    }
     return $;
   }
 }
 
 class Implementation<Σ> extends Δ<Σ> implements Recognizer<Σ> {
   static <T> String toString(String name, Set<T> ts) {
-    return name + "[[" + ts.size() + "]] = " + ts;
+    return head(name, ts) + ts;
   }
 
-  static <S, T> String toString(String name, Map<S, T> ts) {
-    return name + "[[" + ts.size() + "]] = " + name + "[{" + ts.keySet() + "}]=" + ts;
+  private static <T> String head(String name, Set<T> ts) {
+    return name + "[[" + ts.size() + "]] = ";
   }
 
-  static <T> String toString(String name, T t) {
-    return name + " = " + t;
+  static <S, T> String toString(String name, Map<S, T> m) {
+    return name + "[[" + m.size() + "]] = " + name + "[{" + m.keySet() + "}]=" + m;
   }
+
+  static <T> String toString(String name, T t) { return name + " = " + t; }
 
   @Override public String toString() {
     return "" + //
@@ -122,11 +125,11 @@ abstract class FSA<Σ> extends Implementation<Σ> {
   /** Copy constructor */ FSA(FSA<Σ> a) { super(a); }
   /** Partial constructor */  FSA(Map<Σ, Map<Q, Q>> Δ, Set<Q> ζ) { super(ζ, Δ); }
   /** Full constructor */ FSA(Q q0, Set<Q> ζ, Map<Σ,Map<Q,Q>> Δ) { super(q0, ζ, Δ); }
-  /** Modifier: Add a new transition */ FSA<Σ> δ(Q from, Σ σ, Q to) { δ(σ).put(from,to); return this; }
+
   /** Modifier: Add a new accepting state */ FSA<Σ> ζ(Q q) { ζ.add(q); return this; }
   /** Modifier: Add a set of new accepting state */ FSA<Σ> ζ(Set<Q> qs) { ζ.addAll(qs); return this; }
   /** Data: Instance number */  final int n = ++N; 
-  /** Data: Instance counter */ static int N = 0;
+  /** Data: Instance counter */ static int N;
   //@formatter:on
 
   /** Inspector: Set of all reachable state of a give state */
@@ -135,6 +138,12 @@ abstract class FSA<Σ> extends Implementation<Σ> {
     for (Σ σ : Σ())
       $.add(δ(q, σ));
     return $;
+  }
+
+  /** Modifier: Add a new transition */
+  FSA<Σ> δ(Q from, Σ σ, Q to) {
+    δ(σ).put(from, to);
+    return this;
   }
 
   /** Modifier: Add a full transition table */
@@ -167,8 +176,8 @@ abstract class FSA<Σ> extends Implementation<Σ> {
   }
 
   class TikZ extends Grapher { //@formatter:off
-    private int ordinal = 0;
-    final private Map<Q, Integer> enumeration = empty.Map();
+    private int ordinal;
+    private final Map<Q, Integer> enumeration = empty.Map();
     final Set<Q> elaborated = empty.Set();
     void enumerate() { dfs(q -> enumeration.computeIfAbsent(q, __ -> ordinal++)); }
     String tikz(Q q) { return sprintf("\"$q_{%s$\" [%s]", enumeration.get(q), elaborate(q)); }

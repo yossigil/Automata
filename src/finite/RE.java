@@ -116,7 +116,10 @@ public abstract class RE {
       @Override public NFSA<Σ> 
       Φ() { return NFSA.Φ(); }
       @Override public NFSA<Σ> ε() { return NFSA.ε(); }
-      @SuppressWarnings("unchecked") @Override public NFSA<Σ> σ(char σ) { return NFSA.σ((Σ)(Character) σ); }
+      @Override
+      @SuppressWarnings("unchecked") public NFSA<Σ> σ(char σ) {
+        return NFSA.σ((Σ) (Character) σ);
+      }
       @Override public NFSA<Σ> star(NFSA<Σ> a) { return a.star(); }
       @Override public NFSA<Σ> not(NFSA<Σ> a) { return a.not(); }
       @Override public NFSA<Σ> then(NFSA<Σ> a1, NFSA<Σ> a2) { return a1.then(a2); }

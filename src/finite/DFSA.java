@@ -1,7 +1,6 @@
 package finite;
 
 import java.util.Iterator;
-
 import java.util.Map;
 import java.util.Set;
 
@@ -28,7 +27,7 @@ class DFSA<Σ> extends FSA<Σ> {
       Set<Q> ζ() { return set.of(Q(Q(set.pick(ζ)))); }
       Set<Q> Q(Q q) { return container.get(q); }
       Map<Set<Q>, Q> code() { Map<Set<Q>,Q> $ = empty.Map(); for (var s: P) $.put(s, new Q()); return $; }
-      Q Q(Set<Q> s) { return code.get(s); } 
+      Q Q(Set<Q> qs) { return code.get(qs); } 
       final Set<Set<Q>> P = Hopcroft(); 
       final Map<Set<Q>, Q> code = code();
       final Map<Q, Set<Q>> container = container(); 
@@ -77,12 +76,10 @@ class DFSA<Σ> extends FSA<Σ> {
                 W.remove(Y);
                 W.add(intersection);
                 W.add(minus);
-              } else {
-                if (intersection.size() <= minus.size())
-                  W.add(minus);
-                else
-                  W.add(intersection);
-              }
+              } else if (intersection.size() <= minus.size())
+                W.add(minus);
+              else
+                W.add(intersection);
             }
             P = newP;
           }
@@ -112,9 +109,12 @@ class DFSA<Σ> extends FSA<Σ> {
       return DFSA.this.run(new Iterable<Σ>() {
         @Override public Iterator<Σ> iterator() {
           return new Iterator<Σ>() {
-            int i = 0;
+            int i;
             @Override public boolean hasNext() { return i < cs.length; }
-            @SuppressWarnings("unchecked") @Override public Σ next() { return (Σ) (Character) cs[i++]; }
+            @Override
+            @SuppressWarnings("unchecked") public Σ next() {
+              return (Σ) (Character) cs[i++];
+            }
           };
          }
       });

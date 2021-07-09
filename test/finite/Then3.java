@@ -1,29 +1,27 @@
 package finite;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
 public class Then3 {
   final Text abc = new Text('a').Then('b').Then('c');
 
   @Test void accept() {
-    assertTrue(abc.run("abc"));
+    assert abc.run("abc");
   }
 
   @Test void rejectA() {
-    assertFalse(abc.run("a"));
+    assert !abc.run("a");
   }
 
   @Test void rejectB() {
-    assertFalse(abc.run("b"));
+    assert !abc.run("b");
   }
 
   @Test void rejectEmpty() {
-    assertFalse(abc.run(""));
+    assert !abc.run("");
   }
 
   @Test void rejectBA() {
-    assertFalse(abc.run("ba"));
+    assert !abc.run("ba");
   }
 }

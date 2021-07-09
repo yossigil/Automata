@@ -27,7 +27,7 @@ class Text extends NFSA<Character> {
     return run(new Iterable<Character>() {
       @Override public Iterator<Character> iterator() {
         return new Iterator<Character>() {
-          int i = 0;
+          int i;
           @Override public boolean hasNext() { return i < cs.length; }
           @Override public Character next() { return cs[i++]; }
         };

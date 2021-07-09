@@ -1,7 +1,5 @@
 package finite;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
 class Star2 {
@@ -50,42 +48,37 @@ class Star2 {
   }
 
   @Test void DFSA0() {
-    DFSA<Character> dfsa = abStar.DFSA();
-    assertTrue(dfsa.run(""));
+    assert abStar.DFSA().run("");
   }
 
   @Test void DFSA1() {
-    DFSA<Character> dfsa = abStar.DFSA();
-    assertTrue(dfsa.run("ab"));
+    assert abStar.DFSA().run("ab");
   }
 
   @Test void DFSA2() {
-    DFSA<Character> dfsa = abStar.DFSA();
-    assertTrue(dfsa.run("abab"));
+    assert abStar.DFSA().run("abab");
   }
 
   @Test void DFSA3() {
-    DFSA<Character> dfsa = abStar.DFSA();
-    assertTrue(dfsa.run("ababab"));
+    assert abStar.DFSA().run("ababab");
   }
 
   @Test void DFSA4() {
-    DFSA<Character> dfsa = abStar.DFSA();
-    assertTrue(dfsa.run("abababab"));
+    assert abStar.DFSA().run("abababab");
   }
 
   @Test void DFSAx() {
     DFSA<Character> dfsa = abStar.DFSA();
-    assertFalse(dfsa.run("a"));
-    assertFalse(dfsa.run("b"));
-    assertFalse(dfsa.run("aa"));
-    assertFalse(dfsa.run("bb"));
-    assertFalse(dfsa.run("ba"));
-    assertFalse(dfsa.run("aababab"));
-    assertFalse(dfsa.run("aab"));
-    assertFalse(dfsa.run("abb"));
-    assertFalse(dfsa.run("aaa"));
-    assertFalse(dfsa.run("bbb"));
+    assert !dfsa.run("a");
+    assert !dfsa.run("b");
+    assert !dfsa.run("aa");
+    assert !dfsa.run("bb");
+    assert !dfsa.run("ba");
+    assert !dfsa.run("aababab");
+    assert !dfsa.run("aab");
+    assert !dfsa.run("abb");
+    assert !dfsa.run("aaa");
+    assert !dfsa.run("bbb");
   }
 
   private String node(String options, String name) {
@@ -93,55 +86,53 @@ class Star2 {
   }
 
   @Test void minimize() {
-    DFSA<Character> dfsa = abStar.DFSA();
-    DFSA<Character> minimize = dfsa.minimize();
-    assertTrue(minimize.run(""));
+    assert abStar.DFSA().minimize().run("");
   }
 
   @Test void TikZ() {
     DFSA<Character> dfsa = abStar.DFSA();
     dfsa.TikZ();
     DFSA<Character> minimize = dfsa.minimize();
-    assertTrue(minimize.run(""));
+    assert minimize.run("");
     minimize.TikZ();
   }
 
   @Test void accept0() {
-    assertTrue(abStar.run(""));
-    assertTrue(abStar.DFSA().run(""));
+    assert abStar.run("");
+    assert abStar.DFSA().run("");
   }
 
   @Test void accept1() {
-    assertTrue(abStar.run("ab"));
-    assertTrue(abStar.run("ab"));
+    assert abStar.run("ab");
+    assert abStar.run("ab");
   }
 
   @Test void accept2() {
-    assertTrue(abStar.run("abab"));
-    assertTrue(abStar.run("ab"));
+    assert abStar.run("abab");
+    assert abStar.run("ab");
   }
 
   @Test void accept3() {
-    assertTrue(abStar.run("ababab"));
-    assertTrue(abStar.run("ab"));
+    assert abStar.run("ababab");
+    assert abStar.run("ab");
   }
 
   @Test void abStarReject0() {
-    assertFalse(abStar.run("a"));
+    assert !abStar.run("a");
   }
 
   @Test void abStarReject1() {
-    assertFalse(abStar.run("ba"));
-    assertFalse(abStar.DFSA().run("ba"));
+    assert !abStar.run("ba");
+    assert !abStar.DFSA().run("ba");
   }
 
   @Test void abStarReject2() {
-    assertFalse(abStar.run("babab"));
-    assertFalse(abStar.DFSA().run("babab"));
+    assert !abStar.run("babab");
+    assert !abStar.DFSA().run("babab");
   }
 
   @Test void abStarReject3() {
-    assertFalse(abStar.DFSA().run("abababa"));
-    assertFalse(abStar.DFSA().run("abababa"));
+    assert !abStar.DFSA().run("abababa");
+    assert !abStar.DFSA().run("abababa");
   }
 }

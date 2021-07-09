@@ -81,7 +81,7 @@ class NFSA<Σ> extends FSA<Σ> {
   class State implements V<State>, Iterable<Q> {
 
     @Override public boolean equals(Object o) {
-      if (this == o)
+      if (o == this)
         return true;
       if (o == null)
         return false;

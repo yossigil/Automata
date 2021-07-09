@@ -3,6 +3,8 @@ package finite;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import utils.empty;
+
 interface XDFS<V> {
   default V v(V v) {
     return v;
@@ -29,7 +31,7 @@ interface XDFS<V> {
   void v(Vertex t);
 
   default Set<Vertex> dfs(Vertex v) {
-    Set<Vertex> $ = new LinkedHashSet<>();
+    Set<Vertex> $ = empty.Set(); 
     new Object() { 
       void dfs(Vertex v) {
         if (!$.contains(v)) {
