@@ -5,9 +5,9 @@ import java.util.Set;
 
 public enum set {
   ;
-  @SafeVarargs public static <T> Set<T> of(final T... ts) {
+  @SafeVarargs public static <T> Set<T> of(final T... ¢) {
     final Set<T> $ = empty.Set();
-    Collections.addAll($, ts);
+    Collections.addAll($, ¢);
     return $;
   }
 
