@@ -17,6 +17,6 @@ class Tabulator { //@formatter:off
 }
 @SuppressWarnings("static-method") 
 class TeXifier extends Tabulator {
-  String math(String s) { return "\\(" + s + "\\)"; }
-  String tt(String s) { return "\\text{\\texttt{" + s + "}}"; }
+  String math(String ¢) { return "\\ensuremath{" + ¢ + "}"; }
+  String tt(String ¢) { return "\\text{" + ¢ + "}"; }
 }

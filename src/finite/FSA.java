@@ -151,7 +151,7 @@ abstract class FSA<Σ> extends Implementation<Σ> {
   final String TikZ() { return new TikZ().render(); }
   //@formatter:on
 
-  class TikZ extends Renderer { //@formatter:off
+  class TikZ extends TikZifier { //@formatter:off
     private int ordinal;
     private final Map<Q, Integer> enumeration = empty.Map();
     final Set<Q> elaborated = empty.Set();

@@ -4,7 +4,7 @@ import java.util.Set;
 
 import utils.empty;
 
-abstract class Renderer extends Tabulator { //@formatter:off
+abstract class TikZifier extends TeXifier { 
   final String render() { return wrap(traverse()); }
   static String wrap(final String ¢) { return sprintf("graph{\n%s}\n", ¢); }
   abstract String traverse();
