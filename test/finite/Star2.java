@@ -1,7 +1,5 @@
 package finite;
-
 import org.junit.jupiter.api.Test;
-
 class Star2 {
   final Text abStar = new Text('a').Then('b').star();
   final Text star   = new Text('a').Then('b').then(new Text('a').Or('b')).star();

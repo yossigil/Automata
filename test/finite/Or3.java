@@ -2,6 +2,7 @@ package finite;
 
 import org.junit.jupiter.api.Test;
 
+
 class Or3 {
   final Text a_b_c = new Text('a').Or('b').Or('c');
 

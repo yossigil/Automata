@@ -2,7 +2,7 @@ package finite;
 
 import org.junit.jupiter.api.Test;
 
-class Star {
+public class StarTest {
   final Text aStar = new Text(new Text('a').star());
 
   @Test void accept0() {

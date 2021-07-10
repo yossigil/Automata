@@ -1,8 +1,8 @@
 package finite;
 
-import org.junit.jupiter.api.Test;
 
-class Or {
+import org.junit.jupiter.api.Test;
+class OrTest {
   final Text a_b = new Text(new Text('a').or(new Text('b')));
 
   @Test void acceptA() {

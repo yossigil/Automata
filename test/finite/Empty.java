@@ -1,7 +1,6 @@
 package finite;
 
 import org.junit.jupiter.api.Test;
-
 class Empty {
 
   final Text empty = new Text();

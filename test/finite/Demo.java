@@ -1,7 +1,6 @@
 package finite;
 
 import org.junit.jupiter.api.Test;
-
 class Demo {
   final Text empty  = new Text();
   final Text a      = new Text('a').or(empty);

@@ -1,7 +1,7 @@
 package finite;
 
 import org.junit.jupiter.api.Test;
-
+ 
 public class Then2 {
   final Text ab = new Text(new Text('a').then(new Text('b')));
 

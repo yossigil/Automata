@@ -2,6 +2,7 @@ package finite;
 
 import org.junit.jupiter.api.Test;
 
+
 public class Then4 {
   final Text abcd = new Text(new Text('a').then(new Text('b').then(new Text('c')).then(new Text('d'))));
 

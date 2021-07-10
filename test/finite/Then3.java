@@ -2,6 +2,7 @@ package finite;
 
 import org.junit.jupiter.api.Test;
 
+
 public class Then3 {
   final Text abc = new Text('a').Then('b').Then('c');
 
