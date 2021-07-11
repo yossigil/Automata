@@ -12,14 +12,13 @@ class Text extends NFSA<Character> {
   Text and(final Text ¢) { return new Text(super.and(¢)); }
   Text or(final Text ¢) { return new Text(super.or(¢)); }
   Text then(final Text ¢) { return new Text(super.then(¢)); }
-  Text star() { return new Text(super.star()); }
+  @Override public Text many() { return new Text(super.many()); }
   Text(final Q q0, final Set<Q> ζ, final Map<Character, Map<Q, Q>> δ, final Map<Q, Set<Q>> ε) { super(q0, ζ, δ, ε); }
   Text() { }
   Text(final Text t) { super(t); }
   Text(final NFSA<Character> a) { super(a); }
   Text(final char c) { final var q1 = new Q(); δ(q0, c, q1); ζ(q1); }
   //@formatter:on
-
   /* Dense: //@formatter:off */
   boolean run(final String ¢) { return run(¢.toCharArray()); }
   boolean run(final char[] cs) {

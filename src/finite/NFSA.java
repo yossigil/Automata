@@ -8,171 +8,165 @@ import java.util.Set;
 import utils.empty;
 import utils.set;
 
-class NFSA<Σ> extends FSA<Σ> {
+public class NFSA<Σ> extends FSA<Σ> {
+  public NFSA<Σ> and(NFSA<Σ> a2) { return Thompson.and(this, a2); }
+  public NFSA<Σ> many() {
+    final var $ = new NFSA<>(Δ, ζ, ε);
+    $.δ(Δ);
+    $.ε(ε);
+    $.ζ($.q0);
+    $.ε($.q0, q0);
+    for (final Q q : ζ) $.ε(q, $.q0);
+    return $;
+  }
+  public NFSA<Σ> not() { return Thompson.not(this); }
+  public NFSA<Σ> except(NFSA<Σ> a2) { return Thompson.except(this, a2); }
+  public NFSA<Σ> or(NFSA<Σ> a2) { return Thompson.or(this, a2); }
+  public NFSA<Σ> plenty() { return Thompson.plenty(this); }
+  public NFSA<Σ> then(NFSA<Σ> a2) {
+    final var $ = new NFSA<Σ>().ε(this.ε).ε(a2.ε);
+    $.ε($.q0, q0);
+    for (final Q q : ζ) $.ε(q, a2.q0);
+    $.δ(Δ).δ(a2.Δ).ζ(a2.ζ);
+    return $;
+  }
   @Override public String toString() {
     return "Nodeterministic " + super.toString() + //
         "\t ε = " + ε + " (non-deterministic ε-transitions)\n" //
     ;
   }
-
-  @Override Set<Q> δ(Q q) {
-    var $ = new State(ε(q)).add(super.δ(q));
-    for (Σ σ : Σ()) $.add(new State().δ(σ).ε().qs);
-    return $.qs;
-  }
-
-  /* One liners: //@formatter:off */
-  /** Data: the table of ε transitions */ final Map<Q, Set<Q>> ε = empty.Map();               
-  /** Constructor: Empty */ NFSA() { }
-  /** Constructor: Full constructor */ NFSA(Map<Σ, Map<Q, Q>> Δ, Set<Q> ζ, Map<Q, Set<Q>> ε) { super(Δ, ζ); ε(ε);  }  
-  /** Constructor: Copy */ NFSA(NFSA<Σ> that) { this(that.q0, that.ζ, that.Δ, that.ε); }
-  /** Factory: recognizer of a single letter */ static <Σ> NFSA<Σ> σ(Σ ¢) { return new NFSA<Σ>(¢); }
-  /** Factory: recognizer of the empty string */ static  <Σ> NFSA<Σ> ε(){ var $ = new NFSA<Σ>(); $.ζ($.q0); return $;}
-  /** Factory: recognizer of the empty set */ static  <Σ> NFSA<Σ> any(){ return new NFSA<Σ>((Σ)null); } 
-  /** Factory: recognizer of the empty set */ static  <Σ> NFSA<Σ> Φ(){ return new NFSA<Σ>(); }
-  /** Modifier: add a new empty transition */ NFSA<Σ> ε(Q from, Q to) { ε(from).add(to); return this; }
-  Set<Q> ε(Q ¢) { if (ε.get(¢) == null) ε.put(¢, empty.Set()); return ε.get(¢); } // Set of outgoing transitions
-  final State s0 = new State(super.q0); // The initial state
-  NFSA<Σ> plus() { return Thompson.plus(this); }
-  NFSA<Σ> not() { return Thompson.not(this); }
-  NFSA<Σ> or(NFSA<Σ> a2) { return Thompson.or(this, a2); }
-  NFSA<Σ> and(NFSA<Σ> a2) {return Thompson.and(this, a2); }
-
-  //@formatter:on 
-  /** Modifier: add a new table of empty transitions */
-  NFSA<Σ> ε(Map<Q, Set<Q>> ε) {
-    for (Q q : ε.keySet()) if (ε.get(q) != null) ε(q).addAll(ε.get(q));
-    return this;
-  }
-
-  @Override Set<Q> Q() {
-    var $ = set.union(super.Q(), ε.keySet());
-    for (Q q : ε.keySet()) $.addAll(ε.get(q));
-    return $;
-  }
-
-  boolean run(Iterable<Σ> w) {
-    var s = s0.ε();
-    for (var σ : w) s = s.δ(σ).ε();
-    return s.ζ();
-  }
-
-  public NFSA(Q q0, Set<Q> ζ, Map<Σ, Map<Q, Q>> δ, Map<Q, Set<Q>> ε) {
-    super(q0, ζ, δ);
-    for (Q q : ε.keySet()) this.ε.put(q, ε.get(q));
-  }
-
-  public NFSA(Σ σ) {
-    Q q = new Q();
-    δ(q0, σ, q).ζ(q);
-  }
-
-  class State implements Vertex<State>, Iterable<Q> {
-
-    @Override public boolean equals(Object o) {
-      if (o == this) return true;
-      if (o == null) return false;
-      if (getClass() != o.getClass()) return false;
-      @SuppressWarnings("unchecked") State other = (State) o;
-      return qs.equals(other.qs);
-    }
-
-    /* One liners: //@formatter:off */
-    @Override public int hashCode() { return qs.hashCode(); }
-    final Set<Q> qs = new HashSet<>();
-    boolean has(Q ¢) { return qs.contains(¢); }
-    State() {}
-    State(Q q) { add(q); }
-    State(Set<Q> qs) { add(qs);}
-
-    State add(Set<Q> qs) { for (Q q: qs) add(q); return this;}
-    void add(Q ¢) { qs.add(¢); ε(); }
-    @Override public String toString() { return qs + ""; } 
-    @Override public Iterator<Q> iterator() { return qs.iterator(); }
-    //@formatter:on 
-    State ε() {
-      for (final Set<Q> todo = empty.Set();; add(todo), todo.clear()) {
-        for (Q q : this) for (Q qε : NFSA.this.ε(q)) if (!has(qε)) todo.add(qε);
-        if (todo.isEmpty()) return this;
-      }
-    }
-    /*  Multiple liners //@formatter:on */
-
-    State δ(Σ σ) {
-      final var $ = new State();
-      for (var q : this) $.add(NFSA.this.δ(q, σ));
-      return $;
-    }
-
-    @Override public Set<State> neighbours() {
-      final Set<State> $  = new HashSet<>();
-      final State      ε  = ε();
-      Set<Σ>           σ2 = Σ();
-      for (var σ : σ2) $.add(ε.δ(σ).ε());
-      return $;
-    }
-
-    boolean ζ() {
-      for (var q : this) if (ζ.contains(q)) return true;
-      return false;
-    }
-  }
-
-  NFSA<Σ> then(NFSA<Σ> a2) {
-    final var $ = new NFSA<Σ>().ε(this.ε).ε(a2.ε);
-    $.ε($.q0, this.q0);
-    for (Q q : this.ζ) $.ε(q, a2.q0);
-    $.δ(this.Δ).δ(a2.Δ).ζ(a2.ζ);
-    return $;
-  }
-
-  NFSA<Σ> star() {
-    final var $ = new NFSA<Σ>(Δ, ζ, ε);
-    $.δ(Δ);
-    $.ε(ε);
-    $.ζ($.q0);
-    $.ε($.q0, q0);
-    for (Q q : ζ) $.ε(q, $.q0);
-    return $;
-  }
-
   DFSA<Σ> DFSA() {
     return new Object() {
-    /* One liners: //@formatter:off */
-      DFSA<Σ> DFSA() { return new DFSA<Σ>(q0(), ζ(), δ()); }  
-      Q q0() { return code.get(s0); }
-      Set<State> ss = new DFS<State>() { @Override public void visit(State s) {}}.dfs(s0);
-      Map<State, Q> code = code();
-      Map<State, Q> code() { Map<State,Q> $ = empty.Map(); for (var s: ss) $.put(s, new Q()); return $; }
+      Map<State, Q> code() { final Map<State, Q> $ = empty.Map(); for (final var s : ss) $.put(s, new Q()); return $; }
+      /* One liners: //@formatter:off */
+      DFSA<Σ> DFSA() { return new DFSA<>(q0(), ζ(), δ()); }
       Q Q(State ¢) { return code.get(¢); } //@formatter:on */
-
-      Set<Q> ζ() {
-        Set<Q> $ = empty.Set();
-        for (var s : ss) if (s.ζ()) $.add(Q(s));
-        return $;
-      }
-
+      Q q0() { return code.get(s0); }
       Map<Σ, Map<Q, Q>> δ() {
-        Map<Σ, Map<Q, Q>> $ = empty.Map();
-        for (var σ : Σ()) {
+        final Map<Σ, Map<Q, Q>> $ = empty.Map();
+        for (final var σ : Σ()) {
           $.put(σ, δ(σ));
           this.toString();
         }
         return $;
       }
       Map<Q, Q> δ(Σ σ) {
-        Map<Q, Q> $ = empty.Map();
-        for (var s : ss) $.put(Q(s), Q(s.ε().δ(σ).ε()));
+        final Map<Q, Q> $ = empty.Map();
+        for (final var s : ss) $.put(Q(s), Q(s.ε().δ(σ).ε()));
         return $;
       }
+      Set<Q> ζ() {
+        final Set<Q> $ = empty.Set();
+        for (final var s : ss) if (s.ζ()) $.add(Q(s));
+        return $;
+      }
+      Map<State, Q> code = code();
+      Set<State>    ss   = new DFS<State>() { @Override public void visit(State s) {} }.dfs(s0);
     }.DFSA();
   }
-
-  Set<String> labels(finite.Q from, finite.Q to) { 
-    Set<String> $ = super.labels(from, to);
-    if (ε(from).contains(to))
-      $.add("\\varepsilon");
+  @Override Set<String> labels(finite.Q from, finite.Q to) {
+    final var $ = super.labels(from, to);
+    if (ε(from).contains(to)) $.add("\\varepsilon");
+    return $;
+  }
+  @Override Set<Q> Q() {
+    final var $ = set.union(super.Q(), ε.keySet());
+    for (final Q q : ε.keySet()) $.addAll(ε.get(q));
+    return $;
+  }
+  boolean run(Iterable<Σ> w) {
+    var s = s0.ε();
+    for (final var σ : w) s = s.δ(σ).ε();
+    return s.ζ();
+  }
+  @Override Set<Q> δ(Q q) {
+    final var $ = new State(ε(q)).add(super.δ(q));
+    for (final Σ σ : Σ()) $.add(new State().δ(σ).ε().qs);
+    return $.qs;
+  }
+  //@formatter:on
+  /** Modifier: add a new table of empty transitions */
+  NFSA<Σ> ε(Map<Q, Set<Q>> ε) {
+    for (final Q q : ε.keySet()) if (ε.get(q) != null) ε(q).addAll(ε.get(q));
+    return this;
+  }
+  //@formatter:off
+  Set<Q> ε(Q ¢) { if (ε.get(¢) == null) ε.put(¢, empty.Set()); return ε.get(¢); } // Set of outgoing transitions
+  /** Constructor: Empty */ NFSA() { }
+  /** Constructor: Copy */ NFSA(NFSA<Σ> that) { this(that.q0, that.ζ, that.Δ, that.ε); }
+  /** Constructor: Entire data */ NFSA(Map<Σ, Map<Q, Q>> Δ, Set<Q> ζ, Map<Q, Set<Q>> ε) { super(Δ, ζ); ε(ε);  }
+  /** Modifier: add a new empty transition */ NFSA<Σ> ε(Q from, Q to) { ε(from).add(to); return this; }
+  /** Factory: recognizer of a single letter */ public static <Σ> NFSA<Σ> σ(Σ ¢) { return new NFSA<>(¢); }
+  /** Factory: recognizer of the empty string */ public static  <Σ> NFSA<Σ> ε(){ final var $ = new NFSA<Σ>(); $.ζ($.q0); return $;}
+  /** Factory: recognizer of the empty set */ public static  <Σ> NFSA<Σ> Φ(){ return new NFSA<>(); }
+  /** Factory: recognizer of arbitrary single letter */ public static <Σ> NFSA<Σ> ʘ() {
+    final var $ = new NFSA<Σ>();
+    final var q1 = new Q();
+    $.δ($.q0,null,q1).ζ(q1);
     return $;
   }
 
+  public NFSA(Q q0, Set<Q> ζ, Map<Σ, Map<Q, Q>> δ, Map<Q, Set<Q>> ε) {
+    super(q0, ζ, δ);
+    for (final Q q : ε.keySet()) this.ε.put(q, ε.get(q));
+  }
+
+  public NFSA(Σ σ) {
+    final var q = new Q();
+    δ(q0, σ, q).ζ(q);
+  }
+
+
+  final State s0 = new State(super.q0); // The initial state
+
+  /* One liners: //@formatter:off */
+  /** Data: the table of ε transitions */ final Map<Q, Set<Q>> ε = empty.Map();
+
+  class State implements Vertex<State>, Iterable<Q> {
+
+    @Override public boolean equals(Object o) {
+      if (o == this) return true;
+      if ((o == null) || (getClass() != o.getClass())) return false;
+      @SuppressWarnings("unchecked")
+      final var other = (State) o;
+      return qs.equals(other.qs);
+    }
+
+    /* One liners: //@formatter:off */
+    @Override public int hashCode() { return qs.hashCode(); }
+    @Override public Iterator<Q> iterator() { return qs.iterator(); }
+    @Override public Set<State> neighbours() {
+      final Set<State> $  = new HashSet<>();
+      final var      ε  = ε();
+      final var           σ2 = Σ();
+      for (final var σ : σ2) $.add(ε.δ(σ).ε());
+      return $;
+    }
+    @Override public String toString() { return qs + ""; }
+    void add(Q ¢) { qs.add(¢); ε(); }
+    State add(Set<Q> qs) { for (final Q q: qs) add(q); return this;}
+
+    boolean has(Q ¢) { return qs.contains(¢); }
+    State δ(Σ σ) {
+      final var $ = new State();
+      for (final var q : this) $.add(NFSA.this.δ(q, σ));
+      return $;
+    }
+    //@formatter:on
+    State ε() {
+      for (final Set<Q> todo = empty.Set();; add(todo), todo.clear()) {
+        for (final Q q : this) for (final Q qε : NFSA.this.ε(q)) if (!has(qε)) todo.add(qε);
+        if (todo.isEmpty()) return this;
+      }
+    }
+    /*  Multiple liners //@formatter:on */
+    boolean ζ() {
+      for (final var q : this) if (ζ.contains(q)) return true;
+      return false;
+    }
+    State() {}
+    State(Q q) { add(q); }
+    State(Set<Q> qs) { add(qs); }
+    final Set<Q> qs = new HashSet<>();
+  }
 }

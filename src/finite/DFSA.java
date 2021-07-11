@@ -33,19 +33,16 @@ class DFSA<Σ> extends FSA<Σ> {
       Map<Σ, Map<Q, Q>> δ() {
         return Σ().stream().collect(Collectors.toMap(Function.identity(), λ -> δ(λ)));
       }
-
       Map<Q, Q> δ(final Σ σ) {
         final Map<Q, Q> $ = empty.Map();
         for (final var s : P) $.put(Q(s), Q(Q(DFSA.this.δ(set.pick(s), σ))));
         return $;
       }
-
       Map<Q, Set<Q>> container() {
         final Map<Q, Set<Q>> $ = empty.Map();
         for (final Set<Q> s : P) for (final Q q : s) $.put(q, s);
         return $;
       }
-
       Set<Set<Q>> Hopcroft() {
         Set<Set<Q>>       $ = set.of(set.of(ζ), set.minus(Q(), ζ));
         final Set<Set<Q>> W = set.of(set.of(ζ), set.minus(Q(), ζ));
@@ -76,21 +73,16 @@ class DFSA<Σ> extends FSA<Σ> {
         }
         return $;
       }
-
       Set<Q> X(final Set<Q> A, final Σ σ) {
         final Set<Q> $ = empty.Set();
         for (final Q q : Q()) if (A.contains(DFSA.this.δ(q, σ))) $.add(q);
         return $;
       }
-
       Set<Q> Q() {
         return DFSA.this.Q();
       }
-
     }.DFSA();
-
   }
-
   /* Dense: //@formatter:off */
     boolean run(final String ¢) { return run(¢.toCharArray()); }
     boolean run(final char[] cs) {

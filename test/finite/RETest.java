@@ -4,36 +4,41 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import symbolic.Atomic;
+import symbolic.Atoms;
+import symbolic.RE;
+
 public class RETest {
-  final RE ε           = RE.ε;
-  final RE Φ           = RE.Φ;
-  final RE ʘ           = RE.ʘ;
-  final RE a           = RE.c('a');
-  final RE b           = RE.c('b');
-  final RE c           = RE.c('c');
-  final RE d           = RE.c('d');
+  final RE ε           = Atoms.ε;
+  final RE Φ           = Atoms.Φ;
+  final RE ʘ           = Atoms.ʘ;
+  final RE a           = Atomic.c('a');
+  final RE b           = Atomic.c('b');
+  final RE c           = Atomic.c('c');
+  final RE d           = Atomic.c('d');
   final RE ab          = a.then(b);
   final RE a_b         = a.or(b);
   final RE not_a       = a.not();
-  final RE a_star      = a.star();
-  final RE a_plus      = a.plus();
+  final RE a_star      = a.many();
+  final RE a_plus      = a.plenty();
   final RE a_and_b     = a.and(b);
-  final RE abStar      = ab.star();
-  final RE abStar$c    = ab.star().then(c);
-  final RE abStarNot   = ab.star().not();
+  final RE abStar      = ab.many();
+  final RE abStar$c    = ab.many().then(c);
+  final RE abStarNot   = ab.many().not();
   final RE abStar$cNot = abStar$c.not();
-  final RE z           = a.or(b).then(c).star().then(b).and(c).plus().then(ε.or(a));
-  final RE y           = z.or(z).then(z).star().then(z).and(z).plus().then(Φ.or(b));
-  final RE x           = y.or(z).then(y).star().then(z).and(y).plus().then(ʘ.or(ε));
-  final RE w           = x.or(y).then(z).star().then(x).and(y).plus().then(a.or(Φ));
-  final RE v           = w.or(x).then(y).star().then(z).and(w).plus().then(b.or(ʘ));
-  final RE u           = v.or(w).then(x).star().then(y).and(z).plus().then(ε.or(a));
-  final RE t           = u.or(v).then(w).star().then(x).and(y).plus().then(Φ.or(b));
-  final RE s           = t.or(u).then(v).star().then(w).and(x).plus().then(ʘ.or(ε));
-  final RE r           = s.or(t).then(u).star().then(v).and(w).plus().then(a.or(Φ));
-  final RE q           = r.or(s).then(t).star().then(u).and(v).plus().then(b.or(ʘ));
-  final RE p           = r.or(q).then(s).star().then(t).and(u).plus().then(c.or(a));
-  final RE o           = r.or(p).then(q).star().then(s).and(t).plus().then(d.or(b));
+  final RE A           = a.or(b).then(c).many().or(Φ).then(b).then(ʘ).and(c).or(ε).plenty().then(ε.or(a)).except(b);
+  final RE z           = a.or(b).then(c).many().then(b).and(c).plenty().then(ε.or(a)).except(b);
+  final RE y           = z.or(z).then(z).many().then(z).and(z).plenty().then(Φ.or(b)).except(z);
+  final RE x           = y.or(z).then(y).many().then(z).and(y).plenty().then(ʘ.or(ε)).except(y);
+  final RE w           = x.or(y).then(z).many().then(x).and(y).plenty().then(a.or(Φ)).except(x);
+  final RE v           = w.or(x).then(y).many().then(z).and(w).plenty().then(b.or(ʘ)).except(w);
+  final RE u           = v.or(w).then(x).many().then(y).and(z).plenty().then(ε.or(a)).except(v);
+  final RE t           = u.or(v).then(w).many().then(x).and(y).plenty().then(Φ.or(b)).except(u);
+  final RE s           = t.or(u).then(v).many().then(w).and(x).plenty().then(ʘ.or(ε)).except(t);
+  final RE r           = s.or(t).then(u).many().then(v).and(w).plenty().then(a.or(Φ)).except(s);
+  final RE q           = r.or(s).then(t).many().then(u).and(v).plenty().then(b.or(ʘ)).except(r);
+  final RE p           = r.or(q).then(s).many().then(t).and(u).plenty().then(c.or(a)).except(q);
+  final RE o           = r.or(p).then(q).many().then(s).and(t).plenty().then(d.or(b)).except(p);
   @Test void getString$aOK() { assertEquals("a", a + ""); }
   @Test void getString$bOK() { assertEquals("b", b + ""); }
   @Test void getString$cOK() { assertEquals("c", c + ""); }
@@ -67,7 +72,6 @@ public class RETest {
   @Test void TikZabStarNot() { assertEquals("ab*c", abStarNot.TikZ()); }
   @Test void TikZabStar$cNot() { assertEquals("ab*c!", abStar$cNot.TikZ()); }
   @Test void TikZ$z$() { assertEquals("ab*c!", z.TikZ()); }
-  @Test void TikZ$o$() { assertEquals("a", o.TikZ()); }
   //
   @Test void Size$aOK() { assertEquals(1, a.size()); }
   @Test void Size$bOK() { assertEquals(1, b.size()); }
@@ -86,31 +90,31 @@ public class RETest {
   @Test void Size$abStarNot() { assertEquals(5, abStarNot.size()); }
   @Test void Size$abStar$cNot() { assertEquals(7, abStar$cNot.size()); }
 //
-  @Test void Size$o$() { assertEquals(188105, o.size()); }
-  @Test void Size$p$() { assertEquals(95635, p.size()); }
-  @Test void Size$q$() { assertEquals(48805, q.size()); }
-  @Test void Size$r$() { assertEquals(24795, r.size()); }
-  @Test void Size$s$() { assertEquals(12545, s.size()); }
-  @Test void Size$t$() { assertEquals(6315, t.size()); }
-  @Test void Size$u$() { assertEquals(3165, u.size()); }
-  @Test void Size$v$() { assertEquals(1975, v.size()); }
-  @Test void Size$w$() { assertEquals(785, w.size()); }
-  @Test void Size$x$() { assertEquals(295, x.size()); }
-  @Test void Size$y$() { assertEquals(85, y.size()); }
+  @Test void Size$o$() { assertEquals(4416113, o.size()); }
+  @Test void Size$p$() { assertEquals(1693169, p.size()); }
+  @Test void Size$q$() { assertEquals(649265, q.size()); }
+  @Test void Size$r$() { assertEquals(248753, r.size()); }
+  @Test void Size$s$() { assertEquals(95249, s.size()); }
+  @Test void Size$t$() { assertEquals(36497, t.size()); }
+  @Test void Size$u$() { assertEquals(14129, u.size()); }
+  @Test void Size$v$() { assertEquals(5873, v.size()); }
+  @Test void Size$w$() { assertEquals(1745, w.size()); }
+  @Test void Size$x$() { assertEquals(497, x.size()); }
+  @Test void Size$y$() { assertEquals(113, y.size()); }
   @Test void Size$z$() { assertEquals(15, z.size()); }
   //
-  @Test void Depth$o$() { assertEquals(85, o.depth()); }
-  @Test void Depth$p$() { assertEquals(78, p.depth()); }
-  @Test void Depth$q$() { assertEquals(71, q.depth()); }
-  @Test void Depth$r$() { assertEquals(64, r.depth()); }
-  @Test void Depth$s$() { assertEquals(57, s.depth()); }
-  @Test void Depth$t$() { assertEquals(50, t.depth()); }
-  @Test void Depth$u$() { assertEquals(43, u.depth()); }
-  @Test void Depth$v$() { assertEquals(36, v.depth()); }
-  @Test void Depth$w$() { assertEquals(29, w.depth()); }
-  @Test void Depth$x$() { assertEquals(22, x.depth()); }
-  @Test void Depth$y$() { assertEquals(15, y.depth()); }
-  @Test void Depth$z$() { assertEquals(8, z.depth()); }
+  @Test void Depth$o$() { assertEquals(97, o.depth()); }
+  @Test void Depth$p$() { assertEquals(89, p.depth()); }
+  @Test void Depth$q$() { assertEquals(81, q.depth()); }
+  @Test void Depth$r$() { assertEquals(73, r.depth()); }
+  @Test void Depth$s$() { assertEquals(65, s.depth()); }
+  @Test void Depth$t$() { assertEquals(57, t.depth()); }
+  @Test void Depth$u$() { assertEquals(49, u.depth()); }
+  @Test void Depth$v$() { assertEquals(41, v.depth()); }
+  @Test void Depth$w$() { assertEquals(33, w.depth()); }
+  @Test void Depth$x$() { assertEquals(25, x.depth()); }
+  @Test void Depth$y$() { assertEquals(17, y.depth()); }
+  @Test void Depth$z$() { assertEquals(9, z.depth()); }
   //
   @Test void Depth$aOK() { assertEquals(1, a.depth()); }
   @Test void Depth$bOK() { assertEquals(1, b.depth()); }
@@ -128,4 +132,7 @@ public class RETest {
   @Test void Depth$abStar$c() { assertEquals(4, abStar$c.depth()); }
   @Test void Depth$abStarNot() { assertEquals(4, abStarNot.depth()); }
   @Test void Depth$abStar$cNot() { assertEquals(5, abStar$cNot.depth()); }
+  @Test void xxx() {
+    System.out.println(A.TikZ());
+  }
 }

@@ -7,9 +7,7 @@ interface XDFS<V> {
   default V v(final V ¢) {
     return ¢;
   }
-
   Set<V> n(V v);
-
   default Set<V> dfs(final V v) {
     final Set<V> $ = new LinkedHashSet<>();
     new Object() {
