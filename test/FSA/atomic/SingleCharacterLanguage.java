@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import finite.Lexer;
 
-class Singleton {
+public class SingleCharacterLanguage {
   final Lexer a = new Lexer('a');
   final Lexer b = new Lexer('b');
   @Test void aOK() {

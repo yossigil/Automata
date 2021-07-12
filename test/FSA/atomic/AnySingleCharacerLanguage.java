@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import finite.Lexer;
 
-class Wildcard {
+public class AnySingleCharacerLanguage {
   Lexer any = Lexer.any();
   @Test void print() { System.out.println(any.TikZ()); }
   @Test void accept0() { assert any.run("a"); }
