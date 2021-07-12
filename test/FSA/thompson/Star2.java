@@ -1,10 +1,13 @@
-package finite;
+package FSA.thompson;
 
 import org.junit.jupiter.api.Test;
 
+import finite.Lexer;
+import finite.NFSA;
+
 class Star2 {
-  final Text abStar = new Text('a').Then('b').many();
-  final Text many   = new Text('a').Then('b').then(new Text('a').Or('b')).many();
+  final Lexer abStar = new Lexer('a').Then('b').many();
+  final Lexer many   = new Lexer('a').Then('b').then(new Lexer('a').Or('b')).many();
   @Test void m1() {
     abStar.DFSA();
   }

@@ -1,9 +1,11 @@
-package finite;
+package FSA.thompson;
 
 import org.junit.jupiter.api.Test;
 
-class OrTest {
-  final Text a_b = new Text(new Text('a').or(new Text('b')));
+import finite.Lexer;
+
+class Or2 {
+  final Lexer a_b = new Lexer(new Lexer('a').or(new Lexer('b')));
   @Test void acceptA() {
     assert a_b.run("a");
   }

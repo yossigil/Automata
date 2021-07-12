@@ -1,9 +1,11 @@
-package finite;
+package FSA.thompson;
 
 import org.junit.jupiter.api.Test;
 
+import finite.Lexer;
+
 public class Then3 {
-  final Text abc = new Text('a').Then('b').Then('c');
+  final Lexer abc = new Lexer('a').Then('b').Then('c');
   @Test void accept() {
     assert abc.run("abc");
   }

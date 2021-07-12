@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import utils.empty;
 import utils.set;
 
-class DFSA<Σ> extends FSA<Σ> {
+public class DFSA<Σ> extends FSA<Σ> {
   //@formatter:off
   DFSA(final Q q0, final Set<Q> ζ, final Map<Σ, Map<Q, Q>> Δ) { super(q0, ζ, Δ); }
   boolean run(final Iterable<Σ> w) {
@@ -18,7 +18,7 @@ class DFSA<Σ> extends FSA<Σ> {
     return ζ();
   }
 
-  DFSA<Σ> minimize() {
+  public DFSA<Σ> minimize() {
     return new Object() { //@formatter:off
       DFSA<Σ> DFSA() { return new DFSA<>(q0(), ζ(), δ()); }
       Q q0() { return Q(Q(q0)); }
@@ -84,7 +84,7 @@ class DFSA<Σ> extends FSA<Σ> {
     }.DFSA();
   }
   /* Dense: //@formatter:off */
-    boolean run(final String ¢) { return run(¢.toCharArray()); }
+    public boolean run(final String ¢) { return run(¢.toCharArray()); }
     boolean run(final char[] cs) {
       return DFSA.this.run(() -> new Iterator<>() {
         int i;

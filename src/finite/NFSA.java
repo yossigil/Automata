@@ -10,49 +10,35 @@ import utils.set;
 
 public class NFSA<Σ> extends FSA<Σ> {
   public NFSA<Σ> and(NFSA<Σ> a2) { return Thompson.and(this, a2); }
-  public NFSA<Σ> many() {
-    final var $ = new NFSA<>(Δ, ζ, ε);
-    $.δ(Δ);
-    $.ε(ε);
-    $.ζ($.q0);
-    $.ε($.q0, q0);
-    for (final Q q : ζ) $.ε(q, $.q0);
-    return $;
-  }
+  public NFSA<Σ> many() { return Thompson.many(this); }
   public NFSA<Σ> not() { return Thompson.not(this); }
   public NFSA<Σ> except(NFSA<Σ> a2) { return Thompson.except(this, a2); }
   public NFSA<Σ> or(NFSA<Σ> a2) { return Thompson.or(this, a2); }
   public NFSA<Σ> plenty() { return Thompson.plenty(this); }
-  public NFSA<Σ> then(NFSA<Σ> a2) {
-    final var $ = new NFSA<Σ>().ε(this.ε).ε(a2.ε);
-    $.ε($.q0, q0);
-    for (final Q q : ζ) $.ε(q, a2.q0);
-    $.δ(Δ).δ(a2.Δ).ζ(a2.ζ);
-    return $;
-  }
+  public NFSA<Σ> then(NFSA<Σ> a2) { return Thompson.then(this, a2); }
   @Override public String toString() {
     return "Nodeterministic " + super.toString() + //
         "\t ε = " + ε + " (non-deterministic ε-transitions)\n" //
     ;
   }
-  DFSA<Σ> DFSA() {
+  public DFSA<Σ> DFSA() {
     return new Object() {
-      Map<State, Q> code() { final Map<State, Q> $ = empty.Map(); for (final var s : ss) $.put(s, new Q()); return $; }
       /* One liners: //@formatter:off */
+      Map<State, Q> code() { final Map<State, Q> $ = empty.Map(); for (final var s : ss) $.put(s, new Q()); return $; }
+      Set<State>    ss   = new DFS<State>() { @Override public void visit(State s) {} }.dfs(s0);
+      Map<State, Q> code = code();
       DFSA<Σ> DFSA() { return new DFSA<>(q0(), ζ(), δ()); }
-      Q Q(State ¢) { return code.get(¢); } //@formatter:on */
+      Q Q(State ¢) { return code.get(¢); } 
       Q q0() { return code.get(s0); }
+      //@formatter:on */
       Map<Σ, Map<Q, Q>> δ() {
         final Map<Σ, Map<Q, Q>> $ = empty.Map();
-        for (final var σ : Σ()) {
-          $.put(σ, δ(σ));
-          this.toString();
-        }
+        for (final var σ : Σ()) $.put(σ, δ(σ));
         return $;
       }
       Map<Q, Q> δ(Σ σ) {
         final Map<Q, Q> $ = empty.Map();
-        for (final var s : ss) $.put(Q(s), Q(s.ε().δ(σ).ε()));
+        ss.stream().forEach(λ -> $.put(Q(λ), Q(λ.ε().δ(σ).ε())));
         return $;
       }
       Set<Q> ζ() {
@@ -60,8 +46,6 @@ public class NFSA<Σ> extends FSA<Σ> {
         for (final var s : ss) if (s.ζ()) $.add(Q(s));
         return $;
       }
-      Map<State, Q> code = code();
-      Set<State>    ss   = new DFS<State>() { @Override public void visit(State s) {} }.dfs(s0);
     }.DFSA();
   }
   @Override Set<String> labels(finite.Q from, finite.Q to) {
@@ -76,10 +60,14 @@ public class NFSA<Σ> extends FSA<Σ> {
   }
   boolean run(Iterable<Σ> w) {
     var s = s0.ε();
-    for (final var σ : w) s = s.δ(σ).ε();
+    for (final var σ : w) {
+      NFSA<Σ>.State δ2 = s.δ(σ);
+      s = δ2.ε();
+    }
     return s.ζ();
   }
-  @Override Set<Q> δ(Q q) {
+  @Override protected Set<Q> δ(Q q) {
+    super.δ(q);
     final var $ = new State(ε(q)).add(super.δ(q));
     for (final Σ σ : Σ()) $.add(new State().δ(σ).ε().qs);
     return $.qs;
@@ -90,8 +78,10 @@ public class NFSA<Σ> extends FSA<Σ> {
     for (final Q q : ε.keySet()) if (ε.get(q) != null) ε(q).addAll(ε.get(q));
     return this;
   }
-  //@formatter:off
+  /* One liners: //@formatter:off */
   Set<Q> ε(Q ¢) { if (ε.get(¢) == null) ε.put(¢, empty.Set()); return ε.get(¢); } // Set of outgoing transitions
+  /** Data: the table of ε transitions */ final Map<Q, Set<Q>> ε = empty.Map();
+  /** Data: the initial set of states */ final State s0 = new State(super.q0); // The initial state
   /** Constructor: Empty */ NFSA() { }
   /** Constructor: Copy */ NFSA(NFSA<Σ> that) { this(that.q0, that.ζ, that.Δ, that.ε); }
   /** Constructor: Entire data */ NFSA(Map<Σ, Map<Q, Q>> Δ, Set<Q> ζ, Map<Q, Set<Q>> ε) { super(Δ, ζ); ε(ε);  }
@@ -117,10 +107,7 @@ public class NFSA<Σ> extends FSA<Σ> {
   }
 
 
-  final State s0 = new State(super.q0); // The initial state
 
-  /* One liners: //@formatter:off */
-  /** Data: the table of ε transitions */ final Map<Q, Set<Q>> ε = empty.Map();
 
   class State implements Vertex<State>, Iterable<Q> {
 

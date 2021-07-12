@@ -1,9 +1,11 @@
-package finite;
+package FSA.atomic;
 
 import org.junit.jupiter.api.Test;
 
+import finite.Lexer;
+
 class Empty {
-  final Text empty = new Text();
+  final Lexer empty = new Lexer();
   @Test void emptyLanguage() {
     assert !empty.run("");
     assert !empty.run("a");
