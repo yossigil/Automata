@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import utils.empty;
 import static java.util.stream.Collectors.*;
 
+import java.util.HashSet;
+
 /** An immutable transition table, complete function from Q x Σ -> Q */
 abstract class Δ<Σ> {
   // @formatter:off 
@@ -20,7 +22,6 @@ abstract class Δ<Σ> {
   /** Inspector: transition table of given letter */ Map<Q, Q> δ(final Σ ¢) { init(¢); return Δ.get(¢); }
   /** Inspector: transition table of given letter */ private void init(final Σ ¢) { Δ.putIfAbsent(¢, empty.Map()); }
   /** Inspector: Set of all states for which a transition on a letter is defined */ Set<Q> Q(final Σ ¢) { return δ(¢).keySet(); }
-  /** Inspector: Reachable states from a given state */ protected Set<Q> δ(final Q q) { return Σ().stream().map(λ -> δ(q, λ)).collect(toSet()); }
   /** Data: The transition table */ Map<Σ, Map<Q, Q>> Δ;
   /** Data: Wild card letter */ final Σ ANY = null;
   /** Data: Wild card state */ final Q SINK = null;
@@ -29,6 +30,14 @@ abstract class Δ<Σ> {
   protected Q δ(final Q q, final Σ σ) {
     final Q $ = δ(σ).get(q);
     return $ != SINK ? $ : δ(ANY).get(q);
+  }
+  /** Inspector: Reachable states from a given state */
+  protected Set<Q> δ(final Q q) {
+    Set<Q> $ = empty.Set();
+    for (Σ σ : Σ()) $.add(q);
+    return $;
+//    return Σ().stream().map(λ -> δ(q, λ)).collect(toSet());
+    // return Σ().stream().map(λ -> δ(q, λ)).collect(toSet());
   }
   /** Inspector: set of all states seen */ //@formatter:on
   Set<Q> Q() {
@@ -41,7 +50,8 @@ abstract class Δ<Σ> {
     return $;
   }
   Set<String> labels(final Q from, final Q to) {
-    return Σ().stream().filter(λ -> δ(from, λ) == to).map(λ -> λ == null ? "*" : λ + "").collect(Collectors.toSet());
+    Set<Σ> σ = new HashSet<>(Σ());
+    return σ.stream().filter(λ -> δ(from, λ) == to).map(λ -> λ == null ? "*" : λ + "").collect(toSet());
   }
 }
 
@@ -99,17 +109,21 @@ public abstract class FSA<Σ> extends Algorithms<Σ> {
     dfs(λ -> $.add(λ));
     return $;
   }
+  abstract class Enumerator extends TikZifier {
+    private int ordinal;
+    private final Map<Q, Integer> enumeration = empty.Map();
+    private int enumerate() { dfs(q -> enumeration.computeIfAbsent(q, __ -> ordinal++)); return ordinal;}
+    final int n = enumerate();
+    protected int ordinal(Q ¢) { return enumeration.get(¢); }
+  }
   public final String TikZ() {
-    return new TikZifier() {
+    return new Enumerator() {
     //@formatter:off
-      @Override protected String traverse() { enumerate(); dfs(from -> render(from)); return this + ""; }
+      @Override protected String traverse() {  dfs(λ -> render(λ)); return this + ""; }
       void render(Q from) { render(from, δ(from)); }
       void render(Q from, Set<Q> to) { for (final Q q : to) render(from, q); }
-      int ordinal;
-      void enumerate() { dfs(q -> enumeration.computeIfAbsent(q, __ -> ordinal++)); }
-      final Map<Q, Integer> enumeration = empty.Map();
       final Set<Q> elaborated = empty.Set();
-      String tikz(final Q ¢) { return sprintf("\"$q_{%s}$\" %s", enumeration.get(¢), elaborate(¢)); }
+      String tikz(final Q ¢) { return sprintf("\"$q_{%s}$\" %s", ordinal(¢), elaborate(¢)); }
       String elaborate(final Q from, final Q to) { return to == from ? ",loop" : !edge(to, from) ? "" : ",bend left"; }
 
       //@formatter:on

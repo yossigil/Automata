@@ -21,6 +21,8 @@ enum Thompson {
   }
   static <Σ> NFSA<Σ> then(NFSA<Σ> a1, NFSA<Σ> a2)   {
     final var $ = new NFSA<Σ>().ε(a1.ε).ε(a2.ε);
+    $.δ(a1.Δ).δ(a2.Δ); 
+    $.ζ(a2.ζ); 
     for (final Q q : a1.ζ) $.ε(q, a2.q0);
     return $;
   }

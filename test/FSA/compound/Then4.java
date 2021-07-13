@@ -1,4 +1,4 @@
-package compound;
+package FSA.compound;
 
 import org.junit.jupiter.api.Test;
 

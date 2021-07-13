@@ -125,8 +125,9 @@ public class NFSA<Σ> extends FSA<Σ> {
     @Override public Set<State> neighbours() {
       final Set<State> $  = new HashSet<>();
       final var      ε  = ε();
-      final var           σ2 = Σ();
+      final var           σ2 =  Σ();
       for (final var σ : σ2) $.add(ε.δ(σ).ε());
+      
       return $;
     }
     @Override public String toString() { return qs + ""; }

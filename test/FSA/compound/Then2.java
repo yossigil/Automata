@@ -1,4 +1,4 @@
-package compound;
+package FSA.compound;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,5 +20,9 @@ public class Then2 {
   }
   @Test void rejectBA() {
     assert !ab.run("ba");
+  }
+  @Test void print() {
+    System.out.println(ab.TikZ());
+    System.out.println(ab);
   }
 }
