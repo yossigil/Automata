@@ -6,6 +6,10 @@ import finite.FSA;
 import finite.Lexer;
 public class Many2 {
   final FSA<Character> dfsa = Lexer.c('a').Then('b').many().DFSA().minimize();
+  {
+   System.out.println(dfsa + ""); 
+   System.out.println(dfsa.TikZ() + ""); 
+  }
 
   @Test  void  accept0()   {  assert  dfsa.run("");          }
   @Test  void  accept1()   {  assert  dfsa.run("ab");        }

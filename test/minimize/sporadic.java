@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import finite.NFSA;
 
-@SuppressWarnings("static-method")public class terminates {
+@SuppressWarnings("static-method")public class sporadic {
   @Test void or() {
-    NFSA.<Character>σ('a').or(NFSA.<Character>σ('a')).minimize();
+    NFSA.<Character>σ('a').or(NFSA.<Character>σ('b')).minimize();
   }
   @Test void many() {
     NFSA.<Character>σ('a').many().minimize();

@@ -6,6 +6,10 @@ import finite.Lexer;
 
 public class Then2 {
   final Lexer ab = Lexer.c('a').then(Lexer.c('b'));
+  {
+    System.out.println(ab.inner);
+    System.out.println(ab.TikZ());
+  }
   @Test void accept() {
     assert ab.run("ab");
   }
