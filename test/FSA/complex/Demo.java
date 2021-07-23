@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test;
 import finite.Lexer;
 
 class Demo {
-  final Lexer empty  = new Lexer();
-  final Lexer a      = new Lexer('a').or(empty);
-  final Lexer b      = new Lexer('b');
-  final Lexer ab     = new Lexer(a.then(b));
-  final Lexer a_b    = new Lexer(a.or(b));
-  final Lexer abStar = new Lexer(ab.many());
-  final Lexer x0     = new Lexer(a_b.then(ab).Then('c').then(a_b).or(a.then(a).then(a).then(a))).Then('c');
+  final Lexer empty  = Lexer.Φ();
+  final Lexer a      = Lexer.c('a').or(empty);
+  final Lexer b      = Lexer.c('b');
+  final Lexer ab     = (a.then(b));
+  final Lexer a_b    = (a.or(b));
+  final Lexer abStar = (ab.many());
+  final Lexer x0     = a_b.then(ab).Then('c').then(a_b).or(a.then(a).then(a).then(a)).Then('c');
   final Lexer x1     = x0.or(abStar.then(a).or(x0));
   final Lexer x2     = x1.many().Or('c').then(abStar.Then('c').Then('a'));
   final Lexer x3     = x2.then(a_b).then(x2).many();

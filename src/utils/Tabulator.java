@@ -1,4 +1,4 @@
-package finite;
+package utils;
 
 import java.util.Formatter;
 
@@ -17,11 +17,6 @@ class Tabulator extends Encapsulator { //@formatter:off
   protected String indentln(String line) { return println(line) + indent(); }
   protected String unindentln(String line) { return unindent() + println(line); }
   protected String println(String line) { inner.format(indent + "%s\n", line); return ""; }
-  String printf(final String format, final Object... os) { inner.format(format, os);return "";  }
-  static String sprintf(final String format, final Object... os) { return String.format(format, os); }
-}
-
-@SuppressWarnings("static-method") class TeXifier extends Tabulator {
-  protected String math(String ¢) { return "\\ensuremath{" + ¢ + "}"; }
-  protected String tt(String ¢) { return "\\text{" + ¢ + "}"; }
+  protected String printf(final String format, final Object... os) { inner.format(format, os);return "";  }
+  protected static String sprintf(final String format, final Object... os) { return String.format(format, os); }
 }

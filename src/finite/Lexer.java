@@ -1,33 +1,31 @@
 package finite;
 
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
-public class Lexer extends NFSA<Character> {
-  //@formatter:off
-  public Lexer And(final char ¢) { return new Lexer(and(Lexer.c(¢))); }
-  public Lexer Or(final char ¢)  { return new Lexer(or(Lexer.c(¢))); }
-  private static Lexer c(char ¢) { return new Lexer(NFSA.σ(¢)); }
-  public static Lexer any()      { return new Lexer(NFSA.ʘ()); } 
-  public Lexer Then(final char ¢) { return new Lexer(then(Lexer.c(¢))); }
-  public Lexer and(final Lexer ¢) { return new Lexer(super.and(¢)); }
-  public Lexer or(final Lexer ¢) { return new Lexer(super.or(¢)); }
-  public Lexer then(final Lexer ¢) { return new Lexer(super.then(¢)); }
-  @Override public Lexer many() { return new Lexer(super.many()); }
-  Lexer(final Q q0, final Set<Q> ζ, final Map<Character, Map<Q, Q>> δ, final Map<Q, Set<Q>> ε) { super(q0, ζ, δ, ε); }
-  public Lexer() { }
-  Lexer(final Lexer t) { super(t); }
-  public Lexer(final NFSA<Character> a) { super(a); }
-  public Lexer(final char c) { final var q1 = new Q(); δ(q0, c, q1); ζ(q1); }
+public class Lexer { //@formatter:off
+  public final NFSA<Character>  inner;
+  public static Lexer Φ() { return new Lexer(NFSA.Φ()); }
+  public static Lexer c(char ¢) { return new Lexer(NFSA.σ(¢)); }
+  public static Lexer ʘ()      { return new Lexer(NFSA.ʘ()); } 
+  public static Lexer ε()      { return new Lexer(NFSA.ε()); } 
+  public Lexer And(final char ¢) { return and(Lexer.c(¢)); }
+  public Lexer Or(final char ¢)  { return or(Lexer.c(¢)); }
+  public Lexer Then(final char ¢) { return then(Lexer.c(¢)); }
+  public Lexer and(final Lexer ¢) { return new Lexer(inner.and(¢.inner)); }
+  public Lexer or(final Lexer ¢) { return new Lexer(inner.or(¢.inner)); }
+  public Lexer then(final Lexer ¢) { return new Lexer(inner.then(¢.inner)); }
+  private Lexer(NFSA<Character> inner) { this.inner = inner; } 
+  public Lexer many() { return new Lexer(inner.many()); }
   //@formatter:on
   /* Dense: //@formatter:off */
   public boolean run(final String ¢) { return run(¢.toCharArray()); }
   boolean run(final char[] cs) {
-    return run(() -> new Iterator<>() {
+    return inner.run(() -> new Iterator<>() {
       int i;
       @Override public boolean hasNext() { return i < cs.length; }
       @Override public Character next() { return cs[i++]; }
     });
   }
+  public String TikZ() { return inner.TikZ(); }
+  public FSA<Character> DFSA() { return inner.DFSA(); }
 }

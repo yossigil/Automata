@@ -3,8 +3,8 @@ package finite;
 import org.junit.jupiter.api.Test;
 
 class Deterministic {
-  final Lexer a = new Lexer('a');
+  final Lexer a = Lexer.c('a');
   @Test void exists() {
-    a.DFSA();
+    into.FSA(a.inner);
   }
 }

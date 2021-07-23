@@ -1,11 +1,11 @@
-package DFSA;
+package tikz;
 
 import org.junit.jupiter.api.Test;
 
 import finite.Lexer;
 
-class Exists {
-   final Lexer abStar = new Lexer('a').Then('b').many();
+public class abMany {
+  final Lexer abStar = Lexer.c('a').Then('b').many();
   @Test void m1() { abStar.DFSA(); }
   @Test void m2() { abStar.DFSA().minimize(); }
   @Test void t0() { abStar.TikZ(); }

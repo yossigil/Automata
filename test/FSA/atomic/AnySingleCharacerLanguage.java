@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import finite.Lexer;
 
 public class AnySingleCharacerLanguage {
-  Lexer any = Lexer.any();
+  Lexer any = Lexer.ʘ();
   @Test void print() { System.out.println(any.TikZ()); }
   @Test void accept0() { assert any.run("a"); }
   @Test void accept1() { assert any.run("b"); }

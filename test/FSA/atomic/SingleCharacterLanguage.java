@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import finite.Lexer;
 
 public class SingleCharacterLanguage {
-  final Lexer a = new Lexer('a');
-  final Lexer b = new Lexer('b');
+  final Lexer a = Lexer.c('a');
+  final Lexer b = Lexer.c('b');
   @Test void aOK() {
     assert a.run("a");
   }

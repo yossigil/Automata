@@ -6,7 +6,7 @@ import finite.Lexer;
 import finite.NFSA;
 public class ManyShow {
 
-  final Lexer many = new Lexer('a').Then('b').then(new Lexer('a').Or('b')).many();
+  final Lexer many = Lexer.c('a').Then('b').then(Lexer.c('a').Or('b')).many();
 
   static void scope(String ¢) {
     System.out.println("\\begin{scope} \\path");
@@ -26,7 +26,7 @@ public class ManyShow {
   }
 
   @Test void DFSADemo() {
-    show(many);
+    show(many.inner);
   }
   
 }

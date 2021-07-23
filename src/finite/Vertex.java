@@ -1,7 +1,7 @@
 package finite;
 
-import java.util.Set;
+import java.util.Collection;
 
 interface Vertex<Self> {
-  Set<Self> neighbours();
+  Collection<? extends Self> neighbours();
 }

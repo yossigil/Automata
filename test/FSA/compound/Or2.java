@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import finite.Lexer;
 
 class Or2 {
-  final Lexer a_b = new Lexer(new Lexer('a').or(new Lexer('b')));
+  final Lexer a_b = Lexer.c('a').or(Lexer.c('b'));
   @Test void acceptA() {
     assert a_b.run("a");
   }

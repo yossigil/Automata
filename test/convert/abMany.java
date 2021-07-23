@@ -1,11 +1,11 @@
-package DFSAminimized;
+package convert;
 
 import org.junit.jupiter.api.Test;
 
-import finite.DFSA;
+import finite.FSA;
 import finite.Lexer;
-public class Many2 {
-  final DFSA<Character> dfsa = new Lexer('a').Then('b').many().DFSA().minimize();
+public class abMany {
+  final FSA<Character> dfsa = Lexer.c('a').Then('b').many().DFSA();
 
   @Test  void  accept0()   {  assert  dfsa.run("");          }
   @Test  void  accept1()   {  assert  dfsa.run("ab");        }

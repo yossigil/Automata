@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 class Singleton {
-  final Lexer a = new Lexer('a');
+  final Lexer a = Lexer.c('a');
   @Test void singletonSize() {
-    assertEquals(a.Δ.size(), 1);
+    assertEquals(a.inner.Δ.size(), 2);
   }
 }

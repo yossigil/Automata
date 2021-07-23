@@ -1,156 +1,88 @@
 package finite;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import utils.empty;
-import static java.util.stream.Collectors.*;
+import utils.set;
+import utils.val;
 
-import java.util.HashSet;
+public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
 
-/** An immutable transition table, complete function from Q x Σ -> Q */
-abstract class Δ<Σ> {
-  // @formatter:off 
-  /** Class summary */ @Override public String toString() { return "\t Δ = " + Δ + " (transition function)\n"; }
-  /** Empty constructor */ Δ() { this(empty.Map()); }
-  /** Copy constructor */  Δ(final Δ<Σ> that) { this(that.Δ); }
-  /** Full constructor */  Δ(final Map<Σ, Map<Q, Q>> Δ) { this.Δ = Δ; }
-  /** Inspector: Letters seen */ protected final Set<Σ> Σ()  { return Δ.keySet(); }
-  /** Inspector: complete transition function from a state and letter  */
-  /** Inspector: transition table of given letter */ Map<Q, Q> δ(final Σ ¢) { init(¢); return Δ.get(¢); }
-  /** Inspector: transition table of given letter */ private void init(final Σ ¢) { Δ.putIfAbsent(¢, empty.Map()); }
-  /** Inspector: Set of all states for which a transition on a letter is defined */ Set<Q> Q(final Σ ¢) { return δ(¢).keySet(); }
-  /** Data: The transition table */ Map<Σ, Map<Q, Q>> Δ;
-  /** Data: Wild card letter */ final Σ ANY = null;
-  /** Data: Wild card state */ final Q SINK = null;
-  // Details: // @formatter:on
-  /** Inspector: the transition function */
-  protected Q δ(final Q q, final Σ σ) {
-    final Q $ = δ(σ).get(q);
-    return $ != SINK ? $ : δ(ANY).get(q);
-  }
-  /** Inspector: Reachable states from a given state */
-  protected Set<Q> δ(final Q q) {
-    Set<Q> $ = empty.Set();
-    for (Σ σ : Σ()) $.add(q);
-    return $;
-//    return Σ().stream().map(λ -> δ(q, λ)).collect(toSet());
-    // return Σ().stream().map(λ -> δ(q, λ)).collect(toSet());
-  }
-  /** Inspector: set of all states seen */ //@formatter:on
-  Set<Q> Q() {
-    final Set<Q> $ = empty.Set();
-    for (final Σ σ : Σ()) {
-      final var qs = Q(σ);
-      $.addAll(qs);
-      for (final Q q : qs) $.add(δ(σ).get(q));
-    }
-    return $;
-  }
-  Set<String> labels(final Q from, final Q to) {
-    Set<Σ> σ = new HashSet<>(Σ());
-    return σ.stream().filter(λ -> δ(from, λ) == to).map(λ -> λ == null ? "*" : λ + "").collect(toSet());
-  }
-}
-
-abstract class Algorithms<Σ> extends Implementation<Σ> {
-  /** Exerciser: do a DFS search, supplying each state q to a given consumer */
-  final void dfs(final Consumer<Q> c) {
-    new XDFS<Q>() { //@formatter:off
-      @Override public Set<Q> n(final Q ¢) { return δ(¢); }
-      @Override public Q v(final Q ¢) { c.accept(¢); return ¢;}
-      //@formatter:on
-    }.dfs(q0);
-  }
-  Algorithms() {}
-  Algorithms(Implementation<Σ> that) { super(that); }
-  Algorithms(finite.Q q0, Set<finite.Q> ζ, Map<Σ, Map<finite.Q, finite.Q>> Δ) { super(q0, ζ, Δ); }
-  Algorithms(finite.Q q0, Set<finite.Q> ζ) { super(q0, ζ); }
-  Algorithms(Set<finite.Q> ζ, Map<Σ, Map<finite.Q, finite.Q>> Δ) { super(ζ, Δ); }
-}
-
-public abstract class FSA<Σ> extends Algorithms<Σ> {
+ /** Data: Set of accepting states */ final Set<Q> ζ = empty.Set();
+  FSA() { }
+  /** Data: Initial state */ public Q q0 = new Q(); 
+  /** Data: Current state  */ Q q;
+  /** Data: Instance number */ final int n = ++N;
+  /** Data: Instance counter */ static int N;
+  @Override public void reset() { q = q0; }
+  @Override public void feed(final Σ ¢) { q = δ(q, ¢); }
+  @Override public boolean accepting() { return ζ.contains(q); }
   /** Class summary: // @formatter:on */
   @Override public String toString() {
     return "FSA #" + n + "/" + N + " = ⟨Σ,q0,Q,ζ,Δ⟩ \n" + //
-        super.toString() + //
-        "\t " + toString("Q'$", QQ()) + " (reachable states)\n"//
+        "\t " + val.show("Σ", Σ) + " (alphabet)\n" + //
+        "\t " + val.show("q0", q0) + " (initial state)\n" + //
+        "\t " + val.show("Q", Q) + " (all states)\n" + //
+        "\t " + val.show("Q'$", QQ()) + " (reachable states)\n" + //
+        "\t " + val.show("Q\\Q'$", set.minus(Q,QQ())) + " (unreachable states)\n" + //
+        "\t " + val.show("ζ", ζ) + "  (accepting states)\n" + //
+        "\t " + val.show("Q\\ζ", set.minus(Q, ζ)) + " (rejecting states)\n" + //
+        "\t " + val.show("q", q) + " (current state)\n" + //
+        super.toString()//
     ;
   }
-  // @formatter:off
-  /** Empty constructor */ FSA() {}
-  /** Copy constructor */ FSA(final Implementation<Σ> a) { super(a); }
-  /** Partial constructor */  FSA(final Map<Σ, Map<Q, Q>> Δ, final Set<Q> ζ) { super(ζ, Δ); }
-  /** Full constructor */ FSA(final Q q0, final Set<Q> ζ, final Map<Σ,Map<Q,Q>> Δ) { super(q0, ζ, Δ); }
-
-  FSA<Σ> ζ(final Q ¢) { ζ.add(¢); return this; }
-  FSA<Σ> ζ(final Set<Q> ¢) { ζ.addAll(¢); return this; }
-  /** Data: Instance number */  final int n = ++N;
-  /** Data: Instance counter */ static int N;
-  /** Modifier: Add a new transition */
-  @Override FSA<Σ> δ(final Q from, final Σ σ, final Q to) {
-    δ(σ).put(from, to);
-    return this;
+  /** Factory: creates an immutable instance */
+  public static <Σ> FSA<Σ>.Builder builder() {
+    return new FSA<Σ>().new Builder();
   }
-  /** Modifier: Add a full transition table */
-  FSA<Σ> δ(final Map<Σ, Map<Q, Q>> Δ) {
-    for (final Σ σ : Δ.keySet()) δ(δ(σ), Δ.get(σ));
-    return this;
+  class Builder extends Δ<Σ>.Builder {
+    FSA<Σ> build() { super.build(); if (q0 == null) q0 = new Q();
+      assert !Σ.contains(null);
+    return FSA.this; }
+    Builder δ(Q from, Σ σ, Q to) { super.δ(from, σ, to); return this; }
+    Builder ζ(final Q ¢) { ζ.add(¢); return this; }
+    Builder ζ(Set<? extends Q> ¢) { ζ.addAll(¢); return this; }
+    Builder ζ(final FSA<?> ¢) { ζ.addAll(¢.ζ); return this; }
+    Builder q0(Q ¢) { q0 = ¢; return this; }
+    @Override Set<Q> Q() { return set.union(super.Q(), ζ, Set.of(q0)); }
+    @Override Builder Δ(Δ<Σ> ¢) { super.Δ(¢); return this; }
+    @Override Builder Δ(Map<Q, Map<Σ, Q>> ¢) { super.Δ(¢); return this; }
   }
-  /** Helper: Copy a transition table of a single letter */
-  static void δ(final Map<Q, Q> m1, final Map<Q, Q> m2) {
-    for (final Q q : m2.keySet()) m1.put(q, m2.get(q));
+  /** Exerciser: do a DFS search, supplying each state q to a given consumer
+   * 
+   * @return the set of states, in the order they were encountered */
+  protected final Set<Q> dfs(final Consumer<Q> c) {
+    assert q0 != null;
+    return new XDFS<Q>() {
+      @Override public Collection<Q> neighbours(final Q ¢) { return FSA.this.neighbours(¢); }
+      @Override public Q visit(final Q ¢) { c.accept(¢); return ¢; }
+    }.dfs(q0);
   }
   /** Inspector: Set of all reachable states */
   Set<Q> QQ() {
-    final Set<Q> $ = empty.Set();
+    final Set<Q> $ = new LinkedHashSet<>();
     dfs(λ -> $.add(λ));
     return $;
   }
-  abstract class Enumerator extends TikZifier {
-    private int ordinal;
-    private final Map<Q, Integer> enumeration = empty.Map();
-    private int enumerate() { dfs(q -> enumeration.computeIfAbsent(q, __ -> ordinal++)); return ordinal;}
-    final int n = enumerate();
-    protected int ordinal(Q ¢) { return enumeration.get(¢); }
+  abstract class External { FSA<Σ> self() {return FSA.this; } }
+  public String TikZ() {
+    return TikZ.of(this);
   }
-  public final String TikZ() {
-    return new Enumerator() {
-    //@formatter:off
-      @Override protected String traverse() {  dfs(λ -> render(λ)); return this + ""; }
-      void render(Q from) { render(from, δ(from)); }
-      void render(Q from, Set<Q> to) { for (final Q q : to) render(from, q); }
-      final Set<Q> elaborated = empty.Set();
-      String tikz(final Q ¢) { return sprintf("\"$q_{%s}$\" %s", ordinal(¢), elaborate(¢)); }
-      String elaborate(final Q from, final Q to) { return to == from ? ",loop" : !edge(to, from) ? "" : ",bend left"; }
-
-      //@formatter:on
-      void render(Q from, Q to) {
-        printf("\t %s -> [\"%s\"%s] %s;\n", tikz(from), tikz(labels(from, to)), elaborate(from, to), tikz(to));
-      }
-      String elaborate(final Q ¢) {
-        if (!elaborated.add(¢)) return "";
-        var $ = "";
-        if (¢ == q0) $ += "initial,";
-        if (ζ.contains(¢)) $ += "accept";
-        return square($);
-      }//@formatter:on
-      boolean edge(final Q from, final Q to) {
-        for (final Σ σ : Σ()) if (δ(from, σ) == to) return true;
-        return false;
-      }
-      String tikz(final Set<String> ss) {
-        var $        = new StringBuilder();
-        var ordinary = false;
-        for (final String s : ss) {
-          if (ordinary) $.append(", ");
-          else ordinary = true;
-          $.append(s);
-        }
-        return $ + "";
-      }
-    }.render();
+  public FSA<Σ> minimize() {
+    return minimal.FSA(this);
+  }
+  public boolean run(final String ¢) { return run(¢.toCharArray()); }
+  boolean run(final char[] cs) {
+    return run(() -> new Iterator<>() {
+      int i;
+      @Override public boolean hasNext() { return i < cs.length; }
+      @Override
+      @SuppressWarnings("unchecked") public Σ next() { return (Σ) (Character) cs[i++]; }
+    });
   }
 }

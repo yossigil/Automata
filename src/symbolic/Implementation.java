@@ -78,7 +78,7 @@ abstract class Algorithms implements RE {
         });
         return this + "";
       }
-    }.render();
+    }.$();
   }
 }
 

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import finite.Lexer;
 
 public class Then4 {
-  final Lexer abcd = new Lexer(new Lexer('a').then(new Lexer('b').then(new Lexer('c')).then(new Lexer('d'))));
+  final Lexer abcd = Lexer.c('a').then(Lexer.c('b').then(Lexer.c('c')).then(Lexer.c('d')));
   @Test void accept() {
     assert abcd.run("abcd");
   }
