@@ -52,7 +52,7 @@ public enum minimal{
       }
     }.P;
   }
-  static <Σ> FSA<Σ> encode(FSA<Σ> a, Set<Set<Q>> P) {
+  private static <Σ> FSA<Σ> encode(FSA<Σ> a, Set<Set<Q>> P) {
     return a.new External() {
       /** Data: A newly created state representing each p∈P */
       final Map<Set<Q>, Q> encoding    = P.stream().collect(toMap(λ -> λ, λ -> new Q()));

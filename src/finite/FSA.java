@@ -73,7 +73,7 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
   public String TikZ() {
     return TikZ.of(this);
   }
-  public FSA<Σ> minimize() {
+  public FSA<Σ> minimal() {
     return minimal.FSA(this);
   }
   public boolean run(final String ¢) { return run(¢.toCharArray()); }

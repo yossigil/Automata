@@ -59,7 +59,7 @@ class Demo {
       print(path(graph));
     }
     @Test void minimized() {
-      print(path(x4.DFSA().minimize().TikZ()));
+      print(path(x4.DFSA().minimal().TikZ()));
     }
     private static void print(final String ¢) {
       System.out.println(¢);

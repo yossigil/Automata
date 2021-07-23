@@ -5,10 +5,9 @@ import org.junit.jupiter.api.Test;
 import finite.FSA;
 import finite.Lexer;
 public class Many2 {
-  final FSA<Character> dfsa = Lexer.c('a').Then('b').many().DFSA().minimize();
+  final FSA<Character> dfsa = Lexer.c('a').Then('b').many().DFSA().minimal();
   {
-   System.out.println(dfsa + ""); 
-   System.out.println(dfsa.TikZ() + ""); 
+   Sample. many$ab.show();
   }
 
   @Test  void  accept0()   {  assert  dfsa.run("");          }

@@ -6,24 +6,24 @@ import finite.NFSA;
 
 @SuppressWarnings("static-method")public class sporadic {
   @Test void or() {
-    NFSA.<Character>σ('a').or(NFSA.<Character>σ('b')).minimize();
+    NFSA.<Character>σ('a').or(NFSA.<Character>σ('b')).minimal();
   }
   @Test void many() {
-    NFSA.<Character>σ('a').many().minimize();
+    NFSA.<Character>σ('a').many().minimal();
   }
   @Test void then() {
-    NFSA.<Character>σ('a').then(NFSA.<Character>σ('a')).minimize();
+    NFSA.<Character>σ('a').then(NFSA.<Character>σ('a')).minimal();
   }
   @Test void σ() {
-    NFSA.<Character>σ('a').minimize();
+    NFSA.<Character>σ('a').minimal();
   }
   @Test void ε() {
-    NFSA.<Character>ε().minimize();
+    NFSA.<Character>ε().minimal();
   }
   @Test void ʘ() {
-    NFSA.<Character>ʘ().minimize();
+    NFSA.<Character>ʘ().minimal();
   }
   @Test void Φ() {
-    NFSA.<Character>Φ().minimize();
+    NFSA.<Character>Φ().minimal();
   }
 }
