@@ -1,9 +1,9 @@
 package minimize;
 
 import static minimize.Sample.a;
+import static minimize.Sample.aba;
 import static minimize.Sample.b;
 import static minimize.Sample.c;
-import static minimize.Sample.aba;
 import static minimize.Sample.ʘ;
 
 import java.util.AbstractMap.SimpleEntry;
