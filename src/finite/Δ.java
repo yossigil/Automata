@@ -21,7 +21,7 @@ enum stream {
  * to itself. The {@code null} value of the {@code Σ} (letters) denotes a the
  * wild card letter. */
 abstract class Δ<Σ> { // @formatter:off 
-  /** Data: Transition table */ protected final Map<Q, Map<Σ, Q>> Δ = empty.Map();
+  /** Data: Transition table */ public final Map<Q, Map<Σ, Q>> Δ = empty.Map();
   /** Data: Wild card letter */ final Σ ANY = null;
   /** Data: Sink state */ static final Q SINK = null;
   /** Data: All states used, SINK excluded */  public final Set<Q> Q = empty.Set();

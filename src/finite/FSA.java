@@ -13,7 +13,7 @@ import utils.val;
 
 public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
 
- /** Data: Set of accepting states */ final Set<Q> ζ = empty.Set();
+ /** Data: Set of accepting states */ public final Set<Q> ζ = empty.Set();
   FSA() { }
   /** Data: Initial state */ public Q q0 = new Q(); 
   /** Data: Current state  */ Q q;
@@ -64,7 +64,7 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
     }.dfs(q0);
   }
   /** Inspector: Set of all reachable states */
-  Set<Q> QQ() {
+  public Set<Q> QQ() {
     final Set<Q> $ = new LinkedHashSet<>();
     dfs(λ -> $.add(λ));
     return $;

@@ -11,6 +11,7 @@ public class NFSA<Σ> extends FSA<Σ> { //@formatter:off
   /** Data: the initial state */ STATE<Σ> s0;
   /** Inspector: Set of outgoing transitions */  Set<Q> ε(Q ¢) { return ε.get(¢); } 
   @Override protected Set<Q> neighbours(Q ¢) { return set.union(super.neighbours(¢), ε(¢)); }
+  @Override public FSA<Σ> minimal() { return DFSA().minimal(); } 
   public NFSA<Σ> and(NFSA<Σ> a2) { return Thompson.and(this, a2); }
   public NFSA<Σ> many() { return Thompson.many(this); }
   public NFSA<Σ> not() { return Thompson.not(this); }

@@ -27,7 +27,7 @@ class State<Σ> extends NFSA<Σ>.External implements STATE<Σ> {
     assert σ != null;
     assert !qs.contains(null);
     return new State<Σ>(NFSA(), qs().map(q -> NFSA().δ(q, σ)).filter(q -> {
-     // if (q == null) System.out.println("Current = " + this.qs + "SIGMA = " + σ);
+      // if (q == null) System.out.println("Current = " + this.qs + "SIGMA = " + σ);
       return q != null;
     }).collect(toSet()));
   }
@@ -59,9 +59,9 @@ class State<Σ> extends NFSA<Σ>.External implements STATE<Σ> {
       {
         assert !qs.contains(null);
         Set<finite.Q> more;
-        do {
-          more = qs().map(NFSA()::ε).flatMap(Set::stream).filter(this::missing).collect(toSet());
-        } while (qs.addAll(more));
+        do //
+        more = qs().map(NFSA()::ε).flatMap(Set::stream).filter(this::missing).collect(toSet());//
+        while (qs.addAll(more));
       }
     };
   }
