@@ -2,7 +2,7 @@ package minimize;
 
 import org.junit.jupiter.api.Test;
 
-import finite.NFSA;
+import automaton.NFSA;
 
 @SuppressWarnings("static-method")public class afterDFSA {
   @Test void or() {

@@ -1,4 +1,4 @@
-package finite;
+package automaton;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

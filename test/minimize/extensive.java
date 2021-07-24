@@ -3,7 +3,7 @@ package minimize;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import finite.FSA;
+import automaton.FSA;
 
 @SuppressWarnings("static-method") //
 public class extensive {

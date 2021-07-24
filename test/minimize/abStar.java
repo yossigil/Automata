@@ -2,7 +2,7 @@ package minimize;
 
 import org.junit.jupiter.api.Test;
 
-import finite.Lexer;
+import automaton.Lexer;
 
 public class abStar {
   final Lexer abStar = Lexer.c('a').Then('b').many();

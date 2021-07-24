@@ -2,7 +2,7 @@ package run;
 
 import org.junit.jupiter.api.Test;
 
-import finite.NFSA;
+import automaton.NFSA;
 
 @SuppressWarnings("static-method") public class terminates {
   static class Empty {

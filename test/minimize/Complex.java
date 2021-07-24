@@ -3,7 +3,7 @@ package minimize;
 import static minimize.Sample.a;
 import static minimize.Sample.b;
 import static minimize.Sample.c;
-import static minimize.Sample.then$aba;
+import static minimize.Sample.aba;
 import static minimize.Sample.ʘ;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -13,13 +13,13 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import finite.NFSA;
+import automaton.NFSA;
 public enum Complex implements Case {
   ʘ$or$a(".|a", ʘ.or(a)), //
   ʘ$then$a(".a", ʘ.then(a)), //
   ʘ$many$then$a(".*a", ʘ.many().then(a.NFSA())), //
   b$ʘ$many$then$a("b.*a", b.then(ʘ.many().then(c.NFSA()))), //
-  aba$or$a$many("((aba)|(a))*", then$aba.or(b.NFSA()).many()), //
+  aba$or$a$many("((aba)|(a))*", aba.or(b.NFSA()).many()), //
   ; //
   public static Stream<Complex> s() { return Arrays.stream(values()); }
   @Override public String toString() { return asString(); }

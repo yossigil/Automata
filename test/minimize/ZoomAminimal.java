@@ -2,9 +2,9 @@ package minimize;
 
 import org.junit.jupiter.api.Test;
 
-import finite.FSA;
+import automaton.FSA;
 
-public class MinimizeA {
+public class ZoomAminimal {
   final FSA<Character> dfsa = Sample.a.minimal();
   {
     Sample.a.show();

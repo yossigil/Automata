@@ -1,4 +1,4 @@
-package finite;
+package automaton;
 
 import static java.util.stream.Collectors.toSet;
 
@@ -58,7 +58,7 @@ class State<Σ> extends NFSA<Σ>.External implements STATE<Σ> {
       }
       {
         assert !qs.contains(null);
-        Set<finite.Q> more;
+        Set<automaton.Q> more;
         do //
         more = qs().map(NFSA()::ε).flatMap(Set::stream).filter(this::missing).collect(toSet());//
         while (qs.addAll(more));

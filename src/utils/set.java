@@ -15,33 +15,33 @@ public enum set {
     for (final T t : ts) return t;
     return null;
   }
-  public static <T> Set<T> of(final Iterable<T> ts) {
+  public static <T> Set<T> copy(final Collection<T> ts) {
     final Set<T> $ = empty.Set();
     for (final T t : ts) $.add(t);
     return $;
   }
-  public static <T> Set<T> of(final Set<T> ¢) {
+  public static <T> Set<T> copy(final Set<T> ¢) {
     final Set<T> $ = empty.Set();
     $.addAll(¢);
     return $;
   }
-  public static <T> Set<T> minus(final Iterable<T> qs1, final Collection<T> sq2) {
-    final Set<T> $ = set.of(qs1);
+  public static <T> Set<T> minus(final Collection<T> qs1, final Collection<T> sq2) {
+    final Set<T> $ = set.copy(qs1);
     $.removeAll(sq2);
     return $;
   }
   public static <T> Set<T> intersection(final Collection<T> s1, Collection <T> s2) {
-    final Set<T> $ = set.of(s1);
+    final Set<T> $ = set.copy(s1);
     $.retainAll(s2);
     return $;
   }
   public static <T> Set<T> union(final Collection<T> s1, final Collection<T> s2) {
-    final Set<T> $ = set.of(s1);
+    final Set<T> $ = set.copy(s1);
     $.addAll(s2);
     return $;
   }
   @SafeVarargs public static <T> Set<T> union(final Collection<T> ts, final Collection<T> ...tss) {
-    final Set<T> $ = set.of(ts);
+    final Set<T> $ = set.copy(ts);
     for (Collection<T> s: tss)
       $.addAll(s);
     return $;

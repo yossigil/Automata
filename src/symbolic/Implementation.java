@@ -1,7 +1,7 @@
 package symbolic;
 
-import finite.NFSA;
-import finite.TikZifier;
+import automaton.NFSA;
+import automaton.TikZifier;
 import symbolic.Implementation.Σ0.Letter;
 import symbolic.Implementation.Σ0.ʘ;
 import symbolic.Implementation.Σ0.Φ;

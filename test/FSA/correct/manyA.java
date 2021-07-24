@@ -2,7 +2,7 @@ package FSA.correct;
 
 import org.junit.jupiter.api.Test;
 
-import finite.Lexer;
+import automaton.Lexer;
 
 public class manyA {
   final Lexer $ = Lexer.c('a');

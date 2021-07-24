@@ -2,7 +2,7 @@ package tikz;
 
 import org.junit.jupiter.api.Test;
 
-import finite.NFSA;
+import automaton.NFSA;
 
 @SuppressWarnings("static-method")public class existsDFSAMinimize {
   @Test void or() {

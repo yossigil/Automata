@@ -2,7 +2,7 @@ package FSA.compound;
 
 import org.junit.jupiter.api.Test;
 
-import finite.Lexer;
+import automaton.Lexer;
 
 public class Then3 {
   final Lexer abc = Lexer.c('a').Then('b').Then('c');

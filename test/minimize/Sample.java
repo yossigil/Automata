@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import finite.NFSA;
+import automaton.NFSA;
 
 public enum Sample implements Case {
   ε("", NFSA.<Character>ε()), //
@@ -17,18 +17,18 @@ public enum Sample implements Case {
   b("b", NFSA.<Character>σ('b')), //
   c("c", NFSA.<Character>σ('c')), //
   or("a|b", a.or(b)), //
-  then("ab", a.then(b)), //
+  ab("ab", a.then(b)), //
   many("a*", a.many()), //
   or$abc("a|b|c", a.or(b).or(c.NFSA())), //
-  or$many("(a|b)*", or.many()), //
+  orMany("(a|b)*", or.many()), //
   or$aba("a|b|a", a.or(b.or(a))), //
   many$aa("(a*)*", a.many().many()), //
   a$b$many("ab*", a.then(b.many())), //
-  many$ab("(ab)*", a.then(b.many())), //
+  many$ab("(ab)*", ab.many()), //
   many$many$ab("((ab)*)*", many$ab.many()), //
-  then$abc("abc", a.then(b).then(c.NFSA())), //
-  then$aba("aba", a.then(b.then(a))), //
-  aba$or$a$many("((aba)|(a))*", then$aba.or(b).many()) //
+  abc("abc", a.then(b).then(c.NFSA())), //
+  aba("aba", a.then(b.then(a))), //
+  aba$or$a$many("((aba)|(a))*", aba.or(b).many()) //
   ; //
   public static Stream<Sample> s() { return Arrays.stream(values()); }
   @Override public String toString() { return asString(); }
@@ -36,7 +36,7 @@ public enum Sample implements Case {
   private final NFSA<Character> inner;
   private final String          pattern;
   Sample(String pattern, NFSA<Character> inner) {
-    this.pattern    = pattern;
+    this.pattern = pattern;
     this.inner   = inner;
   }
   @Override public boolean accept(String input) { return Pattern.compile(pattern).matcher(input).matches(); }

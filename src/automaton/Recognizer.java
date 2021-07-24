@@ -1,4 +1,4 @@
-package finite;
+package automaton;
 
 /** Abstract recognizer of a formal language over Σ */
 interface Recognizer<Σ> { //@formatter:off

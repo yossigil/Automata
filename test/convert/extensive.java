@@ -3,7 +3,7 @@ package convert;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import finite.FSA;
+import automaton.FSA;
 import minimize.Case;
 import minimize.Sample;
 

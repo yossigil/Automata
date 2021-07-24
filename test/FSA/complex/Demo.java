@@ -2,7 +2,7 @@ package FSA.complex;
 
 import org.junit.jupiter.api.Test;
 
-import finite.Lexer;
+import automaton.Lexer;
 
 class Demo {
   final Lexer empty  = Lexer.Φ();

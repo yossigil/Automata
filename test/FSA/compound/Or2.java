@@ -2,7 +2,7 @@ package FSA.compound;
 
 import org.junit.jupiter.api.Test;
 
-import finite.Lexer;
+import automaton.Lexer;
 
 class Or2 {
   final Lexer a_b = Lexer.c('a').or(Lexer.c('b'));

@@ -2,7 +2,7 @@ package FSA.compound;
 
 import org.junit.jupiter.api.Test;
 
-import finite.Lexer;
+import automaton.Lexer;
 
 class Or3 {
   final Lexer a_b_c = Lexer.c('a').Or('b').Or('c');

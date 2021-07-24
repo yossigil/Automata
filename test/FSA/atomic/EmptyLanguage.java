@@ -2,7 +2,7 @@ package FSA.atomic;
 
 import org.junit.jupiter.api.Test;
 
-import finite.Lexer;
+import automaton.Lexer;
 
 class EmptyLanguage {
   final Lexer empty = Lexer.Φ();

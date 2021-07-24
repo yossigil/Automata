@@ -2,7 +2,7 @@ package convert;
 
 import org.junit.jupiter.api.Test;
 
-import finite.NFSA;
+import automaton.NFSA;
 
 @SuppressWarnings("static-method")public class sporadic {
   @Test void or() {

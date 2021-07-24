@@ -14,7 +14,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
-import finite.FSA;
+import automaton.FSA;
 import utils.set;
 
 @SuppressWarnings("static-method") //

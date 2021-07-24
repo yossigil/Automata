@@ -1,4 +1,6 @@
-package finite;
+package automaton;
+
+import static java.util.stream.Collectors.toSet;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -14,8 +16,8 @@ import utils.val;
 public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
 
  /** Data: Set of accepting states */ public final Set<Q> ζ = empty.Set();
-  FSA() { }
-  /** Data: Initial state */ public Q q0 = new Q(); 
+  FSA(automaton.Q q0) { this.q0 = q0;}
+  /** Data: Initial state */ public final Q q0; 
   /** Data: Current state  */ Q q;
   /** Data: Instance number */ final int n = ++N;
   /** Data: Instance counter */ static int N;
@@ -29,26 +31,28 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
         "\t " + val.show("q0", q0) + " (initial state)\n" + //
         "\t " + val.show("Q", Q) + " (all states)\n" + //
         "\t " + val.show("Q'$", QQ()) + " (reachable states)\n" + //
-        "\t " + val.show("Q\\Q'$", set.minus(Q,QQ())) + " (unreachable states)\n" + //
+        "\t " + val.show("Q\\Q'$", set.minus(Q, QQ())) + " (unreachable states)\n" + //
         "\t " + val.show("ζ", ζ) + "  (accepting states)\n" + //
         "\t " + val.show("Q\\ζ", set.minus(Q, ζ)) + " (rejecting states)\n" + //
         "\t " + val.show("q", q) + " (current state)\n" + //
         super.toString()//
     ;
   }
-  /** Factory: creates an immutable instance */
-  public static <Σ> FSA<Σ>.Builder builder() {
-    return new FSA<Σ>().new Builder();
+  /** Factory: creates an immutable instance 
+   * @param q2 */
+  public static <Σ> FSA<Σ>.Builder builder(automaton.Q q0) {
+    return new FSA<Σ>(q0).new Builder();
   }
   class Builder extends Δ<Σ>.Builder {
-    FSA<Σ> build() { super.build(); if (q0 == null) q0 = new Q();
+    FSA<Σ> build() {
+      super.build();
       assert !Σ.contains(null);
-    return FSA.this; }
+      return FSA.this;
+    }
     Builder δ(Q from, Σ σ, Q to) { super.δ(from, σ, to); return this; }
     Builder ζ(final Q ¢) { ζ.add(¢); return this; }
     Builder ζ(Set<? extends Q> ¢) { ζ.addAll(¢); return this; }
     Builder ζ(final FSA<?> ¢) { ζ.addAll(¢.ζ); return this; }
-    Builder q0(Q ¢) { q0 = ¢; return this; }
     @Override Set<Q> Q() { return set.union(super.Q(), ζ, Set.of(q0)); }
     @Override Builder Δ(Δ<Σ> ¢) { super.Δ(¢); return this; }
     @Override Builder Δ(Map<Q, Map<Σ, Q>> ¢) { super.Δ(¢); return this; }
@@ -57,11 +61,15 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
    * 
    * @return the set of states, in the order they were encountered */
   protected final Set<Q> dfs(final Consumer<Q> c) {
-    assert q0 != null;
+    final Set<Q> $ = dfs(c, q0), visited = set.copy($);
+    for (Q q : Q) if (visited.add(q)) dfs(c, q);
+    return $;
+  }
+  private Set<automaton.Q> dfs(final Consumer<Q> c, automaton.Q q02) {
     return new XDFS<Q>() {
       @Override public Collection<Q> neighbours(final Q ¢) { return FSA.this.neighbours(¢); }
       @Override public Q visit(final Q ¢) { c.accept(¢); return ¢; }
-    }.dfs(q0);
+    }.dfs(q02);
   }
   /** Inspector: Set of all reachable states */
   public Set<Q> QQ() {
@@ -69,7 +77,14 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
     dfs(λ -> $.add(λ));
     return $;
   }
-  abstract class External { FSA<Σ> self() {return FSA.this; } }
+  Set<String> labels(final Q from, final Q to) {
+    return stream.ify(Δ.get(from))//
+        .filter(e -> e.getValue() == to)//
+        .map(e -> e.getKey()) //
+        .map(σ -> σ == null ? "*" : σ + "")//
+        .collect(toSet());
+  }
+  protected abstract class External { FSA<Σ> self() { return FSA.this; } }
   public String TikZ() {
     return TikZ.of(this);
   }

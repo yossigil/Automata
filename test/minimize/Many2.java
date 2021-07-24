@@ -2,8 +2,8 @@ package minimize;
 
 import org.junit.jupiter.api.Test;
 
-import finite.FSA;
-import finite.Lexer;
+import automaton.FSA;
+import automaton.Lexer;
 public class Many2 {
   final FSA<Character> dfsa = Lexer.c('a').Then('b').many().DFSA().minimal();
   {

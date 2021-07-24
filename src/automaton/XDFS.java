@@ -1,4 +1,4 @@
-package finite;
+package automaton;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;

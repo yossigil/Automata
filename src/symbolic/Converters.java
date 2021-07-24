@@ -1,6 +1,6 @@
 package symbolic;
 
-import finite.NFSA;
+import automaton.NFSA;
 
 interface Converters {
   NFSA<Character> fsa();

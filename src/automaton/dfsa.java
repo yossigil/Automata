@@ -1,4 +1,4 @@
-package finite;
+package automaton;
 
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
@@ -9,9 +9,9 @@ import java.util.stream.Stream;
 
 import utils.empty;
 
-public enum into {
+public enum dfsa {
   ;
-  static <Σ> FSA<Σ> FSA(NFSA<Σ> ¢) {
+  static <Σ> FSA<Σ> of(NFSA<Σ> ¢) {
     return ¢.new External() {
       final Set<? extends STATE<Σ>> ss = new DFS<STATE<Σ>>() {}.dfs(This().s0);
       Stream<? extends STATE<Σ>> ss() { return ss.stream(); }
@@ -20,8 +20,7 @@ public enum into {
         for (final var s : ss) code.put(s, new Q());
       }
       FSA<Σ> FSA() {
-        return FSA.<Σ>builder()//
-            .q0(q0())//
+        return FSA.<Σ>builder(q0())//
             .ζ(ζ()) //
             .Δ(map()) //
             .build();

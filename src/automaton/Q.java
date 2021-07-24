@@ -1,4 +1,4 @@
-package finite;
+package automaton;
 
 public class Q {
   static int count = -1;

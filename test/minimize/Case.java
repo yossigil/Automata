@@ -1,10 +1,14 @@
 package minimize;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-import finite.FSA;
-import finite.NFSA;
+import org.junit.jupiter.api.Test;
+
+import automaton.FSA;
+import automaton.NFSA;
 
 public interface Case {
   NFSA<Character> inner();
@@ -13,11 +17,11 @@ public interface Case {
   default NFSA<Character> NFSA() { return inner(); }
   default FSA<Character> DFSA() { return inner().DFSA(); }
   default FSA<Character> minimal() { return DFSA().minimal(); }
-  default NFSA<Character> then(Case other) {return then(other.inner()); }
-  default NFSA<Character> then(NFSA<Character> other) {return inner().then(other); }
-  default NFSA<Character> or(Case other) {return or(other.inner()); }
-  default NFSA<Character> or(NFSA<Character> other) {return inner().or(other); }
-  default NFSA<Character> many() {return inner().many();}
+  default NFSA<Character> then(Case other) { return then(other.inner()); }
+  default NFSA<Character> then(NFSA<Character> other) { return inner().then(other); }
+  default NFSA<Character> or(Case other) { return or(other.inner()); }
+  default NFSA<Character> or(NFSA<Character> other) { return inner().or(other); }
+  default NFSA<Character> many() { return inner().many(); }
   default String asString() { return String.format("/%s/ (%s)", pattern(), name()); }
   boolean accept(String input);
   default void show() {
@@ -29,11 +33,11 @@ public interface Case {
     System.out.println(minimal());
     System.out.println("\\begin{tikzpicture}");
     System.out.println("\\matrix{%");
-    System.out.println("\\node{NFSA of /" + this + "/}\\\\");
+    System.out.println("\\node{NFSA of \\verb+" + this + "+};\\\\");
     System.out.println(NFSA().TikZ() + "\\\\");
-    System.out.println("\\node{DFSA of /" + this + "/}\\\\");
+    System.out.println("\\node{DFSA of \\verb+" + this + "+};\\\\");
     System.out.println(DFSA().TikZ() + "\\\\");
-    System.out.println("\\node{Minimal DFSA of /" + this + "/}\\\\");
+    System.out.println("\\node{Minimal DFSA of \\verb+" + this + "+};\\\\");
     System.out.println(DFSA().minimal().TikZ() + "\\\\");
     System.out.println("};");
     System.out.println("\\end{tikzpicture}\n");
@@ -82,4 +86,12 @@ public interface Case {
       "acba", "bcbb", "ccbc", //
       "acca", "bccb", "cccc", //
   };
+  @SuppressWarnings("static-method") class TEST {
+    @Test public void count() {
+      assertEquals(inputs.length, 1 + 3 + 9 + 27 + 81);
+    }
+    @Test public void unique() {
+      assertEquals(inputs().distinct().count(), inputs().count());
+    }
+  }
 }
