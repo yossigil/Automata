@@ -24,6 +24,6 @@ public class ZoomABA {
   @Test void aaa() { assert !dfsa.run("aaa"); }
   @Test void bbb() { assert !dfsa.run("bbb"); }
   @Test void abababa() { assert !dfsa.run("abababa"); }
+  @Test void abaaba() { assert dfsa.run("abaaba"); }
   @Test void ababab() { assert !dfsa.run("ababab"); }
-  @Test void abaaba() { assert dfsa.run("abababa"); }
 }

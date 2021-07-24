@@ -3,13 +3,13 @@ package minimize;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-public class ZoomAB {
-  static final Sample $ = Sample.ab;
+public class ZoomA {
+  final Sample $ = Sample.a;
   {
     $.show();
   }
   @Nested class NFSA {
-    final automaton.NFSA<Character> $ = ZoomAB.$.NFSA();
+    final automaton.NFSA<Character> $ = ZoomA.this.$.NFSA();
     @Test public void ε() { assert !$.run(""); }
     @Test public void a() { assert !$.run("a"); }
     @Test public void b() { assert !$.run("b"); }
@@ -42,8 +42,8 @@ public class ZoomAB {
     @Test public void bbba() { assert !$.run("bbba"); }
     @Test public void bbbb() { assert !$.run("bbbb"); }
   }
-  static class DFSA {
-    final automaton.FSA<Character> $ = ZoomAB.$.DFSA();
+  @Nested class DFSA {
+    final automaton.FSA<Character> $ = ZoomA.this.$.DFSA();
     @Test public void ε() { assert !$.run(""); }
     @Test public void a() { assert !$.run("a"); }
     @Test public void b() { assert !$.run("b"); }
@@ -76,11 +76,8 @@ public class ZoomAB {
     @Test public void bbba() { assert !$.run("bbba"); }
     @Test public void bbbb() { assert !$.run("bbbb"); }
   }
-  static class MDFSA {
-    {
-      ZoomAB.$.show();
-    }
-    final automaton.FSA<Character> $ = ZoomAB.$.minimal();
+  @Nested class MDFSA {
+    final automaton.FSA<Character> $ = ZoomA.this.$.minimal();
     @Test public void ε() { assert !$.run(""); }
     @Test public void a() { assert !$.run("a"); }
     @Test public void b() { assert !$.run("b"); }
