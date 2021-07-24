@@ -10,9 +10,14 @@ public interface Case {
   NFSA<Character> inner();
   String name();
   String pattern();
-  default FSA<Character> NFSA() { return inner(); }
+  default NFSA<Character> NFSA() { return inner(); }
   default FSA<Character> DFSA() { return inner().DFSA(); }
   default FSA<Character> minimal() { return DFSA().minimal(); }
+  default NFSA<Character> then(Case other) {return then(other.inner()); }
+  default NFSA<Character> then(NFSA<Character> other) {return inner().then(other); }
+  default NFSA<Character> or(Case other) {return or(other.inner()); }
+  default NFSA<Character> or(NFSA<Character> other) {return inner().or(other); }
+  default NFSA<Character> many() {return inner().many();}
   default String asString() { return String.format("/%s/ (%s)", pattern(), name()); }
   boolean accept(String input);
   default void show() {
@@ -33,7 +38,7 @@ public interface Case {
     System.out.println("};");
     System.out.println("\\end{tikzpicture}\n");
   }
-  public static Stream<String> inputs() { return Arrays.stream(inputs); }
+  static Stream<String> inputs() { return Arrays.stream(inputs); }
   String[] inputs = { // All strings of length up 4
       "", //
       "a", "b", "c", //

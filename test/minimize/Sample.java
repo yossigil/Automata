@@ -16,25 +16,23 @@ public enum Sample implements Case {
   a("a", NFSA.<Character>σ('a')), //
   b("b", NFSA.<Character>σ('b')), //
   c("c", NFSA.<Character>σ('c')), //
-  or("a|b", NFSA.<Character>σ('a').or(b.inner)), //
-  then("ab", a.inner.then(b.inner)), //
-  many("a*", a.inner.many()), //
-  or$abc("a|b|c", a.inner.or(b.inner.or(c.inner))), //
-  or$aba("a|b|a", a.inner.or(b.inner.or(a.inner))), //
-  many$aa("(a*)*", a.inner.many().many()), //
-  a$b$many("ab*", a.inner.then(b.inner.many())), //
-  many$ab("(ab)*", a.inner.then(b.inner).many()), //
-  many$many$ab("((ab)*)*", many$ab.inner.many()), //
-  then$abc("abc", a.inner.then(b.inner).then(c.inner)), //
-  then$aba("aba", a.inner.then(b.inner).then(a.inner)), //
-  // ʘ$or$a(".|a", ʘ.inner.or(a.inner)), //
-//  ʘ$then$a(".a", ʘ.inner.then(a.inner)), //
-  /// ʘ$many$then$a(".*a", ʘ.inner.many().then(a.inner)), //
-//  b$ʘ$many$then$a("b.*a", b.inner.then(ʘ.inner.many().then(c.inner))), //
-  aba$or$a$many("((aba)|(a))*", then$aba.inner.or(b.inner).many()), //
+  or("a|b", a.or(b)), //
+  then("ab", a.then(b)), //
+  many("a*", a.many()), //
+  or$abc("a|b|c", a.or(b).or(c.NFSA())), //
+  or$many("(a|b)*", or.many()), //
+  or$aba("a|b|a", a.or(b.or(a))), //
+  many$aa("(a*)*", a.many().many()), //
+  a$b$many("ab*", a.then(b.many())), //
+  many$ab("(ab)*", a.then(b.many())), //
+  many$many$ab("((ab)*)*", many$ab.many()), //
+  then$abc("abc", a.then(b).then(c.NFSA())), //
+  then$aba("aba", a.then(b.then(a))), //
+  aba$or$a$many("((aba)|(a))*", then$aba.or(b).many()) //
   ; //
   public static Stream<Sample> s() { return Arrays.stream(values()); }
   @Override public String toString() { return asString(); }
+  @Override public String pattern() { return pattern; }
   private final NFSA<Character> inner;
   private final String          pattern;
   Sample(String pattern, NFSA<Character> inner) {
@@ -57,5 +55,4 @@ public enum Sample implements Case {
       pairs().forEach(e -> e.getKey().minimal().run(e.getValue()));
     }
   }
-  public String pattern() { return pattern; }
 }

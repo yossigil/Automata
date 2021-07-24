@@ -33,14 +33,14 @@ public class Cartesean {
         dynamicTest("Q contains ζ", () -> assertTrue(¢.Q.containsAll(¢.ζ)))//
     ));
   }
-  @TestFactory Stream<? super DynamicTest> automata() {
+  @TestFactory Stream<? super DynamicTest> structure() {
     return Stream.of(//
         dynamicContainer("DFSA", Sample.s().map(s -> test(s + "", s.NFSA()))), //
         dynamicContainer("DFSA", Sample.s().map(s -> test(s + "", s.DFSA()))), //
         dynamicContainer("DFSA (minimial)", Sample.s().map(s -> test(s + "", s.minimal())))//
     );
   }
-  @TestFactory Stream<? super DynamicTest> runs() {
+  @TestFactory Stream<? super DynamicTest> correctness() {
     return Sample.s().map(makeTest());
   }
   private DynamicTest test(String input, Executable x) { return dynamicTest("'" + input + "'", x); }
