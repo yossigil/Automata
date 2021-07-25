@@ -76,6 +76,7 @@ public class ZoomA {
     @Test public void bbba() { assert !$.run("bbba"); }
     @Test public void bbbb() { assert !$.run("bbbb"); }
   }
+
   @Nested class MDFSA {
     final automaton.FSA<Character> $ = ZoomA.this.$.MDFSA();
     @Test public void ε() { assert !$.run(""); }
