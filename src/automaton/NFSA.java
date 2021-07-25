@@ -72,7 +72,7 @@ public class NFSA<Σ> extends FSA<Σ> { //@formatter:off
       super.build();
       for (Q q : Q) ε.putIfAbsent(q, empty.Set());
       for (Q q : Q) Δ.putIfAbsent(q, empty.Map());
-      s0= new State<Σ>(NFSA.this,q0); 
+      s0 = new State<Σ>(NFSA.this, q0);
       assert !Σ.contains(null);
       return NFSA.this;
     }
