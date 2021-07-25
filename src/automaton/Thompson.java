@@ -17,7 +17,7 @@ enum Thompson {
     return NFSA.<Σ>builder($).ζ(a1).ζ(a2).ε($, a1.q0).ε($, a1.q0).build();
   }
   static <Σ> NFSA<Σ> many(NFSA<Σ> a) {
-    final var $ = NFSA.<Σ>builder(a.q0).ε(a.q0, a.q0).ζ(a.q0).Δ(a);
+    final var $ = NFSA.<Σ>builder(a.q0).ε(a.q0, a.q0).ζ(a.q0).Δ(a).ε(a);
     for (final Q q : a.ζ) $.ε(q, $.q0());
     return $.build();
   }

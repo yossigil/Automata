@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import automaton.FSA;
 
 public class ZoomManyAB {
-  final FSA<Character> $ = Sample.many$ab.minimal();
+  final FSA<Character> $ = Sample.many$ab.MDFSA();
   {
     Sample.many$ab.show();
   }

@@ -80,7 +80,7 @@ public class ZoomAB {
     {
       ZoomAB.$.show();
     }
-    final automaton.FSA<Character> $ = ZoomAB.$.minimal();
+    final automaton.FSA<Character> $ = ZoomAB.$.MDFSA();
     @Test public void ε() { assert !$.run(""); }
     @Test public void a() { assert !$.run("a"); }
     @Test public void b() { assert !$.run("b"); }

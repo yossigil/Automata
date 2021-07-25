@@ -72,10 +72,10 @@ enum minimal {
             .build();
       }
       Map<Q, Map<Σ, Q>> mapEncode(Map<Q, Map<Σ, Q>> m) {
-        return stream.ify(m).collect(toMap(x -> x.getKey(), x -> encode(x.getValue())));
+        return stream.map(m).collect(toMap(x -> x.getKey(), x -> encode(x.getValue())));
       }
       Map<Σ, Q> encode(Map<Σ, Q> m) {
-        return stream.ify(m).collect(toMap(x -> x.getKey(), x -> encode(x.getValue())));
+        return stream.map(m).collect(toMap(x -> x.getKey(), x -> encode(x.getValue())));
       }
       Q encode(Q ¢) { return encoding.get(equivalence.get(¢)); }
       Set<Q> setEncode(Set<Q> ¢) { return ¢.isEmpty() ? ¢ : set.of(encode(set.pick(¢))); }

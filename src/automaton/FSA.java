@@ -78,7 +78,7 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
     return $;
   }
   Set<String> labels(final Q from, final Q to) {
-    return stream.ify(Δ.get(from))//
+    return stream.map(Δ.get(from))//
         .filter(e -> e.getValue() == to)//
         .map(e -> e.getKey()) //
         .map(σ -> σ == null ? "*" : σ + "")//

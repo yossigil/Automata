@@ -52,7 +52,7 @@ public enum Sample implements Case {
       pairs().forEach(e -> e.getKey().DFSA().run(e.getValue()));
     }
     @Test public void runAllMinimals() {
-      pairs().forEach(e -> e.getKey().minimal().run(e.getValue()));
+      pairs().forEach(e -> e.getKey().MDFSA().run(e.getValue()));
     }
   }
 }

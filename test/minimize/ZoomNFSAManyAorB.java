@@ -81,7 +81,7 @@ class ZoomDFSAManyAorB {
 
 
 class ZoomMinimialManyAorB {
-  final FSA<Character> $ = Sample. many$ab.minimal();
+  final FSA<Character> $ = Sample. many$ab.MDFSA();
   {
    Sample. many$ab.show();
   }

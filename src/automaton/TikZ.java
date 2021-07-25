@@ -15,6 +15,7 @@ public enum TikZ {
   static <Σ> String of(FSA<Σ> ¢) {
     return ¢.new External() {
       {
+        tex.memo.put(null, "\\text{undefined}");
         new Object() {
           int ordinal = -1;
           String next() {
@@ -44,6 +45,10 @@ public enum TikZ {
           @Override protected String traverse() { self().dfs(q -> render(q)); return this + ""; }
           void render(Q from) { render(from, self().neighbours(from)); }
           void render(Q from, Collection<Q> to) {
+            if (to.isEmpty()) {
+              printf("\t %s; %% lonely node \n", tikz(from));
+              return;
+            }
             Set<Q> seen = empty.Set();
             for (final Q q : to) if (seen.add(q)) render(from, q);
           }
@@ -76,22 +81,25 @@ public enum TikZ {
       }
       String description() {
         return String.format("\\node{%s};", new TeXifier() {
+          void line(String s1, String s2, String s3) {
+            printf(" %s & = \\scriptsize %s & \\scriptsize %s \\\\\n", s1, s3, s2);
+          }
           {
-            printf("\\begin{tabular}{rll}\n");
+            printf("\\begin{tabularx}{0.6\\textwidth}{lXX}\n");
             printf("\\multicolumn3c{FSA \\#$%d$/$%d$ = $\\langle\\Sigma,Q, q_0,\\zeta,\\Delta\\rangle$}\\\\\n",
                 self().n, FSA.N);
-            printf(" %s & %s & (%s) \\\\\n", "$\\Sigma$", tex.show(self().Σ), "alphabet");//
-            printf(" %s & %s & (%s) \\\\\n", "$Q$", tex.show(self().Q), "set of all states"); //
-            printf(" %s & %s & (%s) \\\\\n", "$q_0$", tex.show(self().q0), "initial state"); //
-            printf(" %s &%s & (%s) \\\\\n", "$Q'$", tex.show(self().QQ()), "reachable states"); //
-            printf(" %s &%s & (%s) \\\\\n", "$Q\\setminus Q'$", tex.show(set.minus(self().Q, self().QQ())),
-                "unreachable states"); //
-            printf(" %s &%s & (%s) \\\\\n", "$\\zeta$", tex.show(self().ζ), "accepting states"); //
-            printf(" %s & %s &(%s) \\\\\n", "$Q\\setminus \\zeta$", tex.show(set.minus(self().Q, self().ζ)),
-                "rejectging states"); //
-            printf(" %s & %s &(%s) \\\\\n", "$\\Delta$", tex.show(self().Δ), "transition table"); //
-            printf(" %s &%s & (%s) \\\\\n", "$q$", tex.show(self().q), "current state"); //
-            printf("\\end{tabular}\n");
+            line("$\\Sigma$", "alphabet", tex.show(self().Σ));//
+            line("$Q$", "set of all states", tex.show(self().Q)); //
+            line("$q_0$", "initial state", tex.show(self().q0)); //
+            line("$\\zeta$", "accepting states", tex.show(self().ζ)); //
+            line("$\\Delta$", "transition table", tex.showMap(self()));
+            line("$q$", "current state", tex.show(self().q)); //
+            line("$Q'$", "reachable states", tex.show(self().QQ())); //
+            line("$Q\\setminus Q'$", "unreachable states", tex.show(set.minus(self().Q, self().QQ()))); //
+            line("$Q\\setminus \\zeta$", "rejecting states", tex.show(set.minus(self().Q, self().ζ))); //
+            if (self() instanceof NFSA)
+              line("$\\varepsilon$", "$\\varepsilon$ transitions", tex.showMapSet(((NFSA<Σ>) self()).ε));
+            printf("\\end{tabularx}\n");
           }
         });
       }

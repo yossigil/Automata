@@ -16,7 +16,7 @@ public interface Case {
   String pattern();
   default NFSA<Character> NFSA() { return inner(); }
   default FSA<Character> DFSA() { return inner().DFSA(); }
-  default FSA<Character> minimal() { return DFSA().minimal(); }
+  default FSA<Character> MDFSA() { return DFSA().minimal(); }
   default NFSA<Character> then(Case other) { return then(other.inner()); }
   default NFSA<Character> then(NFSA<Character> other) { return inner().then(other); }
   default NFSA<Character> or(Case other) { return or(other.inner()); }
@@ -25,12 +25,12 @@ public interface Case {
   default String asString() { return String.format("/%s/ (%s)", pattern(), name()); }
   boolean accept(String input);
   default void show() {
-    System.out.println("NFSA");
-    System.out.println(NFSA());
-    System.out.println("DFSA");
-    System.out.println(DFSA());
-    System.out.println("DFSA (minimal)}");
-    System.out.println(minimal());
+//    System.out.println("NFSA");
+//    System.out.println(NFSA());
+//    System.out.println("DFSA");
+//    System.out.println(DFSA());
+//    System.out.println("DFSA (minimal)}");
+//    System.out.println(minimal());
     System.out.println("\\begin{tikzpicture}");
     System.out.println("\\matrix[ampersand replacement=\\&]{%");
     System.out.println("\\node{NFSA of \\verb+" + this + "+};\\\\");

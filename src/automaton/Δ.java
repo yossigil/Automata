@@ -2,6 +2,7 @@ package automaton;
 
 import static java.util.stream.Collectors.toSet;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,7 +13,18 @@ import utils.empty;
 
 enum stream {
   ;
-  static <K, V> Stream<Entry<K, V>> ify(Map<K, V> ¢) { return ¢.entrySet().stream(); }
+  static <K, V> Stream<Entry<K, V>> map(Map<K, V> ¢) { return ¢.entrySet().stream(); }
+  static <K1, K2> Stream<Entry<K1, K2>> mapOfSets(Map<K1, Set<K2>> m) {
+    return stream.map(m).flatMap(//
+        e -> e.getValue().stream()//
+            .map(ee -> new SimpleEntry<>(e.getKey(), ee)));
+  }
+  static <K1, K2, V> Stream<Entry<K1, Entry<K2, V>>> mapOfMaps(Map<K1, Map<K2, V>> m) {
+    return stream.map(m).flatMap(//
+        e -> stream.map(e.getValue())//
+            .map(ee -> new SimpleEntry<>(e.getKey(), //
+                new SimpleEntry<>(ee.getKey(), ee.getValue()))));
+  }
 }
 
 /** An immutable transition table, complete function from {@code Q} x {@code Σ}
@@ -26,6 +38,7 @@ abstract class Δ<Σ> { // @formatter:off
   /** Data: Sink state */ static final Q SINK = null;
   /** Data: All states used, SINK excluded */  public final Set<Q> Q = empty.Set();
   /** Data: All letters used, ANY excluded */  public final Set<Σ> Σ = empty.Set();
+  public Stream<Entry<Q,Entry<Σ,Q>>> δ() { return stream.mapOfMaps(this.Δ); }
   /** Inspector: the main transition function */ // @formatter:on 
   protected Q δ(final Q q, final Σ σ) {
     if (q == SINK) return SINK; // Starting at the sink, must end in the sink
@@ -42,6 +55,7 @@ abstract class Δ<Σ> { // @formatter:off
       Δ.get(from).put(σ, to);
       return this;
     }
+    // TODO: BUG HERE; why two versions? One at least must be wrong
     /** Modifier: copy a full transition table */
     Builder Δ(final Δ<Σ> Δ) {
       for (Q q : Δ.Q) //
@@ -52,8 +66,8 @@ abstract class Δ<Σ> { // @formatter:off
     }
     /** Modifier: copy a full transition table */
     Builder Δ(final Map<Q, Map<Σ, Q>> m) {
-      stream.ify(m)//
-          .forEach(e -> stream.ify(e.getValue())//
+      stream.map(m)//
+          .forEach(e -> stream.map(e.getValue())//
               .forEach(ee -> δ(e.getKey(), ee.getKey(), ee.getValue())));
       return this;
     }
@@ -89,7 +103,7 @@ abstract class Δ<Σ> { // @formatter:off
     return Δ.get(¢).values();
   }
   Set<String> labels(final Q from, final Q to) {
-    return stream.ify(Δ.get(from))//
+    return stream.map(Δ.get(from))//
         .filter(e -> e.getValue() == to)//
         .map(e -> e.getKey()).map(Object::toString).collect(toSet());
   }

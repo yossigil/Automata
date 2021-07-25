@@ -11,14 +11,14 @@ public class extensive {
   @ParameterizedTest void nothing(Case c) {
   }
   @EnumSource(Sample.class)
-  @ParameterizedTest void terminates(Case ¢) { ¢.minimal(); }
+  @ParameterizedTest void terminates(Case ¢) { ¢.MDFSA(); }
   @EnumSource(Sample.class)
-  @ParameterizedTest void twice(Case ¢) { ¢.minimal().minimal(); }
+  @ParameterizedTest void twice(Case ¢) { ¢.MDFSA().minimal(); }
   @EnumSource(Sample.class)
-  @ParameterizedTest void thrice(Case ¢) { ¢.minimal().minimal(); }
+  @ParameterizedTest void thrice(Case ¢) { ¢.MDFSA().minimal(); }
   @EnumSource(Sample.class)
   @ParameterizedTest void compare(Case c) {
-    FSA<Character> b = c.minimal();
+    FSA<Character> b = c.MDFSA();
     for (String input : Case.inputs)//
       if (c.NFSA().run(input)) //
         assert b.run(input) : "Minimize(" + c + ") fails to accept '" + input + "'";
