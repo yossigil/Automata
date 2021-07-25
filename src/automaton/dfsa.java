@@ -33,7 +33,7 @@ public enum dfsa {
       Map<Σ, Q> map(STATE<Σ> ¢) {
         return This().Σ.stream().collect(toMap(σ->σ, σ->encode(¢.δ(σ))));
       }
-      Set<? extends Q> ζ() { return ss().filter(s -> s.ζ()).map(s -> encode(s)).collect(toSet()); }
+      Set<Q> ζ() { return ss().filter(s -> s.ζ()).map(s -> encode(s)).collect(toSet()); }
     }.FSA();
   }
 }
