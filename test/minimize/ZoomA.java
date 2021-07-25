@@ -11,10 +11,10 @@ public class ZoomA {
   @Nested class NFSA {
     final automaton.NFSA<Character> $ = ZoomA.this.$.NFSA();
     @Test public void ε() { assert !$.run(""); }
-    @Test public void a() { assert !$.run("a"); }
+    @Test public void a() { assert $.run("a"); }
     @Test public void b() { assert !$.run("b"); }
     @Test public void aa() { assert !$.run("aa"); }
-    @Test public void ab() { assert $.run("ab"); }
+    @Test public void ab() { assert !$.run("ab"); }
     @Test public void ba() { assert !$.run("ba"); }
     @Test public void bb() { assert !$.run("bb"); }
     @Test public void aaa() { assert !$.run("aaa"); }
@@ -45,10 +45,10 @@ public class ZoomA {
   @Nested class DFSA {
     final automaton.FSA<Character> $ = ZoomA.this.$.DFSA();
     @Test public void ε() { assert !$.run(""); }
-    @Test public void a() { assert !$.run("a"); }
+    @Test public void a() { assert $.run("a"); }
     @Test public void b() { assert !$.run("b"); }
     @Test public void aa() { assert !$.run("aa"); }
-    @Test public void ab() { assert $.run("ab"); }
+    @Test public void ab() { assert !$.run("ab"); }
     @Test public void ba() { assert !$.run("ba"); }
     @Test public void bb() { assert !$.run("bb"); }
     @Test public void aaa() { assert !$.run("aaa"); }
@@ -79,10 +79,10 @@ public class ZoomA {
   @Nested class MDFSA {
     final automaton.FSA<Character> $ = ZoomA.this.$.MDFSA();
     @Test public void ε() { assert !$.run(""); }
-    @Test public void a() { assert !$.run("a"); }
+    @Test public void a() { assert $.run("a"); }
     @Test public void b() { assert !$.run("b"); }
     @Test public void aa() { assert !$.run("aa"); }
-    @Test public void ab() { assert $.run("ab"); }
+    @Test public void ab() { assert !$.run("ab"); }
     @Test public void ba() { assert !$.run("ba"); }
     @Test public void bb() { assert !$.run("bb"); }
     @Test public void aaa() { assert !$.run("aaa"); }
