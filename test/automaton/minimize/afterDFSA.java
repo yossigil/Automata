@@ -1,7 +1,7 @@
 package automaton.minimize;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import automaton.NFSA;
 

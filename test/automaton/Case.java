@@ -1,8 +1,5 @@
 package automaton;
 
-import automaton.FSA;
-import automaton.NFSA;
-
 public interface Case {
   NFSA<Character> inner();
   String name();

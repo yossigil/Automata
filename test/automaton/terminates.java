@@ -1,9 +1,7 @@
 package automaton;
 
 
-import org.junit.Test;
-
-import automaton.NFSA;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("static-method") public class terminates {
   static class Empty {

@@ -1,7 +1,7 @@
 package automaton.instances.compound;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import automaton.NFSA;
 

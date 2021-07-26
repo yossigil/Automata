@@ -1,9 +1,8 @@
 package automaton;
-
+import utils.empty;
 import java.util.Set;
 
 import utils.TeXifier;
-import utils.empty;
 
 public abstract class TikZifier extends TeXifier {
   public final String $() { return wrap(traverse()); }

@@ -1,9 +1,7 @@
 package automaton;
 
 
-import org.junit.Test;
-
-import automaton.Lexer;
+import org.junit.jupiter.api.Test;
 
 class Demo {
   final Lexer empty  = Lexer.Φ();

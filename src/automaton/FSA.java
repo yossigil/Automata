@@ -1,5 +1,5 @@
 package automaton;
-
+import utils.val;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.Collection;
@@ -11,7 +11,6 @@ import java.util.function.Consumer;
 
 import utils.empty;
 import utils.set;
-import utils.val;
 
 public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
 

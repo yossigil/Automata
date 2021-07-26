@@ -1,7 +1,7 @@
 package automaton.compound;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import automaton.Lexer;
 

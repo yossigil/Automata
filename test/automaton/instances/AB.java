@@ -1,7 +1,7 @@
 package automaton.instances;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
 
 import automaton.minimize.Sample;

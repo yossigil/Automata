@@ -1,6 +1,5 @@
 package automaton;
-
-import utils.set;
+import utils.empty;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collection;
@@ -8,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import utils.TeXifier;
-import utils.empty;
+import utils.set;
 
 public enum TikZ {
   ;

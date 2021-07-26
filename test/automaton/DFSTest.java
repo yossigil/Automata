@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 @SuppressWarnings("static-method")public class DFSTest {

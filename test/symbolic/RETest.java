@@ -3,11 +3,7 @@ package symbolic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
-
-import symbolic.Atomic;
-import symbolic.Atoms;
-import symbolic.RE;
+import org.junit.jupiter.api.Test;
 
 public class RETest {
   final RE ε           = Atoms.ε;
