@@ -52,7 +52,7 @@ public enum TikZ {
             Set<Q> seen = empty.Set();
             for (final Q q : to) if (seen.add(q)) render(from, q);
           }
-          boolean edge(Q from, Q to) { return self().Δ.get(from).containsKey(to); }
+          boolean edge(Q from, Q to) { return self().Δ.get(from).values().contains(to); }
           final Set<Q> elaborated = empty.Set();
           String elaborate(Q from, Q to) { return to == from ? ",loop" : !edge(to, from) ? "" : ",bend left"; }
           void render(Q from, Q to) {
