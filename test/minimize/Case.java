@@ -32,7 +32,7 @@ public interface Case {
 //    System.out.println("DFSA (minimal)}");
 //    System.out.println(minimal());
     System.out.println("\\begin{tikzpicture}");
-    System.out.println("\\matrix[ampersand replacement=\\&]{%");
+    System.out.println("\\matrix[anchor=north,ampersand replacement=\\&]{%");
     System.out.println("\\node{NFSA of \\verb+" + this + "+};\\\\");
     System.out.println(NFSA().TikZ() + "\\\\");
     System.out.println("\\node{DFSA of \\verb+" + this + "+};\\\\");
