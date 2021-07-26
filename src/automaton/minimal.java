@@ -63,16 +63,13 @@ enum minimal {
       /** Data: A newly created state representing each p∈P */
       final Map<Set<Q>, Q> encoding    = P.stream().collect(toMap(λ -> λ, λ -> new Q()));
       /** Data: Equivalence class, p∈P, associated with recoded state */
-      final Map<Q, Set<Q>> equivalence = equivalence();
-      /** Only service */
-      FSA<Σ> minimize() {
-        return FSA.<Σ>builder(encode(self().q0))//
-            .ζ(setEncode(self().ζ))//
-            .Δ(mapEncode(self().Δ))//
-            .build();
-      }
-      Map<Q, Map<Σ, Q>> mapEncode(Map<Q, Map<Σ, Q>> m) {
-        return stream.map(m).collect(toMap(x -> x.getKey(), x -> encode(x.getValue())));
+      final Map<Q, Set<Q>> equivalence = equivalence(); 
+      final FSA<Σ>         $           = FSA.<Σ>builder(encode(self().q0))               //
+          .ζ(setEncode(self().ζ))                                                        //
+          .Δ(mapEncode())                                                        //
+          .build();
+      Map<Q, Map<Σ, Q>> mapEncode() {
+        return P.stream().map(s -> set.pick(s)).collect(toMap(x -> encode(x), x -> encode(self().Δ.get(x))));
       }
       Map<Σ, Q> encode(Map<Σ, Q> m) {
         return stream.map(m).collect(toMap(x -> x.getKey(), x -> encode(x.getValue())));
@@ -89,6 +86,6 @@ enum minimal {
       Map<Q, Set<Q>> equivalence() {
         return collect(invert());
       }
-    }.minimize();
+    }.$;
   }
 }
