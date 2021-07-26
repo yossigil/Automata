@@ -1,27 +1,67 @@
 package minimize;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import automaton.FSA;
 
 public class ZoomManyA {
-  final FSA<Character> dfsa = Sample.many.MDFSA();
+  final Sample $ = Sample.many;
   {
-    Sample.many.show();
+    $.show();
   }
-  @Test void aaaa() { assert dfsa.run("aaaa"); }
-  @Test void aaa() { assert dfsa.run("aaa"); }
-  @Test void aa() { assert dfsa.run("aa"); }
-  @Test void aababab() { assert !dfsa.run("aababab"); }
-  @Test void aab() { assert !dfsa.run("aab"); }
-  @Test void a() { assert dfsa.run("a"); }
-  @Test void abababa() { assert !dfsa.run("abababa"); }
-  @Test void abb() { assert !dfsa.run("abb"); }
-  @Test void ac() { assert !dfsa.run("ac"); }
-  @Test void accept0() { assert dfsa.run(""); }
-  @Test void ba() { assert !dfsa.run("ba"); }
-  @Test void b() { assert !dfsa.run("b"); }
-  @Test void bbb() { assert !dfsa.run("bbb"); }
-  @Test void c() { assert !dfsa.run("c"); }
-  @Test void cb() { assert !dfsa.run("cb"); }
+  @Nested class DFSA {
+    FSA<Character> $ = ZoomManyA.this.$.DFSA();
+    @Test void aaaa() { assert $.run("aaaa"); }
+    @Test void aaa() { assert $.run("aaa"); }
+    @Test void aa() { assert $.run("aa"); }
+    @Test void aababab() { assert !$.run("aababab"); }
+    @Test void aab() { assert !$.run("aab"); }
+    @Test void a() { assert $.run("a"); }
+    @Test void abababa() { assert !$.run("abababa"); }
+    @Test void abb() { assert !$.run("abb"); }
+    @Test void ac() { assert !$.run("ac"); }
+    @Test void accept0() { assert $.run(""); }
+    @Test void ba() { assert !$.run("ba"); }
+    @Test void b() { assert !$.run("b"); }
+    @Test void bbb() { assert !$.run("bbb"); }
+    @Test void c() { assert !$.run("c"); }
+    @Test void cb() { assert !$.run("cb"); }
+  }
+  @Nested class NFSA {
+    FSA<Character> $ = ZoomManyA.this.$.NFSA();
+    @Test void aaaa() { assert $.run("aaaa"); }
+    @Test void aaa() { assert $.run("aaa"); }
+    @Test void aa() { assert $.run("aa"); }
+    @Test void aababab() { assert !$.run("aababab"); }
+    @Test void aab() { assert !$.run("aab"); }
+    @Test void a() { assert $.run("a"); }
+    @Test void abababa() { assert !$.run("abababa"); }
+    @Test void abb() { assert !$.run("abb"); }
+    @Test void ac() { assert !$.run("ac"); }
+    @Test void accept0() { assert $.run(""); }
+    @Test void ba() { assert !$.run("ba"); }
+    @Test void b() { assert !$.run("b"); }
+    @Test void bbb() { assert !$.run("bbb"); }
+    @Test void c() { assert !$.run("c"); }
+    @Test void cb() { assert !$.run("cb"); }
+  }
+  @Nested class MDFSA {
+    FSA<Character> $ = ZoomManyA.this.$.MDFSA();
+    @Test void aaaa() { assert $.run("aaaa"); }
+    @Test void aaa() { assert $.run("aaa"); }
+    @Test void aa() { assert $.run("aa"); }
+    @Test void aababab() { assert !$.run("aababab"); }
+    @Test void aab() { assert !$.run("aab"); }
+    @Test void a() { assert $.run("a"); }
+    @Test void abababa() { assert !$.run("abababa"); }
+    @Test void abb() { assert !$.run("abb"); }
+    @Test void ac() { assert !$.run("ac"); }
+    @Test void accept0() { assert $.run(""); }
+    @Test void ba() { assert !$.run("ba"); }
+    @Test void b() { assert !$.run("b"); }
+    @Test void bbb() { assert !$.run("bbb"); }
+    @Test void c() { assert !$.run("c"); }
+    @Test void cb() { assert !$.run("cb"); }
+  }
 }
