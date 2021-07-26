@@ -6,6 +6,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import utils.empty;
@@ -24,7 +25,6 @@ enum minimal {
           W.remove(A);
           for (final Σ σ : self().Σ) {
             final Set<Q> X = X(A, σ);
-            if (X.isEmpty()) continue;
             final Set<Set<Q>> newP = empty.Set();
             for (final Set<Q> Y : P) {
               final Set<Q> intersection = set.intersection(Y, X);
@@ -63,16 +63,36 @@ enum minimal {
       /** Data: A newly created state representing each p∈P */
       final Map<Set<Q>, Q> encoding    = P.stream().collect(toMap(λ -> λ, λ -> new Q()));
       /** Data: Equivalence class, p∈P, associated with recoded state */
-      final Map<Q, Set<Q>> equivalence = equivalence(); 
+      final Map<Q, Set<Q>> equivalence = equivalence();
       final FSA<Σ>         $           = FSA.<Σ>builder(encode(self().q0))               //
           .ζ(setEncode(self().ζ))                                                        //
-          .Δ(mapEncode())                                                        //
+          .Δ(mapEncode())                                                                //
           .build();
       Map<Q, Map<Σ, Q>> mapEncode() {
-        return P.stream().map(s -> set.pick(s)).collect(toMap(x -> encode(x), x -> encode(self().Δ.get(x))));
+        return P.stream().filter(x -> !x.isEmpty()).map(s -> verify(s)).map(s -> set.pick(s)).map(q -> verify(q)).collect(toMap(x -> encode(x), x -> encode(self().Δ.get(x))));
+      }
+      Set<Q> verify(Set<Q> q) {
+        assert q != null;
+        assert  !q.isEmpty();
+        return q;
+      }
+      Q verify(Q q) {
+        assert q != null: P+"\n"+self();
+        assert encode(q) != null;
+        assert self().Δ.get(q) != null;
+        assert q != null;
+        return q;
       }
       Map<Σ, Q> encode(Map<Σ, Q> m) {
-        return stream.map(m).collect(toMap(x -> x.getKey(), x -> encode(x.getValue())));
+        Function<? super Entry<Σ, Q>, ? extends Σ> keyMapper   = x -> x.getKey();
+        Function<? super Entry<Σ, Q>, ? extends Q> valueMapper = x -> encode(x.getValue());
+        return stream.map(m).map(e -> {
+          assert e != null;
+          assert e.getKey() != null : "He";
+          assert e.getValue() != null : "He";
+          return e;
+        }).//
+        collect(toMap(keyMapper, valueMapper));
       }
       Q encode(Q ¢) { return encoding.get(equivalence.get(¢)); }
       Set<Q> setEncode(Set<Q> ¢) { return ¢.isEmpty() ? ¢ : set.of(encode(set.pick(¢))); }
