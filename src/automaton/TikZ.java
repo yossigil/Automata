@@ -92,7 +92,7 @@ public enum TikZ {
             line("$Q$", "set of all states", tex.show(self().Q)); //
             line("$q_0$", "initial state", tex.show(self().q0)); //
             line("$\\zeta$", "accepting states", tex.show(self().ζ)); //
-            line("$\\Delta$", "transition table", tex.showMap(self()));
+            line("$\\Delta$", "transition table", tex.show(self()));
             line("$q$", "current state", tex.show(self().q)); //
             line("$Q'$", "reachable states", tex.show(self().QQ())); //
             line("$Q\\setminus Q'$", "unreachable states", tex.show(set.minus(self().Q, self().QQ()))); //
