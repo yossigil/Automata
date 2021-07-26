@@ -14,10 +14,10 @@ public enum dfsa {
   static <Σ> FSA<Σ> of(NFSA<Σ> ¢) {
     return ¢.new External() {
       final Set<? extends STATE<Σ>> ss = new DFS<STATE<Σ>>() {}.dfs(This().s0);
-      Stream<? extends STATE<Σ>> ss() { return ss.stream(); }
+      Stream<? extends STATE<Σ>> ss() { return ss.stream().filter(s->s.valid()); }
       final Map<STATE<Σ>, Q> code = empty.Map();
       {
-        for (final var s : ss) code.put(s, new Q());
+        ss().forEach(s -> code.put(s, new Q()));
       }
       FSA<Σ> FSA() {
         return FSA.<Σ>builder(q0())//
@@ -31,7 +31,7 @@ public enum dfsa {
         return ss().collect(toMap(s->encode(s),s ->map(s)));
       }
       Map<Σ, Q> map(STATE<Σ> ¢) {
-        return This().Σ.stream().collect(toMap(σ->σ, σ->encode(¢.δ(σ))));
+        return This().Σ.stream().filter(σ->¢.δ(σ).valid()).collect(toMap(σ->σ, σ->encode(¢.δ(σ))));
       }
       Set<Q> ζ() { return ss().filter(s -> s.ζ()).map(s -> encode(s)).collect(toSet()); }
     }.FSA();
