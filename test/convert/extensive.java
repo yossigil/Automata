@@ -5,6 +5,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import automaton.FSA;
 import minimize.Case;
+import minimize.Input;
 import minimize.Sample;
 
 @SuppressWarnings("static-method") //
@@ -14,7 +15,7 @@ public class extensive {
   @EnumSource(Sample.class)
   @ParameterizedTest void compare(Case c) {
     FSA<Character> dfsa = c.DFSA();
-    for (String input : Case.inputs)//
+    for (String input : Input.inputs)//
       if (c.NFSA().run(input)) //
         assert dfsa.run(input) : "DFSA(" + c + ") fails to accept '" + input + "'";
       else//
@@ -24,7 +25,7 @@ public class extensive {
   @ParameterizedTest void fixedPoint(Case s) {
     FSA<Character> dfsa = s.DFSA();
     FSA<Character> c    = dfsa.minimal();
-    for (String input : Case.inputs)//
+    for (String input : Input.inputs)//
       if (dfsa.run(input)) //
         assert c.run(input) : "Minimize(DFSA(" + s + ")) fails to accept '" + input + "'";
       else//

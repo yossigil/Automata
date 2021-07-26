@@ -64,7 +64,7 @@ public class Pairs {
   }
   private DynamicContainer byInput(Sample s, FSA<Character> nfsa) {
     return dynamicContainer(s + "", //
-        Case.inputs().map(//
+        Input.inputs().map(//
             input -> nfsa.run(input) ? test(input + "+", accept(s, input)) : 
               test(input + "-", reject(s, input)))
         );
@@ -109,9 +109,9 @@ public class Pairs {
     return () -> assertTrue(c.NFSA().run(input));
   }
   private Stream<String> rejects(Case c) {
-    return Case.inputs().filter(input -> !c.accept(input));
+    return Input.inputs().filter(input -> !c.accept(input));
   }
   private Stream<String> accepts(Case c) {
-    return Case.inputs().filter(input -> c.accept(input));
+    return Input.inputs().filter(input -> c.accept(input));
   }
 }

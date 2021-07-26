@@ -42,7 +42,7 @@ public enum Sample implements Case {
   @Override public boolean accept(String input) { return Pattern.compile(pattern).matcher(input).matches(); }
   @Override public NFSA<Character> inner() { return inner; }
   public static Stream<SimpleEntry<Sample, String>> pairs() {
-    return s().flatMap((Sample x) -> Case.inputs().map(v -> new SimpleEntry<Sample, String>(x, v)));
+    return s().flatMap((Sample x) -> Input.inputs().map(v -> new SimpleEntry<Sample, String>(x, v)));
   }
   @SuppressWarnings("static-method") static class RunAllPairs {
     @Test public void runAllNFSAs() {

@@ -1,17 +1,19 @@
-package minimize;
+package automaton.intances;
 
+
+import org.junit.Test;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 
 import automaton.FSA;
+import minimize.Sample;
 
-public class ZoomNFSAManyAorB {
+public class ManyAOrB {
   final Sample $ = Sample.many$ab;
   {
     $.show();
   }
   @Nested class NFSA {
-    final FSA<Character> $ = ZoomNFSAManyAorB.this.$.NFSA();
+    final FSA<Character> $ = ManyAOrB.this.$.NFSA();
     @Test public void a() { assert $.run("a"); }
     @Test public void b() { assert $.run("b"); }
     @Test public void aa() { assert $.run("aa"); }
@@ -44,7 +46,7 @@ public class ZoomNFSAManyAorB {
     @Test public void bbbb() { assert $.run("bbbb"); }
   }
   @Nested class DFSA {
-    final FSA<Character> $ = ZoomNFSAManyAorB.this.$.NFSA();
+    final FSA<Character> $ = ManyAOrB.this.$.NFSA();
     @Test public void a() { assert $.run("a"); }
     @Test public void b() { assert $.run("b"); }
     @Test public void aa() { assert $.run("aa"); }
@@ -77,7 +79,7 @@ public class ZoomNFSAManyAorB {
     @Test public void bbbb() { assert $.run("bbbb"); }
   }
   @Nested class MDFSA {
-    final FSA<Character> $ = ZoomNFSAManyAorB.this.$.MDFSA();
+    final FSA<Character> $ = ManyAOrB.this.$.MDFSA();
     @Test public void a() { assert $.run("a"); }
     @Test public void b() { assert $.run("b"); }
     @Test public void aa() { assert $.run("aa"); }

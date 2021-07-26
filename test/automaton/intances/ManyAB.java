@@ -1,16 +1,17 @@
-package minimize;
+package automaton.intances;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import automaton.FSA;
+import minimize.Sample;
 
-public class ZoomManyAB {
+public class ManyAB {
   final Sample $ = Sample.many$ab;
   {
     Sample.many$ab.show();
   }  @Nested class NFSA {
-    final FSA<Character> $ = ZoomManyAB.this.$.NFSA();
+    final FSA<Character> $ = ManyAB.this.$.NFSA();
     @Test public void ε() { assert $.run(""); }
     @Test public void a() { assert !$.run("a"); }
     @Test public void b() { assert !$.run("b"); }
@@ -46,7 +47,7 @@ public class ZoomManyAB {
 
 
   @Nested class DFSA {
-    final FSA<Character> $ = ZoomManyAB.this.$.DFSA();
+    final FSA<Character> $ = ManyAB.this.$.DFSA();
     @Test public void ε() { assert $.run(""); }
     @Test public void a() { assert !$.run("a"); }
     @Test public void b() { assert !$.run("b"); }
@@ -81,7 +82,7 @@ public class ZoomManyAB {
   }
 
   @Nested class MDFSA {
-    final FSA<Character> $ = ZoomManyAB.this.$.MDFSA();
+    final FSA<Character> $ = ManyAB.this.$.MDFSA();
     @Test public void ε() { assert $.run(""); }
     @Test public void a() { assert !$.run("a"); }
     @Test public void b() { assert !$.run("b"); }

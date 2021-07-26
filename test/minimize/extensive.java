@@ -19,7 +19,7 @@ public class extensive {
   @EnumSource(Sample.class)
   @ParameterizedTest void compare(Case c) {
     FSA<Character> b = c.MDFSA();
-    for (String input : Case.inputs)//
+    for (String input : Input.inputs)//
       if (c.NFSA().run(input)) //
         assert b.run(input) : "Minimize(" + c + ") fails to accept '" + input + "'";
       else//
@@ -27,7 +27,7 @@ public class extensive {
   }
   @EnumSource(Sample.class)
   @ParameterizedTest void NFSA(Case c) {
-    for (String input : Case.inputs)//
+    for (String input : Input.inputs)//
       if (c.accept(input)) //
         assert c.NFSA().run(input) : "NFSA(" + c + ") fails to accept '" + input + "'";
       else//

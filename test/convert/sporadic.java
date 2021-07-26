@@ -1,6 +1,5 @@
 package convert;
 
-import org.junit.jupiter.api.Test;
 
 import automaton.NFSA;
 

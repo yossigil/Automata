@@ -11,7 +11,7 @@ import utils.empty;
 
 public enum tex {
   ;
-  private static final int ETC = 7;
+  private static final int   ETC  = 7;
   static Map<Object, String> memo = empty.Map();
   static String show(Object ¢) { return "$" + info(¢) + "$"; }
   static String show(Set<?> os) {
@@ -19,7 +19,7 @@ public enum tex {
     if (os.size() <= ETC) return String.format("$\\{ %s \\}$", tex.elements(os));
     return String.format("$\\{ %s,\\ldots_{+%d} \\}$", tex.elements(os), os.size() - ETC);
   }
-  static <Σ> String showMap(Δ<Σ> fsa) {
+  static <Σ> String show(Δ<Σ> fsa) {
     Set<Entry<Q, Entry<Σ, Q>>> δ = fsa.δ().collect(toSet());
     if (δ.isEmpty()) return "$\\emptyset$";
     if (δ.size() <= ETC) return String.format("$\\{ %s \\}$", tex.maps(δ));
@@ -43,17 +43,16 @@ public enum tex {
     if (memo.containsKey(x)) return memo.get(x);
     return x + "";
   }
-  static <Σ> String showMapSet(Map<Q, Set<Q>> ¢) { 
+  static <Σ> String showMapSet(Map<Q, Set<Q>> ¢) {
     if (¢.isEmpty()) return "$\\emptyset$";
     if (¢.size() <= ETC) return String.format("$\\{ %s \\}$", tex.mapSet(¢));
     return String.format("$\\{ %s,\\ldots_{+%d} \\}$", tex.mapSet(¢), ¢.size() - ETC);
   }
-  static String mapSet(Map<Q, Set<Q>> m) { 
-    return stream.map(m).map(e -> process(e)).collect(joining(","));
+  static String mapSet(Map<Q, Set<Q>> m) {
+    return stream.map(m).filter(e -> !e.getValue().isEmpty()).map(e -> process(e)).collect(joining(","));
   }
-  static String process(Entry<Q, Set<Q>> qs) { 
+  static String process(Entry<Q, Set<Q>> qs) {
     return String.format("%s \\rightarrow \\{ %s \\}", //
-        info(qs.getKey()),
-        qs.getValue().stream().map(x -> info(x)).collect(joining(",")));
+        info(qs.getKey()), qs.getValue().stream().map(x -> info(x)).collect(joining(",")));
   }
 }

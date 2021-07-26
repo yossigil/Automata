@@ -32,7 +32,7 @@ public enum Complex implements Case {
   @Override public boolean accept(String input) { return Pattern.compile(pattern).matcher(input).matches(); }
   @Override public NFSA<Character> inner() { return inner; }
   public static Stream<SimpleEntry<Complex, String>> pairs() {
-    return s().flatMap((Complex x) -> Case.inputs().map(v -> new SimpleEntry<Complex, String>(x, v)));
+    return s().flatMap((Complex x) -> Input.inputs().map(v -> new SimpleEntry<Complex, String>(x, v)));
   }
   @SuppressWarnings("static-method") static class RunAllPairs {
     @Test public void runAllNFSAs() {

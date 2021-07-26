@@ -1,20 +1,23 @@
-package minimize;
+package automaton.intances;
 
+
+import org.junit.Test;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 
-public class ZoomAB {
-  final Sample $ = Sample.ab;
+import minimize.Sample;
+
+public class A {
+  final Sample $ = Sample.a;
   {
     $.show();
   }
   @Nested class NFSA {
-    final automaton.NFSA<Character> $ = ZoomAB.this.$.NFSA();
+    final automaton.NFSA<Character> $ = A.this.$.NFSA();
     @Test public void ε() { assert !$.run(""); }
-    @Test public void a() { assert !$.run("a"); }
+    @Test public void a() { assert $.run("a"); }
     @Test public void b() { assert !$.run("b"); }
     @Test public void aa() { assert !$.run("aa"); }
-    @Test public void ab() { assert $.run("ab"); }
+    @Test public void ab() { assert !$.run("ab"); }
     @Test public void ba() { assert !$.run("ba"); }
     @Test public void bb() { assert !$.run("bb"); }
     @Test public void aaa() { assert !$.run("aaa"); }
@@ -43,12 +46,12 @@ public class ZoomAB {
     @Test public void bbbb() { assert !$.run("bbbb"); }
   }
   @Nested class DFSA {
-    final automaton.FSA<Character> $ = ZoomAB.this.$.DFSA();
+    final automaton.FSA<Character> $ = A.this.$.DFSA();
     @Test public void ε() { assert !$.run(""); }
-    @Test public void a() { assert !$.run("a"); }
+    @Test public void a() { assert $.run("a"); }
     @Test public void b() { assert !$.run("b"); }
     @Test public void aa() { assert !$.run("aa"); }
-    @Test public void ab() { assert $.run("ab"); }
+    @Test public void ab() { assert !$.run("ab"); }
     @Test public void ba() { assert !$.run("ba"); }
     @Test public void bb() { assert !$.run("bb"); }
     @Test public void aaa() { assert !$.run("aaa"); }
@@ -76,13 +79,14 @@ public class ZoomAB {
     @Test public void bbba() { assert !$.run("bbba"); }
     @Test public void bbbb() { assert !$.run("bbbb"); }
   }
+
   @Nested class MDFSA {
-    final automaton.FSA<Character> $ = ZoomAB.this.$.MDFSA();
+    final automaton.FSA<Character> $ = A.this.$.MDFSA();
     @Test public void ε() { assert !$.run(""); }
-    @Test public void a() { assert !$.run("a"); }
+    @Test public void a() { assert $.run("a"); }
     @Test public void b() { assert !$.run("b"); }
     @Test public void aa() { assert !$.run("aa"); }
-    @Test public void ab() { assert $.run("ab"); }
+    @Test public void ab() { assert !$.run("ab"); }
     @Test public void ba() { assert !$.run("ba"); }
     @Test public void bb() { assert !$.run("bb"); }
     @Test public void aaa() { assert !$.run("aaa"); }
