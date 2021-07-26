@@ -1,6 +1,7 @@
 package convert;
 
-import org.junit.jupiter.api.Test;
+
+import org.junit.Test;
 
 import automaton.FSA;
 import automaton.Lexer;

@@ -1,6 +1,7 @@
 package FSA.complex;
 
-import org.junit.jupiter.api.Test;
+
+import org.junit.Test;
 
 import automaton.Lexer;
 

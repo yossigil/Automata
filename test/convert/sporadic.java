@@ -1,6 +1,8 @@
 package convert;
 
 
+import org.junit.Test;
+
 import automaton.NFSA;
 
 @SuppressWarnings("static-method")public class sporadic {

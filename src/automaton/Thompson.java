@@ -3,10 +3,10 @@ package automaton;
 enum Thompson {
   ;
   static <Σ> NFSA<Σ> or(NFSA<Σ> a1, final NFSA<Σ> a2) {
-    final Q q0 = new Q();
-    return NFSA.<Σ>builder(q0)//
-        .ε(q0, a1.q0) //
-        .ε(q0, a2.q0) //
+    final Q $ = new Q();
+    return NFSA.<Σ>builder($)//
+        .ε($, a1.q0) //
+        .ε($, a2.q0) //
         .Δ(a1).Δ(a2) //
         .ε(a1).ε(a2) //
         .ζ(a1).ζ(a2) //

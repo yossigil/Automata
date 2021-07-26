@@ -1,6 +1,6 @@
 package automaton;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 class Deterministic {
   final Lexer a = Lexer.c('a');

@@ -6,7 +6,6 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import utils.empty;
@@ -71,28 +70,26 @@ enum minimal {
       Map<Q, Map<Σ, Q>> mapEncode() {
         return P.stream().filter(x -> !x.isEmpty()).map(s -> verify(s)).map(s -> set.pick(s)).map(q -> verify(q)).collect(toMap(x -> encode(x), x -> encode(self().Δ.get(x))));
       }
-      Set<Q> verify(Set<Q> q) {
-        assert q != null;
-        assert  !q.isEmpty();
-        return q;
+      Set<Q> verify(Set<Q> ¢) {
+        assert ¢ != null;
+        assert  !¢.isEmpty();
+        return ¢;
       }
-      Q verify(Q q) {
-        assert q != null: P+"\n"+self();
-        assert encode(q) != null;
-        assert self().Δ.get(q) != null;
-        assert q != null;
-        return q;
+      Q verify(Q ¢) {
+        assert ¢ != null: P+"\n"+self();
+        assert encode(¢) != null;
+        assert self().Δ.get(¢) != null;
+        assert ¢ != null;
+        return ¢;
       }
       Map<Σ, Q> encode(Map<Σ, Q> m) {
-        Function<? super Entry<Σ, Q>, ? extends Σ> keyMapper   = x -> x.getKey();
-        Function<? super Entry<Σ, Q>, ? extends Q> valueMapper = x -> encode(x.getValue());
         return stream.map(m).map(e -> {
           assert e != null;
           assert e.getKey() != null : "He";
           assert e.getValue() != null : "He";
           return e;
         }).//
-        collect(toMap(keyMapper, valueMapper));
+        collect(toMap( x -> x.getKey(),  x -> encode(x.getValue())));
       }
       Q encode(Q ¢) { return encoding.get(equivalence.get(¢)); }
       Set<Q> setEncode(Set<Q> ¢) { return ¢.isEmpty() ? ¢ : set.of(encode(set.pick(¢))); }

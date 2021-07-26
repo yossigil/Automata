@@ -20,10 +20,10 @@ public enum tex {
     return String.format("$\\{ %s,\\ldots_{+%d} \\}$", tex.elements(os), os.size() - ETC);
   }
   static <Σ> String show(Δ<Σ> fsa) {
-    Set<Entry<Q, Entry<Σ, Q>>> δ = fsa.δ().collect(toSet());
-    if (δ.isEmpty()) return "$\\emptyset$";
-    if (δ.size() <= ETC) return String.format("$\\{ %s \\}$", tex.maps(δ));
-    return String.format("$\\{ %s,\\ldots_{+%d} \\}$", tex.maps(δ), δ.size() - ETC);
+    Set<Entry<Q, Entry<Σ, Q>>> $ = fsa.δ().collect(toSet());
+    if ($.isEmpty()) return "$\\emptyset$";
+    if ($.size() <= ETC) return String.format("$\\{ %s \\}$", tex.maps($));
+    return String.format("$\\{ %s,\\ldots_{+%d} \\}$", tex.maps($), $.size() - ETC);
   }
   static <Σ> String maps(Set<Entry<Q, Entry<Σ, Q>>> δ) {
     return δ.stream().limit(ETC).map(e -> String.format("%s\\stackrel{%s}{\\rightarrow}%s", info(e.getKey()),

@@ -20,7 +20,7 @@ public class NFSA<Σ> extends FSA<Σ> { //@formatter:off
   public NFSA<Σ> or(NFSA<Σ> a2) { return Thompson.or(this, a2); }
   public NFSA<Σ> plenty() { return Thompson.plenty(this); }
   public NFSA<Σ> then(NFSA<Σ> a2) { return Thompson.then(this, a2); }
-  public static <Σ> NFSA<Σ>.Builder builder(Q q) { return new NFSA<Σ>(q).new Builder(); }
+  public static <Σ> NFSA<Σ>.Builder builder(Q ¢) { return new NFSA<Σ>(¢).new Builder(); }
   abstract class External extends FSA<Σ>.External { NFSA<Σ> This() { return NFSA.this; } }
   //@formatter:on
   /** Factory: recognizer of a single letter */
@@ -30,8 +30,8 @@ public class NFSA<Σ> extends FSA<Σ> { //@formatter:off
   }
   /** Factory: recognizer of the empty string */
   public static <Σ> NFSA<Σ> ε() {
-    final Q q0 = new Q();
-    return NFSA.<Σ>builder(q0).ζ(q0).build();
+    final Q $ = new Q();
+    return NFSA.<Σ>builder($).ζ($).build();
   }
   /** Factory: recognizer of the empty set */
   public static <Σ> NFSA<Σ> Φ() { return NFSA.<Σ>builder(new Q()).build(); }

@@ -3,8 +3,9 @@ package automaton;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.jupiter.api.Test;
-@SuppressWarnings("static-method")public class Factories {
+import org.junit.Test;
+
+public class Factories {
   private FSA<Character> fsa;
   private FSA<Character> fsa2;
   private FSA<Character> fsa3;

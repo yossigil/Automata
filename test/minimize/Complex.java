@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import automaton.NFSA;
 public enum Complex implements Case {

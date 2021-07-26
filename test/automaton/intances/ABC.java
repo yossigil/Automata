@@ -1,7 +1,7 @@
 package automaton.intances;
 
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import automaton.FSA;
 import minimize.Sample;

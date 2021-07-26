@@ -7,7 +7,8 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+
 
 @SuppressWarnings("static-method") class DFSTest {
   static class V implements Vertex<V> {
