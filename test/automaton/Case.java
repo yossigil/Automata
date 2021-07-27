@@ -1,5 +1,7 @@
 package automaton;
 
+import utils.TeXifier;
+
 public interface Case {
   NFSA<Character> inner();
   String name();
@@ -21,15 +23,19 @@ public interface Case {
 //    System.out.println(DFSA());
 //    System.out.println("DFSA (minimal)}");
 //    System.out.println(minimal());
-    System.out.println("\\begin{tikzpicture}");
-    System.out.println("\\matrix[anchor=north,ampersand replacement=\\&]{%");
-    System.out.println("\\node{NFSA of \\verb+" + this + "+};\\\\");
-    System.out.println(NFSA().TikZ() + "\\\\");
-    System.out.println("\\node{DFSA of \\verb+" + this + "+};\\\\");
-    System.out.println(DFSA().TikZ() + "\\\\");
-    System.out.println("\\node{Minimal DFSA of \\verb+" + this + "+};\\\\");
-    System.out.println(DFSA().minimal().TikZ() + "\\\\");
-    System.out.println("};");
-    System.out.println("\\end{tikzpicture}\n");
+    System.out.println(new TeXifier() {
+      {
+        // begin("tikzpicture");
+        System.out.println("\\matrix[anchor=north,ampersand replacement=\\&]{%");
+        System.out.println("\\node{NFSA of \\verb+" + this + "+};\\\\");
+        System.out.println(NFSA().TikZ() + "\\\\");
+        System.out.println("\\node{DFSA of \\verb+" + this + "+};\\\\");
+        System.out.println(DFSA().TikZ() + "\\\\");
+        System.out.println("\\node{Minimal DFSA of \\verb+" + this + "+};\\\\");
+        System.out.println(DFSA().minimal().TikZ() + "\\\\");
+        System.out.println("};");
+       // end("tikzpicture");
+      }
+    } + "");
   }
 }
