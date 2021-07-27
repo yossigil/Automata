@@ -48,7 +48,7 @@ public class ABA {
     @Test void aaa() { assert !$.run("aaa"); }
     @Test void bbb() { assert !$.run("bbb"); }
     @Test void abababa() { assert !$.run("abababa"); }
-    @Test void abaaba() { assert $.run("abaaba"); }
+    @Test void abaaba() { assert! $.run("abaaba"); }
     @Test void ababab() { assert !$.run("ababab"); }
   }
 
@@ -57,7 +57,7 @@ public class ABA {
     @Test void ε() { assert !$.run(""); }
     @Test void ab() { assert !$.run("ab"); }
     @Test void abb() { assert !$.run("abb"); }
-    @Test void aba() { assert !$.run("aba"); }
+    @Test void aba() { assert $.run("aba"); }
     @Test void abc() { assert $.run("aba"); }
     @Test void a() { assert !$.run("a"); }
     @Test void b() { assert !$.run("b"); }
@@ -69,7 +69,7 @@ public class ABA {
     @Test void aaa() { assert !$.run("aaa"); }
     @Test void bbb() { assert !$.run("bbb"); }
     @Test void abababa() { assert !$.run("abababa"); }
-    @Test void abaaba() { assert $.run("abaaba"); }
+    @Test void abaaba() { assert !$.run("abaaba"); }
     @Test void ababab() { assert !$.run("ababab"); }
   }
 
