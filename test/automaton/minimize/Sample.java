@@ -24,7 +24,7 @@ public enum Sample implements Case {
   ab("ab", a.then(b)), //
   ba("ba", b.then(a)), //
   manyAThenManyB("a*b*", manyA.then(manyB)), //
-  many$manyAThenManyB("(a*b*)", manyAThenManyB.many()), //
+  many$manyAThenManyB("(a*b*)*", manyAThenManyB.many()), //
   abba("abba", ab.then(ba)), //
   abOrba("(ab)|(ba)", ab.or(ba)), //
   ManyAbOrBa("((ab)|(ba))*", abOrba.many()), //
@@ -38,7 +38,7 @@ public enum Sample implements Case {
   many$many$ab("((ab)*)*", many$ab.many()), //
   abc("abc", ab.then(c.NFSA())), //
   aba("aba", a.then(ba)), //
-  aba$or$a$many("((aba)|(a))*", aba.or(b).many()) //
+  aba$or$a$many("((aba)|(b))*", aba.or(b).many()) //
   ; //
   public static Stream<Sample> s() { return Arrays.stream(values()); }
   @Override public String toString() { return asString(); }
