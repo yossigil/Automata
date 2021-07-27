@@ -44,12 +44,13 @@ public enum tex {
     return x + "";
   }
   static <Σ> String showMapSet(Map<Q, Set<Q>> ¢) {
-    if (¢.isEmpty()) return "$\\emptyset$";
-    if (¢.size() <= ETC) return String.format("$\\{ %s \\}$", tex.mapSet(¢));
-    return String.format("$\\{ %s,\\ldots_{+%d} \\}$", tex.mapSet(¢), ¢.size() - ETC);
+    var $ =  stream.map(¢).filter(e -> !e.getValue().isEmpty()).collect(toSet());
+    if ($.isEmpty()) return "$\\emptyset$";
+    if ($.size() <= ETC) return String.format("$\\{ %s \\}$", tex.mapSet($));
+    return String.format("$\\{ %s,\\ldots_{+%d} \\}$", tex.mapSet($), ¢.size() - ETC);
   }
-  static String mapSet(Map<Q, Set<Q>> m) {
-    return stream.map(m).filter(e -> !e.getValue().isEmpty()).map(e -> process(e)).collect(joining(","));
+  static String mapSet(Set<Entry<Q, Set<Q>>> m) {
+    return m.stream().map(e -> process(e)).collect(joining(","));
   }
   static String process(Entry<Q, Set<Q>> qs) {
     return String.format("%s \\rightarrow \\{ %s \\}", //
