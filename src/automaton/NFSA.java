@@ -9,7 +9,7 @@ import utils.set;
 public class NFSA<Σ> extends FSA<Σ> { //@formatter:off
   /** Data: the table of ε transitions */ final Map<Q, Set<Q>> ε = empty.Map();
   /** Data: the initial state */ STATE<Σ> s0;
-  public NFSA(automaton.Q q) { super(q); }
+  public NFSA(Q q) { super(q); }
   /** Inspector: Set of outgoing transitions */  Set<Q> ε(Q ¢) { return ε.get(¢); } 
   @Override protected Set<Q> neighbours(Q ¢) { return set.union(super.neighbours(¢), ε(¢)); }
   @Override public FSA<Σ> minimal() { return DFSA().minimal(); } 
@@ -21,12 +21,12 @@ public class NFSA<Σ> extends FSA<Σ> { //@formatter:off
   public NFSA<Σ> plenty() { return Thompson.plenty(this); }
   public NFSA<Σ> then(NFSA<Σ> a2) { return Thompson.then(this, a2); }
   public static <Σ> NFSA<Σ>.Builder builder(Q ¢) { return new NFSA<Σ>(¢).new Builder(); }
-  abstract class External extends FSA<Σ>.External { NFSA<Σ> This() { return NFSA.this; } }
+  abstract class External extends FSA<Σ>.External { @Override NFSA<Σ> self() { return NFSA.this; } }
   //@formatter:on
   /** Factory: recognizer of a single letter */
   public static <Σ> NFSA<Σ> σ(Σ ¢) {
-    final Q q0 = new Q(), q1 = new Q();
-    return NFSA.<Σ>builder(q0).δ(q0, ¢, q1).ζ(q1).build();
+    final Q $ = new Q(), q1 = new Q();
+    return NFSA.<Σ>builder($).δ($, ¢, q1).ζ(q1).build();
   }
   /** Factory: recognizer of the empty string */
   public static <Σ> NFSA<Σ> ε() {
@@ -37,8 +37,8 @@ public class NFSA<Σ> extends FSA<Σ> { //@formatter:off
   public static <Σ> NFSA<Σ> Φ() { return NFSA.<Σ>builder(new Q()).build(); }
   /** Factory: recognizer of arbitrary single letter */
   public static <Σ> NFSA<Σ> ʘ() {
-    final Q q0 = new Q(), q1 = new Q();
-    return NFSA.<Σ>builder(q0).δ(q0, null, q1).ζ(q1).build();
+    final Q $ = new Q(), q1 = new Q();
+    return NFSA.<Σ>builder($).δ($, null, q1).ζ(q1).build();
   }
   //@formatter:on
   public boolean run(Iterable<Σ> w) {
@@ -46,23 +46,21 @@ public class NFSA<Σ> extends FSA<Σ> { //@formatter:off
     for (final var σ : w) s = s.δ(σ);
     return s.ζ();
   }
-  @Override Set<String> labels(Q from, Q to) {
-    final var $ = super.labels(from, to);
-    if (ε(from).contains(to)) $.add("\\varepsilon");
-    return $;
-  }
   class Builder extends FSA<Σ>.Builder {
     @Override Builder δ(Q from, Σ σ, Q to) { super.δ(from, σ, to); return this; }
     @Override Builder ζ(Q ¢) { super.ζ(¢); return this; }
     @Override Builder ζ(FSA<?> ¢) { super.ζ(¢); return this; }
+    @Override Builder ζ(Set<Q> ¢) { super.ζ(¢); return this; }
     @Override Builder Δ(Δ<Σ> ¢) { super.Δ(¢); return this; }
+    @Override Builder Δ(Map<Q, Map<Σ, Q>> ¢) { super.Δ(¢); return this; }
     /** Modifier: add a new empty transition */
     Builder ε(Q from, Q to) { ε(from).add(to); return this; }
     /** Modifier: add a new table of empty transitions */
-    Builder ε(NFSA<?> that) {
-      that.ε.keySet().stream().forEach(q -> ε(q).addAll(that.ε(q)));
+    final Builder ε(Map<Q,Set<Q>> ε) {
+      ε.keySet().stream().forEach(q -> ε(q).addAll(ε.get(q)));
       return this;
     }
+    Builder ε(NFSA<?> that) { return ε(that.ε); }
     @Override protected Set<Q> Q() {
       final var $ = set.union(super.Q(), ε.keySet());
       for (final Q q : ε.keySet()) $.addAll(ε.get(q));
@@ -88,4 +86,7 @@ public class NFSA<Σ> extends FSA<Σ> { //@formatter:off
     ;
   }
   public FSA<Σ> DFSA() { return dfsa.of(this); }
+  public NFSA<Σ> refresh() {
+    return rename.of(this);
+  }
 }

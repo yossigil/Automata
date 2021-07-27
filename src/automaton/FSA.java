@@ -50,7 +50,7 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
     }
     Builder δ(Q from, Σ σ, Q to) { super.δ(from, σ, to); return this; }
     Builder ζ(final Q ¢) { ζ.add(¢); return this; }
-    Builder ζ(Set<? extends Q> ¢) { ζ.addAll(¢); return this; }
+    Builder ζ(Set<Q> ¢) { ζ.addAll(¢); return this; }
     Builder ζ(final FSA<?> ¢) { ζ.addAll(¢.ζ); return this; }
     @Override Set<Q> Q() { return set.union(super.Q(), ζ, Set.of(q0)); }
     @Override Builder Δ(Δ<Σ> ¢) { super.Δ(¢); return this; }
@@ -76,11 +76,10 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
     dfs(λ -> $.add(λ));
     return $;
   }
-  Set<String> labels(final Q from, final Q to) {
+  Set<Σ> labels(final Q from, final Q to) {
     return stream.map(Δ.get(from))//
         .filter(e -> e.getValue() == to)//
         .map(e -> e.getKey()) //
-        .map(σ -> σ == null ? "*" : σ + "")//
         .collect(toSet());
   }
   protected abstract class External { FSA<Σ> self() { return FSA.this; } }
