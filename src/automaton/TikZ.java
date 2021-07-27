@@ -20,12 +20,12 @@ public enum TikZ {
       {
         tex.memo.put(null, "\\text{undefined}");
         var letters = new Object() {
-                      int i = 0;
-                      Character next() { return i >= LETTERS.length ? null : LETTERS[i++]; }
+                      int i = -1;
+                      Character next() { return i >= LETTERS.length ? null : LETTERS[++i]; }
                     };
         var digits  = new Object() {
-                      int i = 0;
-                      Character next() { return i >= DIGITS.length ? null : DIGITS[i++]; }
+                      int i = -1;
+                      Character next() { return i >= DIGITS.length ? null : DIGITS[++i]; }
                     };
         self().dfs(q -> tex.memo.put(q, letters.next() + ""));
         self().Σ.stream().sorted().forEach(σ -> tex.memo.put(σ, digits.next() + ""));
@@ -38,7 +38,7 @@ public enum TikZ {
           @Override protected String traverse() { self().dfs(q -> render(q)); return this + ""; }
           void render(Q from) { render(from, self().neighbours(from)); }
           void render(Q from, Collection<Q> to) {
-            if (to.isEmpty()) {
+            if (to.isEmpty() && !elaborated(from)) {
               printf("\t %s; %% lonely node \n", tikz(from));
               return;
             }
