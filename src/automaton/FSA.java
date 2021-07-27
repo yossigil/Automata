@@ -15,7 +15,7 @@ import utils.set;
 public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
 
  /** Data: Set of accepting states */ public final Set<Q> ζ = empty.Set();
-  FSA(automaton.Q q0) { this.q0 = q0;}
+  FSA(Q q0) { this.q0 = q0;}
   /** Data: Initial state */ public final Q q0; 
   /** Data: Current state  */ Q q;
   /** Data: Instance number */ final int n = ++N;
@@ -39,7 +39,7 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
   }
   /** Factory: creates an immutable instance 
    * @param q2 */
-  public static <Σ> FSA<Σ>.Builder builder(automaton.Q q0) {
+  public static <Σ> FSA<Σ>.Builder builder(Q q0) {
     return new FSA<Σ>(q0).new Builder();
   }
   class Builder extends Δ<Σ>.Builder {
@@ -64,7 +64,7 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
     for (Q q : Q) if (visited.add(q)) dfs(c, q);
     return $;
   }
-  private Set<automaton.Q> dfs(final Consumer<Q> c, automaton.Q q02) {
+  private Set<Q> dfs(final Consumer<Q> c, Q q02) {
     return new XDFS<Q>() {
       @Override public Collection<Q> neighbours(final Q ¢) { return FSA.this.neighbours(¢); }
       @Override public Q visit(final Q ¢) { c.accept(¢); return ¢; }
