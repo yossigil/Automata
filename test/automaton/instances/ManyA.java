@@ -8,7 +8,7 @@ import automaton.FSA;
 import automaton.minimize.Sample;
 
 public class ManyA {
-  final Sample $ = Sample.many;
+  final Sample $ = Sample.manyA;
   {
     $.show();
   }
