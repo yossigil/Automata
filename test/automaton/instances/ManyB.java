@@ -12,13 +12,13 @@ public class ManyB {
   }
   @Nested class NFSA {
     final automaton.NFSA<Character> $ = ManyB.this.$.NFSA();
-    @Test public void ε() { assert !$.run(""); }
+    @Test public void ε() { assert $.run(""); }
     @Test public void a() { assert !$.run("a"); }
     @Test public void b() { assert $.run("b"); }
     @Test public void aa() { assert !$.run("aa"); }
     @Test public void ab() { assert !$.run("ab"); }
     @Test public void ba() { assert !$.run("ba"); }
-    @Test public void bb() { assert !$.run("bb"); }
+    @Test public void bb() { assert $.run("bb"); }
     @Test public void aaa() { assert !$.run("aaa"); }
     @Test public void aab() { assert !$.run("aab"); }
     @Test public void aba() { assert !$.run("aba"); }
@@ -26,7 +26,7 @@ public class ManyB {
     @Test public void baa() { assert !$.run("baa"); }
     @Test public void bab() { assert !$.run("bab"); }
     @Test public void bba() { assert !$.run("bba"); }
-    @Test public void bbb() { assert !$.run("bbb"); }
+    @Test public void bbb() { assert $.run("bbb"); }
     @Test public void aaaa() { assert !$.run("aaaa"); }
     @Test public void aaab() { assert !$.run("aaab"); }
     @Test public void aaba() { assert !$.run("aaba"); }
@@ -42,17 +42,17 @@ public class ManyB {
     @Test public void bbaa() { assert !$.run("bbaa"); }
     @Test public void bbab() { assert !$.run("bbab"); }
     @Test public void bbba() { assert !$.run("bbba"); }
-    @Test public void bbbb() { assert !$.run("bbbb"); }
+    @Test public void bbbb() { assert $.run("bbbb"); }
   }
   @Nested class DFSA {
     final automaton.FSA<Character> $ = ManyB.this.$.DFSA();
-    @Test public void ε() { assert !$.run(""); }
+    @Test public void ε() { assert $.run(""); }
     @Test public void a() { assert !$.run("a"); }
     @Test public void b() { assert $.run("b"); }
     @Test public void aa() { assert !$.run("aa"); }
     @Test public void ab() { assert !$.run("ab"); }
     @Test public void ba() { assert !$.run("ba"); }
-    @Test public void bb() { assert !$.run("bb"); }
+    @Test public void bb() { assert $.run("bb"); }
     @Test public void aaa() { assert !$.run("aaa"); }
     @Test public void aab() { assert !$.run("aab"); }
     @Test public void aba() { assert !$.run("aba"); }
@@ -60,7 +60,7 @@ public class ManyB {
     @Test public void baa() { assert !$.run("baa"); }
     @Test public void bab() { assert !$.run("bab"); }
     @Test public void bba() { assert !$.run("bba"); }
-    @Test public void bbb() { assert !$.run("bbb"); }
+    @Test public void bbb() { assert $.run("bbb"); }
     @Test public void aaaa() { assert !$.run("aaaa"); }
     @Test public void aaab() { assert !$.run("aaab"); }
     @Test public void aaba() { assert !$.run("aaba"); }
@@ -76,17 +76,17 @@ public class ManyB {
     @Test public void bbaa() { assert !$.run("bbaa"); }
     @Test public void bbab() { assert !$.run("bbab"); }
     @Test public void bbba() { assert !$.run("bbba"); }
-    @Test public void bbbb() { assert !$.run("bbbb"); }
+    @Test public void bbbb() { assert $.run("bbbb"); }
   }
   @Nested class MDFSA {
     final automaton.FSA<Character> $ = ManyB.this.$.MDFSA();
-    @Test public void ε() { assert !$.run(""); }
+    @Test public void ε() { assert $.run(""); }
     @Test public void a() { assert !$.run("a"); }
     @Test public void b() { assert $.run("b"); }
     @Test public void aa() { assert !$.run("aa"); }
     @Test public void ab() { assert !$.run("ab"); }
     @Test public void ba() { assert !$.run("ba"); }
-    @Test public void bb() { assert !$.run("bb"); }
+    @Test public void bb() { assert $.run("bb"); }
     @Test public void aaa() { assert !$.run("aaa"); }
     @Test public void aab() { assert !$.run("aab"); }
     @Test public void aba() { assert !$.run("aba"); }
@@ -94,7 +94,7 @@ public class ManyB {
     @Test public void baa() { assert !$.run("baa"); }
     @Test public void bab() { assert !$.run("bab"); }
     @Test public void bba() { assert !$.run("bba"); }
-    @Test public void bbb() { assert !$.run("bbb"); }
+    @Test public void bbb() { assert $.run("bbb"); }
     @Test public void aaaa() { assert !$.run("aaaa"); }
     @Test public void aaab() { assert !$.run("aaab"); }
     @Test public void aaba() { assert !$.run("aaba"); }
@@ -110,6 +110,6 @@ public class ManyB {
     @Test public void bbaa() { assert !$.run("bbaa"); }
     @Test public void bbab() { assert !$.run("bbab"); }
     @Test public void bbba() { assert !$.run("bbba"); }
-    @Test public void bbbb() { assert !$.run("bbbb"); }
+    @Test public void bbbb() { assert $.run("bbbb"); }
   }
 }

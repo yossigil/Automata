@@ -20,7 +20,7 @@ public enum Sample implements Case {
   c("c", NFSA.<Character>σ('c')), //
   or("a|b", a.or(b)), //
   manyA("a*", a.many()), //
-  manyB("b*", a.many()), //
+  manyB("b*", b.many()), //
   ab("ab", a.then(b)), //
   ba("ab", b.then(a)), //
   manyAThenManyB("a*b*", manyA.then(manyB)), //
