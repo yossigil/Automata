@@ -10,6 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DynamicContainer;
+import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
@@ -17,46 +18,44 @@ import org.junit.jupiter.api.function.Executable;
 import automaton.minimize.Sample;
 import utils.set;
 
-@SuppressWarnings("static-method") public class Pairs {
+@SuppressWarnings("static-method") public class All {
   @TestFactory Stream<? super DynamicTest> brief() {
     return Stream.of(//
-        dynamicContainer("NFSA", Sample.s().map(s -> xtest(s, s.NFSA(), "NFSA"))), //
-        dynamicContainer("DFSA", Sample.s().map(s -> xtest(s, s.DFSA(), "DFSA"))), //
-        dynamicContainer("MDFSA", Sample.s().map(s -> xtest(s, s.MDFSA(), "MDFSA"))) //
+        dynamicContainer("Structure", structure()),
+        dynamicContainer("NFSA", Sample.s().map(s -> test(s, s.NFSA(), "NFSA"))), //
+        dynamicContainer("DFSA", Sample.s().map(s -> test(s, s.DFSA(), "DFSA"))), //
+        dynamicContainer("MDFSA", Sample.s().map(s -> test(s, s.MDFSA(), "MDFSA"))) //
     );
   }
-  @TestFactory Stream<? super DynamicTest> byCase() {
-    return Sample.s().map(makeTest());
+  @TestFactory Stream<DynamicNode> pairs() {
+    return Sample.s().map(test());
   }
-  @TestFactory Stream<? super DynamicTest> structure() {
+  Stream<DynamicNode> structure() {
     return Stream.of(//
         dynamicContainer("NFSA", Sample.s().map(s -> test(s + "", s.NFSA()))), //
         dynamicContainer("DFSA", Sample.s().map(s -> test(s + "", s.DFSA()))), //
         dynamicContainer("MDFSA", Sample.s().map(s -> test(s + "", s.MDFSA())))//
     );
   }
-  private Function<Case, DynamicContainer> makeTest() {
-    return s -> dynamicContainer(s + "", //
-        Stream.of(//
-            dynamicContainer("NFSA", //
-                Stream.of(//
-                    dynamicContainer("Accepts: ", accepts(s)//
-                        .map(input -> test(input, accept(s, input)))),
-                    dynamicContainer("Rejects: ", rejects(s)//
-                        .map(input -> test(input, reject(s, input))))//
-                )//
-            ), //
-            dynamicContainer("DFSA", Stream.of(//
-                dynamicContainer("Accepts: ", //
-                    accepts(s).map(input -> test(input, () -> assertTrue(s.DFSA().run(input))))), //
-                dynamicContainer("Rejects: ", //
-                    rejects(s).map(input -> test(input, () -> assertFalse(s.DFSA().run(input))))))), //
-            dynamicContainer("Minimized DFSA", Stream.of(//
-                dynamicContainer("Accepts: ", accepts(s)//
-                    .map(input -> test(input, () -> assertTrue(s.MDFSA().run(input))))), //
-                dynamicContainer("Rejects: ", rejects(s)//
-                    .map(input -> test(input, () -> assertFalse(s.MDFSA().run(input)))))))//
-        ));
+  private String accept(Case s, String input) { return String.format("%s rejects '%s'", s, input); }
+  private String reject(Case s, String input) { return String.format("%s accepts '%s'", s, input); }
+  private boolean run(FSA<Character> c, String input) { return c.run(input); }
+  private Function<Case, DynamicContainer> test() {
+    return s -> dynamicContainer(s + "", Stream.of(//
+        test(x -> x.NFSA(), s, "NFSA"), //
+        test(x -> x.DFSA(), s, "DFSA"), //
+        test(x -> x.MDFSA(), s, "Minimized DFSA")));
+  }
+  private DynamicContainer test(Function<Case, FSA<Character>> MDFSA, Case s, String extracted) {
+    return dynamicContainer(extracted, Stream.of(//
+        dynamicContainer("Accepts: ", accepts(s)//
+            .map(input -> test(input, () -> {
+              assert run(MDFSA.apply(s), input) : accept(s, input);
+            }))), //
+        dynamicContainer("Rejects: ", rejects(s)//
+            .map(input -> test(input, () -> {
+              assert !run(MDFSA.apply(s), input) : reject(s, input);
+            })))));
   }
   private DynamicTest test(String input, Executable x) { return dynamicTest("'" + input + "'", x); }
   private DynamicContainer test(String name, FSA<?> ¢) {
@@ -73,17 +72,14 @@ import utils.set;
         dynamicTest("Q contains ζ", () -> assertTrue(¢.Q.containsAll(¢.ζ)))//
     ));
   }
-  private static Executable accept(Case c, String input) {
-    return () -> assertTrue(c.NFSA().run(input));
-  }
   private static Stream<String> accepts(Case c) {
     return Input.inputs().filter(input -> c.accept(input));
   }
-  private static Executable reject(Case c, String input) {
-    return () -> assertFalse(c.NFSA().run(input));
-  }
   private static Stream<String> rejects(Case c) {
     return Input.inputs().filter(input -> !c.accept(input));
+  }
+  private static DynamicTest test(Case c, FSA<Character> f, String name) {
+    return dynamicTest(c + "", () -> test(c, String.format("%s(%s)", c, name), f));
   }
   private static void test(Case c, String name, FSA<Character> f) {
     for (String input : Input.inputs)//
@@ -91,8 +87,5 @@ import utils.set;
         assert f.run(input) : String.format("%s rejects '%s'", name, input);
       else//
         assert !f.run(input) : String.format("%s accepts '%s'", name, input);
-  }
-  private static DynamicTest xtest(Case c, FSA<Character> f, String name) {
-    return dynamicTest(c + "", () -> test(c, String.format("%s(%s)", c, name), f));
   }
 }
