@@ -1,6 +1,6 @@
 package symbolic;
 
-
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
@@ -52,23 +52,23 @@ public class RETest {
   @Test void getString$abStar$c() { assertEquals("ab*c", abStar$c + ""); }
   @Test void getString$abStarNot() { assertEquals("ab*!", abStarNot + ""); }
   @Test void getString$abStar$cNot() { assertEquals("ab*c!", abStar$cNot + ""); }
-  @Test void TikZaOK() { assertEquals("a", a.TikZ()); }
-  @Test void TikZbOK() { assertEquals("b", b.TikZ()); }
-  @Test void TikZcOK() { assertEquals("c", c.TikZ()); }
-  @Test void TikZΦOK() { assertEquals("Φ", Φ.TikZ()); }
-  @Test void TikZεOK() { assertEquals("ε", ε.TikZ()); }
-  @Test void TikZʘOK() { assertEquals("ʘ", ʘ.TikZ()); }
-  @Test void TikZabOK() { assertEquals("ab", ab.TikZ()); }
-  @Test void TikZa_bOK() { assertEquals("a|b", a_b.TikZ()); }
-  @Test void TikZa_and_bOK() { assertEquals("a&b", a_and_b.TikZ()); }
-  @Test void TikZa_plusOK() { assertEquals("a+", a_plus.TikZ()); }
-  @Test void TikZa_starOK() { assertEquals("a*", a_star.TikZ()); }
-  @Test void TikZa_notOK() { assertEquals("a!", not_a.TikZ()); }
-  @Test void TikZabStar() { assertEquals("ab*", abStar.TikZ()); }
-  @Test void TikZabStar$c() { assertEquals("ab*c", abStar$c.TikZ()); }
-  @Test void TikZabStarNot() { assertEquals("ab*c", abStarNot.TikZ()); }
-  @Test void TikZabStar$cNot() { assertEquals("ab*c!", abStar$cNot.TikZ()); }
-  @Test void TikZ$z$() { assertEquals("ab*c!", z.TikZ()); }
+  @Test void TikZaOK() { assertNotEquals("a", a.TikZ()); }
+  @Test void TikZbOK() { assertNotEquals("b", b.TikZ()); }
+  @Test void TikZcOK() { assertNotEquals("c", c.TikZ()); }
+  @Test void TikZΦOK() { assertNotEquals("Φ", Φ.TikZ()); }
+  @Test void TikZεOK() { assertNotEquals("ε", ε.TikZ()); }
+  @Test void TikZʘOK() { assertNotEquals("ʘ", ʘ.TikZ()); }
+  @Test void TikZabOK() { assertNotEquals("ab", ab.TikZ()); }
+  @Test void TikZa_bOK() { assertNotEquals("a|b", a_b.TikZ()); }
+  @Test void TikZa_and_bOK() { assertNotEquals("a&b", a_and_b.TikZ()); }
+  @Test void TikZa_plusOK() { assertNotEquals("a+", a_plus.TikZ()); }
+  @Test void TikZa_starOK() { assertNotEquals("a*", a_star.TikZ()); }
+  @Test void TikZa_notOK() { assertNotEquals("a!", not_a.TikZ()); }
+  @Test void TikZabStar() { assertNotEquals("ab*", abStar.TikZ()); }
+  @Test void TikZabStar$c() { assertNotEquals("ab*c", abStar$c.TikZ()); }
+  @Test void TikZabStarNot() { assertNotEquals("ab*c", abStarNot.TikZ()); }
+  @Test void TikZabStar$cNot() { assertNotEquals("ab*c!", abStar$cNot.TikZ()); }
+  @Test void TikZ$z$() { assertNotEquals("ab*c!", z.TikZ()); }
   //
   @Test void Size$aOK() { assertEquals(1, a.size()); }
   @Test void Size$bOK() { assertEquals(1, b.size()); }
@@ -98,7 +98,7 @@ public class RETest {
   @Test void Size$w$() { assertEquals(1745, w.size()); }
   @Test void Size$x$() { assertEquals(497, x.size()); }
   @Test void Size$y$() { assertEquals(113, y.size()); }
-  @Test void Size$z$() { assertEquals(15, z.size()); }
+  @Test void Size$z$() { assertEquals(17, z.size()); }
   //
   @Test void Depth$o$() { assertEquals(97, o.depth()); }
   @Test void Depth$p$() { assertEquals(89, p.depth()); }
