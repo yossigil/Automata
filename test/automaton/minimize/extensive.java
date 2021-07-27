@@ -19,7 +19,16 @@ public class extensive {
   @EnumSource(Sample.class)
   @ParameterizedTest void thrice(Case ¢) { ¢.MDFSA().minimal(); }
   @EnumSource(Sample.class)
-  @ParameterizedTest void compare(Case c) {
+  @ParameterizedTest void DFSA(Case c) {
+    FSA<Character> b = c.DFSA();
+    for (String input : Input.inputs)//
+      if (c.NFSA().run(input)) //
+        assert b.run(input) : "DFSA(" + c + ") fails to accept '" + input + "'";
+      else//
+        assert !b.run(input) : "DFSA(" + b + ") incorrectly accepts '" + input + "'";
+  }
+  @EnumSource(Sample.class)
+  @ParameterizedTest void MDFSA(Case c) {
     FSA<Character> b = c.MDFSA();
     for (String input : Input.inputs)//
       if (c.NFSA().run(input)) //
