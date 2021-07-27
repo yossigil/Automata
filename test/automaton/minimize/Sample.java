@@ -23,8 +23,8 @@ public enum Sample implements Case {
   manyB("b*", b.many()), //
   ab("ab", a.then(b)), //
   ba("ba", b.then(a)), //
-  manyAThenManyB("a*b*", manyA.then(manyB)), //
-  many$manyAThenManyB("(a*b*)*", manyAThenManyB.many()), //
+  manyAThenManyB("(a*)(b*)", manyA.then(manyB)), //
+  manyAThenManyBmany("(a*b*)*", manyAThenManyB.many()), //
   abba("abba", ab.then(ba)), //
   abOrba("(ab)|(ba)", ab.or(ba)), //
   ManyAbOrBa("((ab)|(ba))*", abOrba.many()), //
