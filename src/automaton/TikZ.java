@@ -1,5 +1,6 @@
 package automaton;
-import utils.empty;
+
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collection;
@@ -7,34 +8,27 @@ import java.util.List;
 import java.util.Set;
 
 import utils.TeXifier;
+import utils.empty;
 import utils.set;
 
 public enum TikZ {
   ;
+  static final char[] LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+  static final char[] DIGITS  = "0123456789".toCharArray();
   static <Σ> String of(FSA<Σ> ¢) {
     return ¢.new External() {
       {
         tex.memo.put(null, "\\text{undefined}");
-        new Object() {
-          int ordinal = -1;
-          String next() {
-            return !letters.isEmpty() ? letters.remove(0) + "" : String.format("q_{%d}", ++ordinal);
-          }
-          List<Character> letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".chars()
-              .mapToObj(e -> (char) e).collect(toList());
-          {
-            self().dfs(q -> tex.memo.put(q, next()));
-          }
-        };
-        new Object() {
-          String next() {
-            return digits.isEmpty() ? null : digits.remove(0) + "";
-          }
-          List<Character> digits = "0123456789".chars().mapToObj(e -> (char) e).collect(toList());
-          {
-            self().Σ.stream().forEach(σ -> tex.memo.put(σ, next()));
-          }
-        };
+        var letters = new Object() {
+                      int i = 0;
+                      Character next() { return i >= LETTERS.length ? null : LETTERS[i++]; }
+                    };
+        var digits  = new Object() {
+                      int i = 0;
+                      Character next() { return i >= DIGITS.length ? null : DIGITS[i++]; }
+                    };
+        self().dfs(q -> tex.memo.put(q, letters.next() + ""));
+        self().Σ.stream().sorted().forEach(σ -> tex.memo.put(σ, digits.next() + ""));
       }
       @Override public String toString() {
         return String.format("%s \n\t\t\t \\pgfmatrixnextcell \n %s", description(), graph());
@@ -55,8 +49,13 @@ public enum TikZ {
           final Set<Q> elaborated = empty.Set();
           String elaborate(Q from, Q to) { return to == from ? ",loop" : !edge(to, from) ? "" : ",bend left"; }
           void render(Q from, Q to) {
-            printf("\t %s -> [\"%s\"%s] %s;\n", tikz(from), tikz(self().labels(from, to)), elaborate(from, to),
-                tikz(to));
+            printf("\t %s -> [\"%s\"%s] %s;\n", tikz(from), labels(from, to), elaborate(from, to), tikz(to));
+          }
+          String labels(Q from, Q to) {
+            Set<?>       a = self().letters(from, to);
+            List<String> $ = a.stream().map(x -> x == null ? "*" : tex.info(x)).collect(toList());
+            if (self() instanceof NFSA<?> && ((NFSA<?>) self()).ε(from).contains(to)) $.add(0, "\\varepsilon");
+            return $.stream().sorted().collect(joining(","));
           }
           String tikz(Q ¢) { return sprintf("\"${%s}$\" %s", tex.memo.get(¢), elaborate(¢)); }
           String elaborate(Q ¢) {
@@ -66,16 +65,6 @@ public enum TikZ {
             if (self().ζ.contains(¢)) $ += "accept";
             return square($);
           }
-          String tikz(final Set<String> ss) {
-            var $        = new StringBuilder();
-            var ordinary = false;
-            for (final String ¢ : ss) {
-              if (ordinary) $.append(", ");
-              else ordinary = true;
-              $.append(¢);
-            }
-            return $ + "";
-          }
         }.$();
       }
       String description() {
@@ -84,7 +73,7 @@ public enum TikZ {
             printf(" %s & = \\scriptsize %s & \\scriptsize %s \\\\\n", s1, s3, s2);
           }
           {
-            printf("\\begin{tabularx}{0.6\\textwidth}{lXX}\n");
+            printf("\\begin{tabularx}{0.6\\textwidth}{@{}r@{}XX}\n");
             printf("\\multicolumn3c{FSA \\#$%d$/$%d$ = $\\langle\\Sigma,Q, q_0,\\zeta,\\Delta\\rangle$}\\\\\n",
                 self().n, FSA.N);
             line("$\\Sigma$", "alphabet", tex.show(self().Σ));//
@@ -92,12 +81,12 @@ public enum TikZ {
             line("$q_0$", "initial state", tex.show(self().q0)); //
             line("$\\zeta$", "accepting states", tex.show(self().ζ)); //
             line("$\\Delta$", "transition table", tex.show(self()));
+            if (self() instanceof NFSA)
+              line("$\\varepsilon$", "$\\varepsilon$ transitions", tex.showMapSet(((NFSA<Σ>) self()).ε));
             line("$q$", "current state", tex.show(self().q)); //
             line("$Q'$", "reachable states", tex.show(self().QQ())); //
             line("$Q\\setminus Q'$", "unreachable states", tex.show(set.minus(self().Q, self().QQ()))); //
             line("$Q\\setminus \\zeta$", "rejecting states", tex.show(set.minus(self().Q, self().ζ))); //
-            if (self() instanceof NFSA)
-              line("$\\varepsilon$", "$\\varepsilon$ transitions", tex.showMapSet(((NFSA<Σ>) self()).ε));
             printf("\\end{tabularx}\n");
           }
         });
