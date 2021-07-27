@@ -2,7 +2,6 @@ package automaton;
 
 import static java.util.stream.Collectors.toSet;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,22 +9,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import utils.empty;
-
-enum stream {
-  ;
-  static <K, V> Stream<Entry<K, V>> map(Map<K, V> ¢) { return ¢.entrySet().stream(); }
-  static <K1, K2> Stream<Entry<K1, K2>> mapOfSets(Map<K1, Set<K2>> m) {
-    return stream.map(m).flatMap(//
-        e -> e.getValue().stream()//
-            .map(ee -> new SimpleEntry<>(e.getKey(), ee)));
-  }
-  static <K1, K2, V> Stream<Entry<K1, Entry<K2, V>>> mapOfMaps(Map<K1, Map<K2, V>> m) {
-    return stream.map(m).flatMap(//
-        e -> stream.map(e.getValue())//
-            .map(ee -> new SimpleEntry<>(e.getKey(), //
-                new SimpleEntry<>(ee.getKey(), ee.getValue()))));
-  }
-}
 
 /** An immutable transition table, complete function from {@code Q} x {@code Σ}
  * to {@code Q}. The {@code null} value of the type {@code Q} (states) denotes a
@@ -102,10 +85,10 @@ abstract class Δ<Σ> { // @formatter:off
     assert !Δ.get(¢).values().contains(null);
     return Δ.get(¢).values();
   }
-  Set<String> labels(final Q from, final Q to) {
+  final Set<Σ> letters(final Q from, final Q to) {
     return stream.map(Δ.get(from))//
         .filter(e -> e.getValue() == to)//
-        .map(e -> e.getKey()).map(Object::toString).collect(toSet());
+        .map(e -> e.getKey()).collect(toSet());
   }
   /** Inspector: get all letters */
   Collection<Σ> σ(Q ¢) { return Δ.get(¢).keySet(); }
