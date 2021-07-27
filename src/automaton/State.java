@@ -46,8 +46,8 @@ class State<Σ> extends NFSA<Σ>.External implements STATE<Σ> {
   @Override public int hashCode() { return qs.hashCode(); }
   @Override public Iterator<Q> iterator() { return qs.iterator(); }
   @Override public String toString() { return qs + ""; }
-  @Override public Set<? extends STATE<Σ>> neighbours() { return This().Σ.stream().map(λ -> δ(λ)).filter(s->s.valid()).collect(toSet()); }
-  NFSA<Σ> NFSA() { return This(); }
+  @Override public Set<? extends STATE<Σ>> neighbours() { return self().Σ.stream().map(λ -> δ(λ)).filter(s->s.valid()).collect(toSet()); }
+  NFSA<Σ> NFSA() { return self(); }
   /** Reinstate ε-closure */
   private void ε() {
     new Object() {
@@ -71,6 +71,6 @@ class State<Σ> extends NFSA<Σ>.External implements STATE<Σ> {
     return qs.equals(other.qs);
   }
   public boolean ζ() {
-    return !set.intersection(qs, This().ζ).isEmpty();
+    return !set.intersection(qs, self().ζ).isEmpty();
   }
 }
