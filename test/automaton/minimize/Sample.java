@@ -19,17 +19,25 @@ public enum Sample implements Case {
   b("b", NFSA.<Character>σ('b')), //
   c("c", NFSA.<Character>σ('c')), //
   or("a|b", a.or(b)), //
+  manyA("a*", a.many()), //
+  manyB("b*", a.many()), //
   ab("ab", a.then(b)), //
-  many("a*", a.many()), //
+  ba("ab", b.then(a)), //
+  manyAThenManyB("a*b*", manyA.then(manyB)), //
+  many$manyAThenManyB("(a*b*)", manyAThenManyB.many()), //
+  abba("abba", ab.then(ba)), //
+  abOrba("(ab)|(ba)", ab.then(ba)), //
+  ManyAbOrBa("(ab)|(ba)", abOrba.many()), //
   or$abc("a|b|c", a.or(b).or(c.NFSA())), //
   orMany("(a|b)*", or.many()), //
-  or$aba("a|b|a", a.or(b.or(a))), //
+  orAbc("a|b|c", a.or(b.or(c))), //
+  orAba("a|b|a", a.or(b.or(a))), //
   many$aa("(a*)*", a.many().many()), //
   a$b$many("ab*", a.then(b.many())), //
   many$ab("(ab)*", ab.many()), //
   many$many$ab("((ab)*)*", many$ab.many()), //
-  abc("abc", a.then(b).then(c.NFSA())), //
-  aba("aba", a.then(b.then(a))), //
+  abc("abc", ab.then(c.NFSA())), //
+  aba("aba", a.then(ba)), //
   aba$or$a$many("((aba)|(a))*", aba.or(b).many()) //
   ; //
   public static Stream<Sample> s() { return Arrays.stream(values()); }
