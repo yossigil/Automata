@@ -20,12 +20,12 @@ public enum TikZ {
       {
         tex.memo.put(null, "\\text{undefined}");
         var letters = new Object() {
-                      int i = -1;
-                      Character next() { return i >= LETTERS.length ? null : LETTERS[++i]; }
+                      int i;
+                      Character next() { return i >= LETTERS.length ? null : LETTERS[i++]; }
                     };
         var digits  = new Object() {
-                      int i = -1;
-                      Character next() { return i >= DIGITS.length ? null : DIGITS[++i]; }
+                      int i;
+                      Character next() { return i >= DIGITS.length ? null : DIGITS[i++]; }
                     };
         self().dfs(q -> tex.memo.put(q, letters.next() + ""));
         self().Σ.stream().sorted().forEach(σ -> tex.memo.put(σ, digits.next() + ""));
