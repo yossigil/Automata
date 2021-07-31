@@ -10,9 +10,9 @@ enum refresh {
   ;
   static <Σ> FSA<Σ> of(FSA<Σ> ¢) {
     return ¢.new External() {
-      final Map<Q, Q> encoding = self().Q.stream().collect(toMap(λ -> λ, λ -> new Q()));
+      final Map<Q, Q> encoding = my().Q.stream().collect(toMap(λ -> λ, λ -> new Q()));
       Q encode(Q ¢) { return encoding.get(¢); }
-      final NFSA<Σ> $ = NFSA.<Σ>builder(encode(self().q0)).ζ(encode(self().ζ)).Δ(mapEncode(self().Δ)).build();
+      final NFSA<Σ> $ = NFSA.<Σ>builder(encode(my().q0)).ζ(encode(my().ζ)).Δ(mapEncode(my().Δ)).build();
       Map<Q, Map<Σ, Q>> mapEncode(Map<Q, Map<Σ, Q>> m) {
         return stream.map(m).collect(toMap(x -> encode(x.getKey()), x -> encode(x.getValue())));
       }
@@ -29,10 +29,10 @@ enum refresh {
   }
   static <Σ> NFSA<Σ> of(NFSA<Σ> ¢) {
     return ¢.new External() {
-      final Map<Q, Q> encoding = self().Q.stream().collect(toMap(λ -> λ, λ -> new Q()));
+      final Map<Q, Q> encoding = my().Q.stream().collect(toMap(λ -> λ, λ -> new Q()));
       Q encode(Q ¢) { return encoding.get(¢); }
-      final NFSA<Σ> $ = NFSA.<Σ>builder(encode(self().q0)).ζ(encode(self().ζ)).Δ(mapEncode(self().Δ))
-          .ε(encodeMapOfSets(self().ε)).build();
+      final NFSA<Σ> $ = NFSA.<Σ>builder(encode(my().q0)).ζ(encode(my().ζ)).Δ(mapEncode(my().Δ))
+          .ε(encodeMapOfSets(my().ε)).build();
       Map<Q, Map<Σ, Q>> mapEncode(Map<Q, Map<Σ, Q>> m) {
         return stream.map(m).collect(toMap(x -> encode(x.getKey()), x -> encode(x.getValue())));
       }

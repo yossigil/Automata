@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 public class Lexer { //@formatter:off
   public final NFSA<Character>  inner;
-  public static Lexer Φ() { return new Lexer(NFSA.Φ()); }
   public static Lexer c(char ¢) { return new Lexer(NFSA.σ(¢)); }
   public static Lexer ʘ()      { return new Lexer(NFSA.ʘ()); } 
   public static Lexer ε()      { return new Lexer(NFSA.ε()); } 

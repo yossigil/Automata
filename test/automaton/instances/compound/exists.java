@@ -23,7 +23,4 @@ import automaton.NFSA;
   @Test void ʘ() {
     NFSA.<Character>ʘ().TikZ();
   }
-  @Test void Φ() {
-    NFSA.<Character>Φ().TikZ();
-  }
 }

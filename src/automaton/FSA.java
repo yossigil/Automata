@@ -82,7 +82,7 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
         .map(e -> e.getKey()) //
         .collect(toSet());
   }
-  protected abstract class External { FSA<Σ> self() { return FSA.this; } }
+  protected abstract class External { FSA<Σ> my() { return FSA.this; } }
   public String TikZ() {
     return TikZ.of(this);
   }

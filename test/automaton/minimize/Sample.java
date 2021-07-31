@@ -14,7 +14,6 @@ import automaton.NFSA;
 public enum Sample implements Case {
   ε("", NFSA.<Character>ε()), //
   ʘ(".", NFSA.<Character>ʘ()), //
-  Φ("Φ", NFSA.<Character>Φ()), //
   a("a", NFSA.<Character>σ('a')), //
   b("b", NFSA.<Character>σ('b')), //
   c("c", NFSA.<Character>σ('c')), //

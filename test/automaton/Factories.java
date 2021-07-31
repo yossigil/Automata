@@ -38,20 +38,4 @@ public class Factories {
     (fsa3 + "").hashCode();
   }
 
-  @Test void Φ() {
-    fsa4 = NFSA.<Character>Φ();
-    assertNotNull(fsa4.q0);
-    assertNotNull(fsa4.Q);
-    assertNotNull(fsa4.Δ);
-    assertNotNull(fsa4.ζ);
-    assertEquals(fsa4.Δ.keySet().size(),1);
-    assertEquals(fsa4.ζ.size(),0);
-    assertEquals(fsa4.Q.size(),1);
-    assert fsa4.Δ.containsKey(fsa4.q0);
-    assert !fsa4.Σ.contains(null);
-    assertEquals("Weird characters " +fsa4.Σ, fsa4.Σ.size(),0);
-    fsa4.hashCode();
-    (fsa4 + "").hashCode();
-    fsa4.run("abc");
-  }
 }

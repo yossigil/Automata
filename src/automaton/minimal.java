@@ -21,15 +21,16 @@ enum minimal {
   }
   private static <Σ> Set<Set<Q>> partition(FSA<Σ> a) {
     return a.new External() {
-      Set<Set<Q>> P = set.of(set.copy(self().ζ), rejects());
+      Set<Set<Q>> P = set.of(set.copy(my().ζ), rejects());
       {
         /** Almost verbatim implementation of Hoprcroft's algorithm, as drawn from
          * Wikipedia
          * {@link https://en.wikipedia.org/wiki/DFA_minimization#Hopcroft's_algorithm} */
+        assert !my().Q.isEmpty() : my() + ": there must be at least one state";
+        assert !rejects().isEmpty() : my() + ": there must be at least one rejecting state";
+        assert !P.contains(empty.Set()) : my() + ": only in the case of the empty language; we should never allow it!";
         final Set<Set<Q>> W = set.copy(P);
-        explain("Initially, P=%s, W=P=%s\n", P, W);
         while (!W.isEmpty()) {
-          assert !W.contains(empty.Set());
           assert !P.contains(empty.Set());
           final Set<Q> A = set.pick(W);
           explain("Selected a set A=%s\n", A);
@@ -39,7 +40,7 @@ enum minimal {
           W.remove(A);
           explain("Removed A from W, now is =%s\n", W);
           assert !W.contains(A);
-          for (final Σ σ : self().Σ) {
+          for (final Σ σ : my().Σ) {
             final Set<Q>      X    = X(A, σ);
             final Set<Set<Q>> newP = empty.Set();
             for (final Set<Q> Y : P) {
@@ -71,18 +72,17 @@ enum minimal {
       /** Set of <b>all</b> states that are not in {@link #ζ}, including, the special
        * {@link #REJECT} state. */
       Set<Q> rejects() {
-        return set.union(set.of(Δ.REJECT), set.minus(self().Q, self().ζ));
+        return set.union(set.of(Δ.REJECT), set.minus(my().Q, my().ζ));
       }
-      private String explain(String format, Object ...os) {
-        return String.format(format, os); 
-       }
+      String explain(String format, Object... os) {
+        return String.format(format, os);
+      }
       /** @return the set X as in Wikipedia, defined as the set of states for which a
        *         transition on σ leads to a state in A */
       Set<Q> X(final Set<Q> A, final Σ σ) { //@formatter:on
         final Set<Q> $ = empty.Set();
-        for (final Q q : self().Q) if (A.contains(self().δ(q, σ))) $.add(q);
-        if (A.contains(Δ.REJECT)) 
-          $.add(Δ.REJECT);
+        for (final Q q : my().Q) if (A.contains(my().δ(q, σ))) $.add(q);
+        if (A.contains(Δ.REJECT)) $.add(Δ.REJECT);
         return $;
       }
     }.P;
@@ -105,15 +105,15 @@ enum minimal {
         encoding.put(equivalence.get(Δ.REJECT), Δ.REJECT);
         assert encode(Δ.REJECT) == Δ.REJECT;
       }
-      final FSA<Σ> $ = FSA.<Σ>builder(encode(self().q0)) //
-          .ζ(setEncode(self().ζ)) //
+      final FSA<Σ> $ = FSA.<Σ>builder(encode(my().q0)) //
+          .ζ(setEncode(my().ζ)) //
           .Δ(mapEncode()) //
           .build();
       Map<Q, Map<Σ, Q>> mapEncode() {
         return P.stream().map(s -> verify(s)).map(s -> set.pick(s)).map(q -> verify(q)).filter(q -> q != Δ.REJECT) //
             .collect(toMap(//
                 x -> encode(x), //
-                x -> encode(self().Δ.get(x)//
+                x -> encode(my().Δ.get(x)//
         )));
       }
       Set<Q> verify(Set<Q> ¢) {
@@ -136,7 +136,7 @@ enum minimal {
       }
       Q encode(Q ¢) { return encoding.get(equivalence.get(¢)); }
       Set<Q> setEncode(Set<Q> ¢) {
-        return ¢.stream().map(q->encode(q)).collect(toSet());
+        return ¢.stream().map(q -> encode(q)).collect(toSet());
       }
       //@formatter:on
       Stream<Entry<Q, Set<Q>>> invert() {

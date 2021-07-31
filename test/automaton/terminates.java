@@ -23,9 +23,6 @@ import org.junit.jupiter.api.Test;
     @Test void ʘ() {
       NFSA.<Character>ʘ().run("");
     }
-    @Test void Φ() {
-      NFSA.<Character>Φ().run("");
-    }
   }
   static class onA {
     @Test void or() {
@@ -45,9 +42,6 @@ import org.junit.jupiter.api.Test;
     }
     @Test void ʘ() {
       NFSA.<Character>ʘ().run("a");
-    }
-    @Test void Φ() {
-      NFSA.<Character>Φ().run("a");
     }
   }
   static class onB {
@@ -69,9 +63,6 @@ import org.junit.jupiter.api.Test;
     @Test void ʘ() {
       NFSA.<Character>ʘ().run("b");
     }
-    @Test void Φ() {
-      NFSA.<Character>Φ().run("b");
-    }
   }
   static class onAB {
     @Test void or() {
@@ -91,9 +82,6 @@ import org.junit.jupiter.api.Test;
     }
     @Test void ʘ() {
       NFSA.<Character>ʘ().run("ab");
-    }
-    @Test void Φ() {
-      NFSA.<Character>Φ().run("ab");
     }
   }
 }

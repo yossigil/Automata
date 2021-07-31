@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 public class RETest {
   final RE ε           = Atoms.ε;
-  final RE Φ           = Atoms.Φ;
   final RE ʘ           = Atoms.ʘ;
   final RE a           = Atomic.c('a');
   final RE b           = Atomic.c('b');
@@ -23,23 +22,22 @@ public class RETest {
   final RE abStar$c    = ab.many().then(c);
   final RE abStarNot   = ab.many().not();
   final RE abStar$cNot = abStar$c.not();
-  final RE A           = a.or(b).then(c).many().or(Φ).then(b).then(ʘ).and(c).or(ε).plenty().then(ε.or(a)).except(b);
+  final RE A           = a.or(b).then(c).many().or(a).then(b).then(ʘ).and(c).or(ε).plenty().then(ε.or(a)).except(b);
   final RE z           = a.or(b).then(c).many().then(b).and(c).plenty().then(ε.or(a)).except(b);
-  final RE y           = z.or(z).then(z).many().then(z).and(z).plenty().then(Φ.or(b)).except(z);
+  final RE y           = z.or(z).then(z).many().then(z).and(z).plenty().then(a.or(b)).except(z);
   final RE x           = y.or(z).then(y).many().then(z).and(y).plenty().then(ʘ.or(ε)).except(y);
-  final RE w           = x.or(y).then(z).many().then(x).and(y).plenty().then(a.or(Φ)).except(x);
+  final RE w           = x.or(y).then(z).many().then(x).and(y).plenty().then(a.or(a_b)).except(x);
   final RE v           = w.or(x).then(y).many().then(z).and(w).plenty().then(b.or(ʘ)).except(w);
   final RE u           = v.or(w).then(x).many().then(y).and(z).plenty().then(ε.or(a)).except(v);
-  final RE t           = u.or(v).then(w).many().then(x).and(y).plenty().then(Φ.or(b)).except(u);
+  final RE t           = u.or(v).then(w).many().then(x).and(y).plenty().then(a_b.or(b)).except(u);
   final RE s           = t.or(u).then(v).many().then(w).and(x).plenty().then(ʘ.or(ε)).except(t);
-  final RE r           = s.or(t).then(u).many().then(v).and(w).plenty().then(a.or(Φ)).except(s);
+  final RE r           = s.or(t).then(u).many().then(v).and(w).plenty().then(a.or(a_b)).except(s);
   final RE q           = r.or(s).then(t).many().then(u).and(v).plenty().then(b.or(ʘ)).except(r);
   final RE p           = r.or(q).then(s).many().then(t).and(u).plenty().then(c.or(a)).except(q);
   final RE o           = r.or(p).then(q).many().then(s).and(t).plenty().then(d.or(b)).except(p);
   @Test void getString$aOK() { assertEquals("a", a + ""); }
   @Test void getString$bOK() { assertEquals("b", b + ""); }
   @Test void getString$cOK() { assertEquals("c", c + ""); }
-  @Test void getString$ΦOK() { assertEquals("Φ", Φ + ""); }
   @Test void getString$εOK() { assertEquals("ε", ε + ""); }
   @Test void getString$ʘOK() { assertEquals("ʘ", ʘ + ""); }
   @Test void getString$abOK() { assertEquals("ab", ab + ""); }
@@ -55,7 +53,6 @@ public class RETest {
   @Test void TikZaOK() { assertNotEquals("a", a.TikZ()); }
   @Test void TikZbOK() { assertNotEquals("b", b.TikZ()); }
   @Test void TikZcOK() { assertNotEquals("c", c.TikZ()); }
-  @Test void TikZΦOK() { assertNotEquals("Φ", Φ.TikZ()); }
   @Test void TikZεOK() { assertNotEquals("ε", ε.TikZ()); }
   @Test void TikZʘOK() { assertNotEquals("ʘ", ʘ.TikZ()); }
   @Test void TikZabOK() { assertNotEquals("ab", ab.TikZ()); }
@@ -73,7 +70,6 @@ public class RETest {
   @Test void Size$aOK() { assertEquals(1, a.size()); }
   @Test void Size$bOK() { assertEquals(1, b.size()); }
   @Test void Size$cOK() { assertEquals(1, c.size()); }
-  @Test void Size$ΦOK() { assertEquals(1, Φ.size()); }
   @Test void Size$εOK() { assertEquals(1, ε.size()); }
   @Test void Size$ʘOK() { assertEquals(1, ʘ.size()); }
   @Test void Size$abOK() { assertEquals(3, ab.size()); }
@@ -116,7 +112,6 @@ public class RETest {
   @Test void Depth$aOK() { assertEquals(1, a.depth()); }
   @Test void Depth$bOK() { assertEquals(1, b.depth()); }
   @Test void Depth$cOK() { assertEquals(1, c.depth()); }
-  @Test void Depth$ΦOK() { assertEquals(1, Φ.depth()); }
   @Test void Depth$εOK() { assertEquals(1, ε.depth()); }
   @Test void Depth$ʘOK() { assertEquals(1, ʘ.depth()); }
   @Test void Depth$abOK() { assertEquals(2, ab.depth()); }

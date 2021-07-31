@@ -24,7 +24,4 @@ import automaton.NFSA;
   @Test void ʘ() {
     NFSA.<Character>ʘ().DFSA();
   }
-  @Test void Φ() {
-    NFSA.<Character>Φ().DFSA();
-  }
 }

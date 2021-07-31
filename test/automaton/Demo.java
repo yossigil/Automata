@@ -4,8 +4,8 @@ package automaton;
 import org.junit.jupiter.api.Test;
 
 class Demo {
-  final Lexer empty  = Lexer.Φ();
-  final Lexer a      = Lexer.c('a').or(empty);
+  final Lexer any      = Lexer.ʘ();
+  final Lexer a      = Lexer.c('a').or(any);
   final Lexer b      = Lexer.c('b');
   final Lexer ab     = (a.then(b));
   final Lexer a_b    = (a.or(b));
@@ -46,8 +46,8 @@ class Demo {
   @Test  void  nfsa_a_TikZ()       {  show(a.TikZ());              }
   @Test  void  nfsa_b_run()        {  b.run("abc");                }
   @Test  void  nfsa_b_TikZ()       {  show(b.TikZ());              }
-  @Test  void  nfsaEmptyrun()      {  empty.run("abc");            }
-  @Test  void  nfsaEmptyTikZ()     {  show(empty.TikZ());          }
+  @Test  void  nfsaEmptyrun()      {  any.run("abc");            }
+  @Test  void  nfsaEmptyTikZ()     {  show(any.TikZ());          }
   @Test  void  nfsa_x0_run()       {  x0.run("abc");               }
   @Test  void  nfsa_x1_run()       {  x1.run("abc");               }
   @Test  void  nfsa_x2_run()       {  x2.run("abc");               }

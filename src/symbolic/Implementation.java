@@ -27,7 +27,6 @@ abstract class Algorithms implements RE {
       @Override public RE ʘ() { return Atoms.ʘ; }
       @Override public RE ε() { return Atoms.ε; }
       @Override public RE σ(final char ¢) { return Atomic.c(¢); }
-      @Override public RE Φ() { return Atoms.Φ; }
     });
   }
   @Override public final NFSA<Character> fsa() {
@@ -44,7 +43,6 @@ abstract class Algorithms implements RE {
       @Override public NFSA<Character> ʘ() { return NFSA.ʘ(); }
       @Override public NFSA<Character> ε() { return NFSA.ε(); }
       @Override public NFSA<Character> σ(final char ¢) { return NFSA.σ(¢); }
-      @Override public NFSA<Character> Φ() { return NFSA.Φ(); }
     });
   }
   @Override public final String TikZ() {
@@ -101,11 +99,6 @@ abstract class Implementation extends Algorithms {
                      @Override public <T> T kind(final Abstracter<T> ¢) { return ¢.ε(); }
                      @Override public <T> T reduce(final Reducer<T> ¢) { return ¢.ε(); }
                      @Override public String toString() { return "ε"; }
-                   };
-  static final Φ Φ = new Φ() {
-                     @Override public <T> T kind(final Abstracter<T> ¢) { return ¢.Φ(); }
-                     @Override public <T> T reduce(final Reducer<T> ¢) { return ¢.Φ(); }
-                     @Override public String toString() { return "Φ"; }
                    };
   static Implementation c(final char c) {
     return new Letter(c) {

@@ -27,7 +27,7 @@ import utils.set;
         dynamicContainer("MDFSA", Sample.s().map(s -> test(s, s.MDFSA(), "MDFSA"))) //
     );
   }
-  @TestFactory Stream<DynamicNode> pairs() {
+  @TestFactory Stream<DynamicNode> verbose() {
     return Sample.s().map(test());
   }
   Stream<DynamicNode> structure() {

@@ -21,7 +21,7 @@ public class NFSA<Σ> extends FSA<Σ> { //@formatter:off
   public NFSA<Σ> plenty() { return Thompson.plenty(this); }
   public NFSA<Σ> then(NFSA<Σ> a2) { return Thompson.then(this, a2); }
   public static <Σ> NFSA<Σ>.Builder builder(Q ¢) { return new NFSA<Σ>(¢).new Builder(); }
-  abstract class External extends FSA<Σ>.External { @Override NFSA<Σ> self() { return NFSA.this; } }
+  abstract class External extends FSA<Σ>.External { @Override NFSA<Σ> my() { return NFSA.this; } }
   //@formatter:on
   /** Factory: recognizer of a single letter */
   public static <Σ> NFSA<Σ> σ(Σ ¢) {
@@ -33,8 +33,6 @@ public class NFSA<Σ> extends FSA<Σ> { //@formatter:off
     final Q $ = new Q();
     return NFSA.<Σ>builder($).ζ($).build();
   }
-  /** Factory: recognizer of the empty set */
-  public static <Σ> NFSA<Σ> Φ() { return NFSA.<Σ>builder(new Q()).build(); }
   /** Factory: recognizer of arbitrary single letter */
   public static <Σ> NFSA<Σ> ʘ() {
     final Q $ = new Q(), q1 = new Q();

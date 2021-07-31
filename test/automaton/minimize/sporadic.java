@@ -24,7 +24,4 @@ import automaton.NFSA;
   @Test void ʘ() {
     NFSA.<Character>ʘ().minimal();
   }
-  @Test void Φ() {
-    NFSA.<Character>Φ().minimal();
-  }
 }
