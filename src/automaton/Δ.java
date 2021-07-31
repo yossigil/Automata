@@ -18,22 +18,22 @@ import utils.empty;
 abstract class Δ<Σ> { // @formatter:off 
   /** Data: Transition table */ public final Map<Q, Map<Σ, Q>> Δ = empty.Map();
   /** Data: Wild card letter */ final Σ ANY = null;
-  /** Data: Sink state */ static final Q SINK = null;
+  /** Data: Sink state */ static final Q REJECT = null;
   /** Data: All states used, SINK excluded */  public final Set<Q> Q = empty.Set();
   /** Data: All letters used, ANY excluded */  public final Set<Σ> Σ = empty.Set();
   public Stream<Entry<Q,Entry<Σ,Q>>> δ() { return stream.mapOfMaps(this.Δ); }
   /** Inspector: the main transition function */ // @formatter:on 
   protected Q δ(final Q q, final Σ σ) {
-    if (q == SINK) return SINK; // Starting at the sink, must end in the sink
+    if (q == REJECT) return REJECT; // Starting at the sink, must end in the sink
     final Q $ = Δ.get(q).get(σ); // Wild card magic
     assert σ != ANY; // But no magic on wild card
-    return $ != SINK ? $ : Δ.get(q).get(ANY);
+    return $ != REJECT ? $ : Δ.get(q).get(ANY);
   }
   class Builder {
     /** Modifier: Add a single transition */
     Builder δ(final Q from, final Σ σ, final Q to) {
-      assert from != SINK;
-      assert to != SINK;
+      assert from != REJECT;
+      assert to != REJECT;
       Δ.putIfAbsent(from, empty.Map());
       Δ.get(from).put(σ, to);
       return this;
@@ -42,7 +42,7 @@ abstract class Δ<Σ> { // @formatter:off
     /** Modifier: copy a full transition table */
     Builder Δ(final Δ<Σ> Δ) {
       for (Q q : Δ.Q) //
-        if (q != SINK) //
+        if (q != REJECT) //
           for (final Σ σ : Δ.σ(q)) //
             δ(q, σ, Δ.δ(q, σ));
       return this;

@@ -85,8 +85,8 @@ public class NFSA<Σ> extends FSA<Σ> { //@formatter:off
         "\t ε = " + ε + " (non-deterministic ε-transitions)\n" //
     ;
   }
-  public FSA<Σ> DFSA() { return dfsa.of(this); }
   public NFSA<Σ> refresh() {
-    return rename.of(this);
+    return refresh.of(this);
   }
+  public FSA<Σ> DFSA() { return dfsa.of(this); }
 }

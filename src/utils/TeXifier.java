@@ -1,6 +1,5 @@
 package utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("static-method") public class TeXifier extends Tabulator {

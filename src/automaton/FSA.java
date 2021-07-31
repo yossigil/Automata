@@ -98,4 +98,7 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
       @SuppressWarnings("unchecked") public Σ next() { return (Σ) (Character) cs[i++]; }
     });
   }
+  public FSA<Σ> refresh() {
+    return refresh.of(this);
+  }
 }
