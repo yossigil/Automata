@@ -24,9 +24,8 @@ class State<Σ> extends NFSA<Σ>.External implements STATE<Σ> {
     assert !this.qs.contains(null);
   }
   @Override public STATE<Σ> δ(Σ σ) {
-    assert σ != null;
     assert !qs.contains(null);
-    return new State<Σ>(NFSA(), qs().map(q -> NFSA().δ(q, σ)).filter(q -> q != null).collect(toSet()));
+    return new State<Σ>(NFSA(), qs().flatMap(q -> NFSA().Δ.get(q).values().stream()).filter(q -> q != Δ.REJECT).collect(toSet()));
   }
   @Override public Stream<Q> qs() {
     assert !qs.contains(null);
