@@ -5,6 +5,6 @@ package symbolic;
  * children */
 public interface Abstracter<Tag> extends Tagger.Γ<Tag> { // @formatter:off
   /** Process a leaf */ void γ0(Tag t);
-  /** Process a internal unary node */ void γ1(Tag t, RE r);
-  /** Process a internal unary node */ void γ2(Tag t, RE r1, RE r2);
+  /** Process a internal unary node */ void γ1(Tag t, RE e);
+  /** Process a internal unary node */ void γ2(Tag t, RE e1, RE e2);
 }
