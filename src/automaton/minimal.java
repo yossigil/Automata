@@ -27,6 +27,7 @@ enum minimal {
          * Wikipedia
          * {@link https://en.wikipedia.org/wiki/DFA_minimization#Hopcroft's_algorithm} */
         assert !my().Q.isEmpty() : my() + ": there must be at least one state";
+        assert !my().ζ.isEmpty() : my() + ": there must be at least one accepting state";
         assert !rejects().isEmpty() : my() + ": there must be at least one rejecting state";
         assert !P.contains(empty.Set()) : my() + ": only in the case of the empty language; we should never allow it!";
         final Set<Set<Q>> W = set.copy(P);
@@ -41,6 +42,7 @@ enum minimal {
           explain("Removed A from W, now is =%s\n", W);
           assert !W.contains(A);
           for (final Σ σ : my().Σ) {
+            if (σ == (Σ) null) continue;
             final Set<Q>      X    = X(A, σ);
             final Set<Set<Q>> newP = empty.Set();
             for (final Set<Q> Y : P) {
@@ -80,7 +82,15 @@ enum minimal {
       /** @return the set X as in Wikipedia, defined as the set of states for which a
        *         transition on σ leads to a state in A */
       Set<Q> X(final Set<Q> A, final Σ σ) { //@formatter:on
-        final Set<Q> $ = empty.Set();
+        final Set<Q> $   = empty.Set();
+        final Σ      ANY = (Σ) null;
+        if (σ == ANY) {
+          for (final Q q : my().Q) {//
+            if (A.contains(my().Δ.get(q).get(ANY))) $.add(q);
+          }
+          // if (, ANY))) $.
+          // Special case for null processing
+        }
         for (final Q q : my().Q) if (A.contains(my().δ(q, σ))) $.add(q);
         if (A.contains(Δ.REJECT)) $.add(Δ.REJECT);
         return $;
@@ -128,7 +138,6 @@ enum minimal {
         assert m != null;
         return stream.map(m).map(e -> {
           assert e != null;
-          assert e.getKey() != null : "Key" + e;
           assert e.getValue() != null : "Value" + e;
           return e;
         }).//
