@@ -17,8 +17,8 @@ enum Thompson {
   static <Σ> NFSA<Σ> and(final NFSA<Σ> a1, final NFSA<Σ> a2) {
     throw new UnsupportedOperationException("26 Jul 2021");
   }
-  static <Σ> NFSA<Σ> many(NFSA<Σ> n) {
-    return manyFresh(n.refresh());
+  static <Σ> NFSA<Σ> many(NFSA<Σ> ¢) {
+    return manyFresh(¢.refresh());
   }
   private static <Σ> NFSA<Σ> manyFresh(NFSA<Σ> a) {
     final var $ = NFSA.<Σ>builder(a.q0).ε(a.q0, a.q0).ζ(a.q0).Δ(a).ε(a);
