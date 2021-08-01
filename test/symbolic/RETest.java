@@ -83,15 +83,15 @@ public class RETest {
   @Test void Size$abStarNot() { assertEquals(5, abStarNot.size()); }
   @Test void Size$abStar$cNot() { assertEquals(7, abStar$cNot.size()); }
 //
-  @Test void Size$o$() { assertEquals(4416113, o.size()); }
-  @Test void Size$p$() { assertEquals(1693169, p.size()); }
-  @Test void Size$q$() { assertEquals(649265, q.size()); }
-  @Test void Size$r$() { assertEquals(248753, r.size()); }
-  @Test void Size$s$() { assertEquals(95249, s.size()); }
-  @Test void Size$t$() { assertEquals(36497, t.size()); }
-  @Test void Size$u$() { assertEquals(14129, u.size()); }
-  @Test void Size$v$() { assertEquals(5873, v.size()); }
-  @Test void Size$w$() { assertEquals(1745, w.size()); }
+  @Test void Size$o$() { assertEquals(4_420_683, o.size()); }
+  @Test void Size$p$() { assertEquals(1_694_921, p.size()); }
+  @Test void Size$q$() { assertEquals(649_937, q.size()); }
+  @Test void Size$r$() { assertEquals(249_011, r.size()); }
+  @Test void Size$s$() { assertEquals(95_347, s.size()); }
+  @Test void Size$t$() { assertEquals(36_535, t.size()); }
+  @Test void Size$u$() { assertEquals(14_143, u.size()); }
+  @Test void Size$v$() { assertEquals(5_879, v.size()); }
+  @Test void Size$w$() { assertEquals(1_747, w.size()); }
   @Test void Size$x$() { assertEquals(497, x.size()); }
   @Test void Size$y$() { assertEquals(113, y.size()); }
   @Test void Size$z$() { assertEquals(17, z.size()); }
