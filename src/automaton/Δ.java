@@ -9,10 +9,11 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import utils.empty;
+import utils.set;
 
 /** An immutable transition table, complete function from {@code Q} x {@code Σ}
  * to {@code Q}. The {@code null} value of the type {@code Q} (states) denotes a
- * designated sink state, i.e., a non-accepting state from which all edges lead
+ * designated rejection state, i.e., a non-accepting state from which all edges lead
  * to itself. The {@code null} value of the {@code Σ} (letters) denotes a the
  * wild card letter. */
 abstract class Δ<Σ> { // @formatter:off 
@@ -20,11 +21,11 @@ abstract class Δ<Σ> { // @formatter:off
   /** Data: Wild card letter */ final Σ ANY = null;
   /** Data: Sink state */ static final Q REJECT = null;
   /** Data: All states used, SINK excluded */  public final Set<Q> Q = empty.Set();
-  /** Data: All letters used, ANY excluded */  public final Set<Σ> Σ = empty.Set();
+  /** Data: All letters used, ANY included */  public final Set<Σ> Σ = set.of(ANY); 
   public Stream<Entry<Q,Entry<Σ,Q>>> δ() { return stream.mapOfMaps(this.Δ); }
   /** Inspector: the main transition function */ // @formatter:on 
   protected Q δ(final Q q, final Σ σ) {
-    if (q == REJECT) return REJECT; // Starting at the sink, must end in the sink
+    if (q == REJECT) return REJECT; // Once rejected, always rejected
     final Q $ = Δ.get(q).get(σ); // Wild card magic
     assert σ != ANY; // But no magic on wild card
     return $ != REJECT ? $ : Δ.get(q).get(ANY);
@@ -56,9 +57,7 @@ abstract class Δ<Σ> { // @formatter:off
     }
     Δ<Σ> build() { return build(Q(), Σ()); }
     Set<Σ> Σ() { // Initial approximation of the set of letters
-      assert !Δ.values().stream().flatMap(x -> x.keySet().stream()).filter(x -> x != ANY).collect(toSet())
-          .contains(null);
-      return Δ.values().stream().flatMap(x -> x.keySet().stream()).filter(x -> x != ANY).collect(toSet());
+      return Δ.values().stream().flatMap(x -> x.keySet().stream()).collect(toSet());
     }
     Set<Q> Q() { // Initial approximation of the set of states; builders of subclasses may refine
       final Set<Q> $ = empty.Set();
@@ -69,9 +68,7 @@ abstract class Δ<Σ> { // @formatter:off
     final Δ<Σ> build(Set<Q> qs, Set<Σ> σs) {
       for (Q q : qs) Δ.putIfAbsent(q, empty.Map());
       Δ.this.Q.addAll(qs);
-      assert !Σ.contains(null);
       Δ.this.Σ.addAll(σs);
-      assert !Σ.contains(null);
       return Δ.this;
     }
   } // @formatter:off 
