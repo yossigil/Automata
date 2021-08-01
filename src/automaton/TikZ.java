@@ -28,7 +28,7 @@ public enum TikZ {
                       Character next() { return i >= DIGITS.length ? null : DIGITS[i++]; }
                     };
         my().dfs(q -> tex.memo.put(q, letters.next() + ""));
-        my().Σ.stream().sorted().forEach(σ -> tex.memo.put(σ, digits.next() + ""));
+        my().Σ.stream().filter(σ -> σ != null).sorted().forEach(σ -> tex.memo.put(σ, digits.next() + ""));
       }
       @Override public String toString() {
         return String.format("%s \n\t\t\t \\pgfmatrixnextcell \n %s", description(), graph());
