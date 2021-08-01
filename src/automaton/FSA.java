@@ -45,7 +45,6 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
   class Builder extends Δ<Σ>.Builder {
     FSA<Σ> build() {
       super.build();
-      assert !Σ.contains(null);
       return FSA.this;
     }
     Builder δ(Q from, Σ σ, Q to) { super.δ(from, σ, to); return this; }
