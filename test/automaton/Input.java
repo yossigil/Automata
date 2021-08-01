@@ -53,6 +53,7 @@ public interface Input {
       "ccaaa", "ccaab", "ccaac", "ccaba", "ccabb", "ccabc", "ccaca", "ccacb", "ccacc", "ccbaa", "ccbab", "ccbac",
       "ccbba", "ccbbb", "ccbbc", "ccbca", "ccbcb", "ccbcc", "cccaa", "cccab", "cccac", "cccba", "cccbb", "cccbc",
       "cccca", "ccccb", "ccccc", };
+  static Stream<String> s() { return Arrays.stream(inputs); }
   @SuppressWarnings("static-method") class TEST {
     @Test public void count() {
       assertEquals(inputs.length, 1 + 3 + 9 + 27 + 81 + 243);
