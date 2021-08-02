@@ -12,7 +12,7 @@ import utils.empty;
 public enum dfsa {
   ;
   static <Σ> FSA<Σ> of(NFSA<Σ> ¢) {
-    return ¢.new External() {
+    return ¢.new Extension() {
       final Set<? extends STATE<Σ>> ss = new DFS_LIST<STATE<Σ>>() {}.dfs(my().s0);
       Stream<? extends STATE<Σ>> ss() { return ss.stream().filter(s->s.valid()); }
       final Map<STATE<Σ>, Q> code = empty.Map();

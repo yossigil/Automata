@@ -28,7 +28,7 @@ enum refresh {
     }.$;
   }
   static <Σ> NFSA<Σ> of(NFSA<Σ> ¢) {
-    return ¢.new External() {
+    return ¢.new Extension() {
       final Map<Q, Q> encoding = my().Q.stream().collect(toMap(λ -> λ, λ -> new Q()));
       Q encode(Q ¢) { return encoding.get(¢); }
       final NFSA<Σ> $ = NFSA.<Σ>builder(encode(my().q0)).ζ(encode(my().ζ)).Δ(mapEncode(my().Δ))

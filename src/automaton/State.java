@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import utils.empty;
 import utils.set;
 
-class State<Σ> extends NFSA<Σ>.External implements STATE<Σ> {
+class State<Σ> extends NFSA<Σ>.Extension implements STATE<Σ> {
   /** Data: an ε-closed set of contained plain states */
   final Set<Q> qs = empty.Set();
   /** Constructor: from single plain state */
