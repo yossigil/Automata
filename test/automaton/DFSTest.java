@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
   @Test public void n4() { assertEquals((new V(4)).neighbours().size(), 3); }
   @Test public void n5() { assertEquals((new V(5)).neighbours().size(), 2); }
   @Test public void n6() { assertEquals((new V(6)).neighbours().size(), 4); }
-  @Test public void exists0() { new DFS<V>() {}.dfs(new V(0)); }
-  @Test public void exists1() { new DFS<V>() {}.dfs(new V(1)); }
-  @Test public void exists120() { new DFS<V>() {}.dfs(new V(120)); }
+  @Test public void exists0() { new DFS_LIST<V>() {}.dfs(new V(0)); }
+  @Test public void exists1() { new DFS_LIST<V>() {}.dfs(new V(1)); }
+  @Test public void exists120() { new DFS_LIST<V>() {}.dfs(new V(120)); }
 }

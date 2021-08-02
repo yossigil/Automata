@@ -64,7 +64,7 @@ public class FSA<Σ> extends Δ<Σ> implements Recognizer<Σ> { //@formatter:off
     return $;
   }
   private Set<Q> dfs(final Consumer<Q> c, Q q02) {
-    return new XDFS<Q>() {
+    return new DFS<Q>() {
       @Override public Collection<Q> neighbours(final Q ¢) { return FSA.this.neighbours(¢); }
       @Override public Q visit(final Q ¢) { c.accept(¢); return ¢; }
     }.dfs(q02);
